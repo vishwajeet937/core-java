@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>SchedulerAPIHandler.getExportedGroupFileName</title>
+        <script src='../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : com.triniti.scheduler.handlers</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : SchedulerAPIHandler</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : getExportedGroupFileName</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 2400,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-2065: Assign "" to variable fileName');
+            nodesArr.push('Line No-2066: Call getDateTime and assign the result to variable currentDate');
+            nodesArr.push('Line No-2068:  scheduleName is not equal to null AND jobName is not equal to null AND jobTypeName is not equal to null');
+            nodesArr.push('Line No-2070: Concatenate "Schedule$Job$Jobtypes", currentDate, ".zip"');
+            nodesArr.push('Line No-2072:  jobName is not equal to null AND jobTypeName is not equal to null');
+            nodesArr.push('Line No-2074: Concatenate "Job$Jobtypes", currentDate, ".zip"');
+            nodesArr.push('Line No-2076:  scheduleName is not equal to null AND jobTypeName is not equal to null');
+            nodesArr.push('Line No-2078: Concatenate "Schedule$Jobtypes", currentDate, ".zip"');
+            nodesArr.push('Line No-2080:  scheduleName is not equal to null AND jobName is not equal to null');
+            nodesArr.push('Line No-2082: Concatenate "Schedule$Jobs", currentDate, ".zip"');
+            nodesArr.push('Line No-2084:  jobTypeName is not equal to null');
+            nodesArr.push('Line No-2086: Concatenate "Jobtypes", currentDate, ".zip"');
+            nodesArr.push('Line No-2088:  jobName is not equal to null');
+            nodesArr.push('Line No-2090: Concatenate "Jobs", currentDate, ".zip"');
+            nodesArr.push('Line No-2094: Concatenate "Schedules", currentDate, ".zip"');
+            nodesArr.push('Line No-2098: Return fileName');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-2065: Assign "" to variable fileName    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2066: Call getDateTime and assign the result to variable currentDate    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/SchedulerAPIHandler/getDateTime.html');
+            rect2.attr('body/stroke', 'blue');
+            rect2.attr('body/fill', 'blue');
+            rect2.attr('label/cursor', 'pointer');
+            rect2.attr('body/cursor', 'pointer');
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2068:  scheduleName is not equal to null AND jobName is not equal to null AND jobTypeName is not equal to null');
+            var rect3 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect3.resize(maxNodeWidth, resizeWidth);
+            rect3.attr('text/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2070: Concatenate "Schedule$Job$Jobtypes", currentDate, ".zip"    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.translate(-1.1 * maxNodeWidth,377200);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2072:  jobName is not equal to null AND jobTypeName is not equal to null');
+            var rect5 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect5.resize(maxNodeWidth, resizeWidth);
+            rect5.translate(1.1 * maxNodeWidth,377300);
+            rect5.attr('text/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2074: Concatenate "Job$Jobtypes", currentDate, ".zip"    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.translate(0.0 * maxNodeWidth,377300);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2076:  scheduleName is not equal to null AND jobTypeName is not equal to null');
+            var rect7 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect7.resize(maxNodeWidth, resizeWidth);
+            rect7.translate(2.2 * maxNodeWidth,377400);
+            rect7.attr('text/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2078: Concatenate "Schedule$Jobtypes", currentDate, ".zip"    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.translate(1.1 * maxNodeWidth,377400);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2080:  scheduleName is not equal to null AND jobName is not equal to null');
+            var rect9 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect9.resize(maxNodeWidth, resizeWidth);
+            rect9.translate(3.3000000000000003 * maxNodeWidth,377500);
+            rect9.attr('text/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2082: Concatenate "Schedule$Jobs", currentDate, ".zip"    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.translate(2.2 * maxNodeWidth,377500);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2084:  jobTypeName is not equal to null');
+            var rect11 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect11.resize(maxNodeWidth, resizeWidth);
+            rect11.translate(4.4 * maxNodeWidth,377600);
+            rect11.attr('text/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2086: Concatenate "Jobtypes", currentDate, ".zip"    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.translate(3.3000000000000003 * maxNodeWidth,377600);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2088:  jobName is not equal to null');
+            var rect13 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect13.resize(maxNodeWidth, resizeWidth);
+            rect13.translate(5.5 * maxNodeWidth,377700);
+            rect13.attr('text/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2090: Concatenate "Jobs", currentDate, ".zip"    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.translate(4.4 * maxNodeWidth,377700);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2094: Concatenate "Schedules", currentDate, ".zip"    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.translate(6.6000000000000005 * maxNodeWidth,377700);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.translate(5.5 * maxNodeWidth,377700);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+            rect16.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.translate(4.4 * maxNodeWidth,377700);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+            rect17.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.translate(3.3000000000000003 * maxNodeWidth,377700);
+            rect18.attr('label/text', flowChartNode);
+            rect18.addTo(nlStatementsGraph);
+            rect18.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.translate(2.2 * maxNodeWidth,377700);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(nlStatementsGraph);
+            rect19.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.translate(1.1 * maxNodeWidth,377700);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+            rect20.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(nlStatementsGraph);
+            rect21.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-2098: Return fileName    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect23 = ellipse.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.attr('text/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.set('ifBlockStartLink', true);
+            link4.label(0, {attrs: {text: {text: 'Yes'}}});
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect3);
+            link5.target(rect5);
+            link5.set('elseBlockStartLink', true);
+            link5.label(0, {attrs: {text: {text: 'No'}}});
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.set('ifBlockStartLink', true);
+            link6.label(0, {attrs: {text: {text: 'Yes'}}});
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect5);
+            link7.target(rect7);
+            link7.set('elseBlockStartLink', true);
+            link7.label(0, {attrs: {text: {text: 'No'}}});
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.set('ifBlockStartLink', true);
+            link8.label(0, {attrs: {text: {text: 'Yes'}}});
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect7);
+            link9.target(rect9);
+            link9.set('elseBlockStartLink', true);
+            link9.label(0, {attrs: {text: {text: 'No'}}});
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.set('ifBlockStartLink', true);
+            link10.label(0, {attrs: {text: {text: 'Yes'}}});
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect9);
+            link11.target(rect11);
+            link11.set('elseBlockStartLink', true);
+            link11.label(0, {attrs: {text: {text: 'No'}}});
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect11);
+            link12.target(rect12);
+            link12.set('ifBlockStartLink', true);
+            link12.label(0, {attrs: {text: {text: 'Yes'}}});
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect11);
+            link13.target(rect13);
+            link13.set('elseBlockStartLink', true);
+            link13.label(0, {attrs: {text: {text: 'No'}}});
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.set('ifBlockStartLink', true);
+            link14.label(0, {attrs: {text: {text: 'Yes'}}});
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect13);
+            link15.target(rect15);
+            link15.set('elseBlockStartLink', true);
+            link15.label(0, {attrs: {text: {text: 'No'}}});
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect14);
+            link16.target(rect16);
+            link16.addTo(nlStatementsGraph);
+            link16.set('ifBlockEndLink', true);
+            link16.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link17 = link.clone();
+            link17.source(rect15);
+            link17.target(rect16);
+            link17.addTo(nlStatementsGraph);
+            link17.set('elseBlockEndLink', true);
+            link17.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect13.set('endIfConditionId', rect16.id);
+            rect16.set('ifConditionId', rect13.id);
+
+            var link18 = link.clone();
+            link18.source(rect12);
+            link18.target(rect17);
+            link18.addTo(nlStatementsGraph);
+            link18.set('ifBlockEndLink', true);
+            link18.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link19 = link.clone();
+            link19.source(rect16);
+            link19.target(rect17);
+            link19.addTo(nlStatementsGraph);
+            link19.set('elseBlockEndLink', true);
+            link19.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect11.set('endIfConditionId', rect17.id);
+            rect17.set('ifConditionId', rect11.id);
+
+            var link20 = link.clone();
+            link20.source(rect10);
+            link20.target(rect18);
+            link20.addTo(nlStatementsGraph);
+            link20.set('ifBlockEndLink', true);
+            link20.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link21 = link.clone();
+            link21.source(rect17);
+            link21.target(rect18);
+            link21.addTo(nlStatementsGraph);
+            link21.set('elseBlockEndLink', true);
+            link21.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect9.set('endIfConditionId', rect18.id);
+            rect18.set('ifConditionId', rect9.id);
+
+            var link22 = link.clone();
+            link22.source(rect8);
+            link22.target(rect19);
+            link22.addTo(nlStatementsGraph);
+            link22.set('ifBlockEndLink', true);
+            link22.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link23 = link.clone();
+            link23.source(rect18);
+            link23.target(rect19);
+            link23.addTo(nlStatementsGraph);
+            link23.set('elseBlockEndLink', true);
+            link23.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect7.set('endIfConditionId', rect19.id);
+            rect19.set('ifConditionId', rect7.id);
+
+            var link24 = link.clone();
+            link24.source(rect6);
+            link24.target(rect20);
+            link24.addTo(nlStatementsGraph);
+            link24.set('ifBlockEndLink', true);
+            link24.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link25 = link.clone();
+            link25.source(rect19);
+            link25.target(rect20);
+            link25.addTo(nlStatementsGraph);
+            link25.set('elseBlockEndLink', true);
+            link25.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect5.set('endIfConditionId', rect20.id);
+            rect20.set('ifConditionId', rect5.id);
+
+            var link26 = link.clone();
+            link26.source(rect4);
+            link26.target(rect21);
+            link26.addTo(nlStatementsGraph);
+            link26.set('ifBlockEndLink', true);
+            link26.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link27 = link.clone();
+            link27.source(rect20);
+            link27.target(rect21);
+            link27.addTo(nlStatementsGraph);
+            link27.set('elseBlockEndLink', true);
+            link27.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect3.set('endIfConditionId', rect21.id);
+            rect21.set('ifConditionId', rect3.id);
+
+            var link28 = link.clone();
+            link28.source(rect21);
+            link28.target(rect22);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect22);
+            link29.target(rect23);
+            link29.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect23.set('stopNode', 'true');
+            rect23.attr('circle/fill', 'red');
+            rect23.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect23);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 4800,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-2065: String fileName = "";');
+            nodesArr.push('Line No-2066: String currentDate = getDateTime();');
+            nodesArr.push('Line No-2068:  scheduleName != null && jobName != null && jobTypeName != null');
+            nodesArr.push('Line No-2070: fileName = "Schedule$Job$Jobtypes" + currentDate + ".zip";');
+            nodesArr.push('Line No-2072:  jobName != null && jobTypeName != null');
+            nodesArr.push('Line No-2074: fileName = "Job$Jobtypes" + currentDate + ".zip";');
+            nodesArr.push('Line No-2076:  scheduleName != null && jobTypeName != null');
+            nodesArr.push('Line No-2078: fileName = "Schedule$Jobtypes" + currentDate + ".zip";');
+            nodesArr.push('Line No-2080:  scheduleName != null && jobName != null');
+            nodesArr.push('Line No-2082: fileName = "Schedule$Jobs" + currentDate + ".zip";');
+            nodesArr.push('Line No-2084:  jobTypeName != null');
+            nodesArr.push('Line No-2086: fileName = "Jobtypes" + currentDate + ".zip";');
+            nodesArr.push('Line No-2088:  jobName != null');
+            nodesArr.push('Line No-2090: fileName = "Jobs" + currentDate + ".zip";');
+            nodesArr.push('Line No-2094: fileName = "Schedules" + currentDate + ".zip";');
+            nodesArr.push('Line No-2098: return fileName;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect24 = ellipse.clone();
+            rect24.addTo(javaStatementsGraph);
+            rect24.attr('text/text', 'Start');
+            rect24.attr('circle/fill', 'green');
+
+            rootNode = rect24;
+
+            flowChartNode = getBrokenText('Line No-2065: String fileName = "";    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2066: String currentDate = getDateTime();    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/SchedulerAPIHandler/getDateTime.html');
+            rect26.attr('body/stroke', 'blue');
+            rect26.attr('body/fill', 'blue');
+            rect26.attr('label/cursor', 'pointer');
+            rect26.attr('body/cursor', 'pointer');
+            rect26.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2068:  scheduleName != null && jobName != null && jobTypeName != null');
+            var rect27 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect27.resize(maxNodeWidth, resizeWidth);
+            rect27.attr('text/text', flowChartNode);
+            rect27.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2070: fileName = "Schedule$Job$Jobtypes" + currentDate + ".zip";    ');
+            var rect28 = rect.clone();
+            rect28.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect28.translate(-1.1 * maxNodeWidth,378200);
+            rect28.attr('label/text', flowChartNode);
+            rect28.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2072:  jobName != null && jobTypeName != null');
+            var rect29 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect29.resize(maxNodeWidth, resizeWidth);
+            rect29.translate(1.1 * maxNodeWidth,378300);
+            rect29.attr('text/text', flowChartNode);
+            rect29.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2074: fileName = "Job$Jobtypes" + currentDate + ".zip";    ');
+            var rect30 = rect.clone();
+            rect30.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect30.translate(0.0 * maxNodeWidth,378300);
+            rect30.attr('label/text', flowChartNode);
+            rect30.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2076:  scheduleName != null && jobTypeName != null');
+            var rect31 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect31.resize(maxNodeWidth, resizeWidth);
+            rect31.translate(2.2 * maxNodeWidth,378400);
+            rect31.attr('text/text', flowChartNode);
+            rect31.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2078: fileName = "Schedule$Jobtypes" + currentDate + ".zip";    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.translate(1.1 * maxNodeWidth,378400);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2080:  scheduleName != null && jobName != null');
+            var rect33 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect33.resize(maxNodeWidth, resizeWidth);
+            rect33.translate(3.3000000000000003 * maxNodeWidth,378500);
+            rect33.attr('text/text', flowChartNode);
+            rect33.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2082: fileName = "Schedule$Jobs" + currentDate + ".zip";    ');
+            var rect34 = rect.clone();
+            rect34.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect34.translate(2.2 * maxNodeWidth,378500);
+            rect34.attr('label/text', flowChartNode);
+            rect34.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2084:  jobTypeName != null');
+            var rect35 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect35.resize(maxNodeWidth, resizeWidth);
+            rect35.translate(4.4 * maxNodeWidth,378600);
+            rect35.attr('text/text', flowChartNode);
+            rect35.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2086: fileName = "Jobtypes" + currentDate + ".zip";    ');
+            var rect36 = rect.clone();
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.translate(3.3000000000000003 * maxNodeWidth,378600);
+            rect36.attr('label/text', flowChartNode);
+            rect36.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2088:  jobName != null');
+            var rect37 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect37.resize(maxNodeWidth, resizeWidth);
+            rect37.translate(5.5 * maxNodeWidth,378700);
+            rect37.attr('text/text', flowChartNode);
+            rect37.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2090: fileName = "Jobs" + currentDate + ".zip";    ');
+            var rect38 = rect.clone();
+            rect38.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect38.translate(4.4 * maxNodeWidth,378700);
+            rect38.attr('label/text', flowChartNode);
+            rect38.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-2094: fileName = "Schedules" + currentDate + ".zip";    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.translate(6.6000000000000005 * maxNodeWidth,378700);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect40 = rect.clone();
+            rect40.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect40.translate(5.5 * maxNodeWidth,378700);
+            rect40.attr('label/text', flowChartNode);
+            rect40.addTo(javaStatementsGraph);
+            rect40.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.translate(4.4 * maxNodeWidth,378700);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(javaStatementsGraph);
+            rect41.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.translate(3.3000000000000003 * maxNodeWidth,378700);
+            rect42.attr('label/text', flowChartNode);
+            rect42.addTo(javaStatementsGraph);
+            rect42.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect43 = rect.clone();
+            rect43.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect43.translate(2.2 * maxNodeWidth,378700);
+            rect43.attr('label/text', flowChartNode);
+            rect43.addTo(javaStatementsGraph);
+            rect43.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.translate(1.1 * maxNodeWidth,378700);
+            rect44.attr('label/text', flowChartNode);
+            rect44.addTo(javaStatementsGraph);
+            rect44.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.attr('label/text', flowChartNode);
+            rect45.addTo(javaStatementsGraph);
+            rect45.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-2098: return fileName;    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.attr('label/text', flowChartNode);
+            rect46.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect47 = ellipse.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.attr('text/text', flowChartNode);
+            rect47.addTo(javaStatementsGraph);
+
+
+            var link30 = link.clone();
+            link30.source(rect24);
+            link30.target(rect25);
+            link30.addTo(javaStatementsGraph);
+
+            var link31 = link.clone();
+            link31.source(rect25);
+            link31.target(rect26);
+            link31.addTo(javaStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect26);
+            link32.target(rect27);
+            link32.addTo(javaStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect27);
+            link33.target(rect28);
+            link33.set('ifBlockStartLink', true);
+            link33.label(0, {attrs: {text: {text: 'Yes'}}});
+            link33.addTo(javaStatementsGraph);
+
+            var link34 = link.clone();
+            link34.source(rect27);
+            link34.target(rect29);
+            link34.set('elseBlockStartLink', true);
+            link34.label(0, {attrs: {text: {text: 'No'}}});
+            link34.addTo(javaStatementsGraph);
+
+            var link35 = link.clone();
+            link35.source(rect29);
+            link35.target(rect30);
+            link35.set('ifBlockStartLink', true);
+            link35.label(0, {attrs: {text: {text: 'Yes'}}});
+            link35.addTo(javaStatementsGraph);
+
+            var link36 = link.clone();
+            link36.source(rect29);
+            link36.target(rect31);
+            link36.set('elseBlockStartLink', true);
+            link36.label(0, {attrs: {text: {text: 'No'}}});
+            link36.addTo(javaStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect31);
+            link37.target(rect32);
+            link37.set('ifBlockStartLink', true);
+            link37.label(0, {attrs: {text: {text: 'Yes'}}});
+            link37.addTo(javaStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect31);
+            link38.target(rect33);
+            link38.set('elseBlockStartLink', true);
+            link38.label(0, {attrs: {text: {text: 'No'}}});
+            link38.addTo(javaStatementsGraph);
+
+            var link39 = link.clone();
+            link39.source(rect33);
+            link39.target(rect34);
+            link39.set('ifBlockStartLink', true);
+            link39.label(0, {attrs: {text: {text: 'Yes'}}});
+            link39.addTo(javaStatementsGraph);
+
+            var link40 = link.clone();
+            link40.source(rect33);
+            link40.target(rect35);
+            link40.set('elseBlockStartLink', true);
+            link40.label(0, {attrs: {text: {text: 'No'}}});
+            link40.addTo(javaStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect35);
+            link41.target(rect36);
+            link41.set('ifBlockStartLink', true);
+            link41.label(0, {attrs: {text: {text: 'Yes'}}});
+            link41.addTo(javaStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect35);
+            link42.target(rect37);
+            link42.set('elseBlockStartLink', true);
+            link42.label(0, {attrs: {text: {text: 'No'}}});
+            link42.addTo(javaStatementsGraph);
+
+            var link43 = link.clone();
+            link43.source(rect37);
+            link43.target(rect38);
+            link43.set('ifBlockStartLink', true);
+            link43.label(0, {attrs: {text: {text: 'Yes'}}});
+            link43.addTo(javaStatementsGraph);
+
+            var link44 = link.clone();
+            link44.source(rect37);
+            link44.target(rect39);
+            link44.set('elseBlockStartLink', true);
+            link44.label(0, {attrs: {text: {text: 'No'}}});
+            link44.addTo(javaStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect38);
+            link45.target(rect40);
+            link45.addTo(javaStatementsGraph);
+            link45.set('ifBlockEndLink', true);
+            link45.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link46 = link.clone();
+            link46.source(rect39);
+            link46.target(rect40);
+            link46.addTo(javaStatementsGraph);
+            link46.set('elseBlockEndLink', true);
+            link46.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect37.set('endIfConditionId', rect40.id);
+            rect40.set('ifConditionId', rect37.id);
+
+            var link47 = link.clone();
+            link47.source(rect36);
+            link47.target(rect41);
+            link47.addTo(javaStatementsGraph);
+            link47.set('ifBlockEndLink', true);
+            link47.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link48 = link.clone();
+            link48.source(rect40);
+            link48.target(rect41);
+            link48.addTo(javaStatementsGraph);
+            link48.set('elseBlockEndLink', true);
+            link48.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect35.set('endIfConditionId', rect41.id);
+            rect41.set('ifConditionId', rect35.id);
+
+            var link49 = link.clone();
+            link49.source(rect34);
+            link49.target(rect42);
+            link49.addTo(javaStatementsGraph);
+            link49.set('ifBlockEndLink', true);
+            link49.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link50 = link.clone();
+            link50.source(rect41);
+            link50.target(rect42);
+            link50.addTo(javaStatementsGraph);
+            link50.set('elseBlockEndLink', true);
+            link50.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect33.set('endIfConditionId', rect42.id);
+            rect42.set('ifConditionId', rect33.id);
+
+            var link51 = link.clone();
+            link51.source(rect32);
+            link51.target(rect43);
+            link51.addTo(javaStatementsGraph);
+            link51.set('ifBlockEndLink', true);
+            link51.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link52 = link.clone();
+            link52.source(rect42);
+            link52.target(rect43);
+            link52.addTo(javaStatementsGraph);
+            link52.set('elseBlockEndLink', true);
+            link52.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect31.set('endIfConditionId', rect43.id);
+            rect43.set('ifConditionId', rect31.id);
+
+            var link53 = link.clone();
+            link53.source(rect30);
+            link53.target(rect44);
+            link53.addTo(javaStatementsGraph);
+            link53.set('ifBlockEndLink', true);
+            link53.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link54 = link.clone();
+            link54.source(rect43);
+            link54.target(rect44);
+            link54.addTo(javaStatementsGraph);
+            link54.set('elseBlockEndLink', true);
+            link54.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect29.set('endIfConditionId', rect44.id);
+            rect44.set('ifConditionId', rect29.id);
+
+            var link55 = link.clone();
+            link55.source(rect28);
+            link55.target(rect45);
+            link55.addTo(javaStatementsGraph);
+            link55.set('ifBlockEndLink', true);
+            link55.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link56 = link.clone();
+            link56.source(rect44);
+            link56.target(rect45);
+            link56.addTo(javaStatementsGraph);
+            link56.set('elseBlockEndLink', true);
+            link56.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect27.set('endIfConditionId', rect45.id);
+            rect45.set('ifConditionId', rect27.id);
+
+            var link57 = link.clone();
+            link57.source(rect45);
+            link57.target(rect46);
+            link57.addTo(javaStatementsGraph);
+
+            var link58 = link.clone();
+            link58.source(rect46);
+            link58.target(rect47);
+            link58.addTo(javaStatementsGraph);
+
+            rect24.set('startNode', 'true');
+            rect47.set('stopNode', 'true');
+            rect47.attr('circle/fill', 'red');
+            rect47.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect24, rect47);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,277 @@
+<html>
+	<head><link rel='icon' href='../../../../../../../dependencies/images/triniti-corporation.png' >  
+		<style type="text/css">
+			th {
+				text-align: start;
+				border-color: grey;
+				padding: 0.2em 0.5em;
+			}
+			th > a {
+				color: inherit;
+			}
+			td {
+				border-color: grey;
+				padding: 0.2em 0.5em;
+			}
+			table.ellipsis {
+				width: 100%;
+				border-color: grey;
+				border-radius: 10px;
+				border-spacing: 0px;
+				border-collapse: collapse;
+			}
+			:root {
+				background-color: -moz-dialog;
+				font: message-box;
+			}
+			div#div1 {
+				border: 1px solid ThreeDShadow;
+				border-radius: 10px;
+				padding: 3em;
+				min-width: 30em;
+				max-width: 65em;
+				margin: 4em auto;
+				background-color: -moz-field;
+				color: -moz-fieldtext;
+			}
+			a {
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			p {
+				font-size: 110%;
+			}
+			table {
+				margin: 0 auto;
+			}
+			thead {
+				font-size: 120%;
+			}
+		</style>
+	</head>
+	<body>
+             <img height='50' width='150;'  alt='Triniti' src='../../../../../../../dependencies/images/logo_triniti.png'  />  
+	<div id='div1'>
+	    <h1>src.eDynamo.classes.scheduler.T_SCHEDULES</h1>
+	    <h2 style="font-weight:normal"><B><U>Creating a Cron Schedule</U></B>
+<P>
+Schedule has to be created to use it for scheduling purposes.Before adding a
+schedule the details regarding the schedule are to be set.Following is the
+pseudo code for the creation of a cron schedule that has to run for
+every minute on all the week days  ie the cron expression [* * * * 2-5] .
+<pre>
+...
+T_SCHEDULES cronSchedule = new T_SCHEDULES();
+
+cronSchedule.setSCHEDULE_TYPE("Cron Schedule");
+cronSchedule.setSCHEDULE_TYPE_ID("001012");
+cronSchedule.setDESCRIPTION("Schedule that runs for every minute on week days");
+cronSchedule.setENABLED("true");
+cronSchedule.setSCHEDULE_ID("0001111");
+cronSchedule.setSCHEDULE_NAME("Every_Minute_Schedule");
+
+Calendar calendar = Calendar.getInstance();
+calendar.set(Calendar.MILLISECOND, 0);
+calendar.set(2005, 8, 30, 18, 06, 0);   // Start date set to  18:06 August,30 2005
+cronSchedule.setSTART_DATE(new Timestamp(calendar.getTimeInMillis()));
+
+calendar.set(2006, 9, 30, 18, 06, 0);   //End date set to 18:06 September,30 2006
+cronSchedule.setEND_DATE(new Timestamp(calendar.getTimeInMillis()));
+
+
+//Creating the parameters for the cron schedule
+
+T_SCHEDULE_PARAMS parameters_minutes = new T_SCHEDULE_PARAMS();
+parameters_minutes.setPARAM_ID("001020");      //predefined
+parameters_minutes.setPARAMETER("MINUTES");    //predefined
+parameters_minutes.setPARAM_VALUE("*");
+parameters_minutes.setSCHEDULE_ID("0001111"); //Set the Schedule Id from creating T_SCHEDULES
+
+T_SCHEDULE_PARAMS parameters_hours = new T_SCHEDULE_PARAMS();
+parameters_hours.setPARAM_ID("001022");         //predefined
+parameters_hours.setPARAMETER("HOURS");         //predefined
+parameters_hours.setPARAM_VALUE("*");
+parameters_hours.setSCHEDULE_ID("00001111"); //Set the Schedule Id from creating T_SCHEDULES
+
+T_SCHEDULE_PARAMS parameters_DOM = new T_SCHEDULE_PARAMS();
+parameters_DOM.setPARAM_ID("001024");            //predefined
+parameters_DOM.setPARAMETER("DATE");             //predefined
+parameters_DOM.setPARAM_VALUE("*");
+parameters_DOM.setSCHEDULE_ID("00001111");      //Set the Schedule Id from creating T_SCHEDULES
+
+T_SCHEDULE_PARAMS parameters_month = new T_SCHEDULE_PARAMS();
+parameters_month.setPARAM_ID("001026");         //predefined
+parameters_month.setPARAMETER("MONTH");         //predefined
+parameters_month.setPARAM_VALUE("*");
+parameters_month.setSCHEDULE_ID("00001111");    //Set the Schedule Id from creating T_SCHEDULES
+
+T_SCHEDULE_PARAMS parameters_DOW = new T_SCHEDULE_PARAMS();
+parameters_DOW.setPARAM_ID("10");               //predefined
+parameters_DOW.setPARAMETER("TIME");            //predefined
+parameters_DOW.setPARAM_VALUE("2-5");
+parameters_DOW.setSCHEDULE_ID("00001111");      //Set the Schedule Id from creating T_SCHEDULES
+
+T_SCHEDULE_PARAMS[] params_array  = new T_SCHEDULE_PARAMS[5];
+params_array[0] = parameters_minutes;
+params_array[1] = parameters_hours;
+params_array[2] = parameters_DOM;
+params_array[3] = parameters_month;
+params_array[4] = parameters_DOW;
+
+cronSchedule.setT_SCHEDULE_PARAMS(params_array);  //Set the parameters to the schedule
+</pre>
+<P>
+
+<P> After creating the Schedule object it can be added to the databse by calling the SchedulerAPI method as follows
+<pre>
+...
+SchedulerAPI schedulerAPI = new SchedulerAPI();
+schedulerAPI.addSchedule(cronSchedule);
+...
+</pre>
+</P></h2>
+	    <body>
+		<table class='ellipsis' border='1' align=center >
+			<thead style="font-size: 120%;">
+			<tr>
+				<th>No. of Methods</th>
+				<th>With Description</th>
+				<th>Without Description</th>
+			</tr>
+			</thead>
+			<tr>
+				<td>29</td>
+				<td>18</td>
+				<td>11</td>
+			</tr>
+		</table>
+		<hr>
+		<table class='ellipsis' border='1' align=center >
+			<thead style="font-size: 120%;">
+			<tr>
+				<th>Method</th>
+				<th>Description</th>
+			</tr>
+			</thead>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getCategories.html'>getCategories</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getDESCRIPTION.html'>getDESCRIPTION</td>
+				<td>Returns the description</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getENABLED.html'>getENABLED</td>
+				<td>Returns enabled</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getEND_DATE.html'>getEND_DATE</td>
+				<td>Returns the end date</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getLastUpdatedBy.html'>getLastUpdatedBy</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getLastUpdatedDate.html'>getLastUpdatedDate</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getSCHEDULE_ID.html'>getSCHEDULE_ID</td>
+				<td>Returns the Schedule_Id</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getSCHEDULE_NAME.html'>getSCHEDULE_NAME</td>
+				<td>Returns the schedule name</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getSCHEDULE_TYPE.html'>getSCHEDULE_TYPE</td>
+				<td>Returns the schedule type</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getSCHEDULE_TYPE_ID.html'>getSCHEDULE_TYPE_ID</td>
+				<td>Returns the Schedule type id</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getSTART_DATE.html'>getSTART_DATE</td>
+				<td>Returns the Start date</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getScheduleOverrideFlag.html'>getScheduleOverrideFlag</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getT_SCHEDULE_PARAMS.html'>getT_SCHEDULE_PARAMS</td>
+				<td>Returns the schedule parameters</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='getT_jobs.html'>getT_jobs</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setCategories.html'>setCategories</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setDESCRIPTION.html'>setDESCRIPTION</td>
+				<td>Sets the description</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setENABLED.html'>setENABLED</td>
+				<td>Sets the enabled</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setEND_DATE.html'>setEND_DATE</td>
+				<td>Sets the end date</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setLastUpdatedBy.html'>setLastUpdatedBy</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setLastUpdatedDate.html'>setLastUpdatedDate</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setSCHEDULE_ID.html'>setSCHEDULE_ID</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setSCHEDULE_NAME.html'>setSCHEDULE_NAME</td>
+				<td>Sets the schedule name</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setSCHEDULE_TYPE.html'>setSCHEDULE_TYPE</td>
+				<td>Sets the schedule type</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setSCHEDULE_TYPE_ID.html'>setSCHEDULE_TYPE_ID</td>
+				<td>Sets the schedule type id</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setSTART_DATE.html'>setSTART_DATE</td>
+				<td>Sets the startdate</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setScheduleOverrideFlag.html'>setScheduleOverrideFlag</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setT_SCHEDULE_PARAMS.html'>setT_SCHEDULE_PARAMS</td>
+				<td>Sets the parameters as T_SCHEDULE_PARAMS array</td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='setT_jobs.html'>setT_jobs</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><a style='style="text-decoration: none;"' target='_blank' href='toString.html'>toString</td>
+				<td>Sets the Schedule_ID</td>
+			</tr>
+		</table>
+	</div>
+	</body>
+</html>

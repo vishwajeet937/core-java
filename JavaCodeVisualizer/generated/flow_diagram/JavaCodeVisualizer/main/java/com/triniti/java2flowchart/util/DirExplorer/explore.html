@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>DirExplorer.explore</title>
+        <script src='../../../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: message-box;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 20px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+   <script type='text/javascript'>
+   var textColor = '#000000';
+   var backGroundColor = '#FFFFFF';
+    var rhombus = new joint.shapes.basic.Rhombus({
+       size: {
+       width: 120, height: 60,
+       height: 60
+             },
+      attrs: {
+          path: {
+          d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+          fill: '#FFFFFF',
+          stroke: '#800020',
+          strokeWidth: 4,
+          cursor: 'context-menu'
+                 },
+       text: {
+       text: 'Rhombus',
+       fill: textColor,
+       cursor: 'context-menu'
+              }
+            }
+      });
+      rhombus.position(400, 30);
+      rhombus.set('nodeType', 'Rhombus');
+
+      var ellipse = new joint.shapes.basic.Circle({
+      size: { 
+         width: 100, height: 40 
+            },
+      attrs: { 
+            text: { 
+            text: 'Ellipse', fill: textColor,
+            cursor: 'context-menu'
+                  },
+          circle: { 
+               fill:'blue', 
+               strokeWidth:4,
+               cursor:'context-menu',
+                  }
+              }
+          });
+      ellipse.position(400, 30);
+
+    var rect = new joint.shapes.standard.Rectangle();
+    rect.attr({
+          body: {
+            fill: '#FFFFFF',
+            rx: 10,
+            ry: 10,
+            strokeWidth: 4,
+            stroke:'#9400D3',
+            cursor: 'context-menu',
+                },
+          label: {
+             text: 'Rectangle',
+             cursor:'context-menu'
+                 }
+            });
+     rect.position(400, 30);
+     rect.resize(100, 40);
+     rect.set('nodeType', 'Rectangle');
+
+    var link = new joint.shapes.standard.Link({
+    attrs: {
+      line: { 
+      strokeWidth: 1.5
+             }
+           }
+                                              });
+    link.connector('rounded', { radius: 15 });
+    </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+ <div class='flow-head'>
+   <div class='flow-1'>
+   <img height='50' width='150;' alt='Triniti' src='../../../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package-Name : main.java.com.triniti.java2flowchart.util</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class-Name : DirExplorer</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method-Name : explore</h4>
+   <p style='text-decoration:none' target='_blank'>   </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: blue;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Method calling</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Initialization & Assignment</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 1000,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-40:  Call isDirectory on variable File');
+            nodesArr.push('Line No-42: For each child in  Call listFiles on variable File ');
+            nodesArr.push('Line No-45: Call explore()');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-52:  flag01');
+            nodesArr.push('Line No-54: Call handle() on variable fileHandler');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-40:  Call isDirectory on variable File');
+            var rect1 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect1.resize(maxNodeWidth, resizeWidth);
+            rect1.attr('label/cursor', 'context-menu');
+            rect1.attr('body/cursor', 'context-menu');
+            rect1.attr('text/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: For each child in  Call listFiles on variable File     ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.translate(-1.1 * maxNodeWidth,107000);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: Call explore()    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.translate(-1.1 * maxNodeWidth,107100);
+            rect3.attr('label/text', flowChartNode);
+            rect3.set('externalLink', 'JavaCodeVisualizer/main/java/com/triniti/java2flowchart/util/DirExplorer/explore.html');
+            rect3.attr('body/stroke', 'blue');
+            rect3.attr('label/cursor', 'pointer');
+            rect3.attr('body/cursor', 'pointer');
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.translate(-1.1 * maxNodeWidth,107200);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+            rect4.attr('body/stroke', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-52:  flag01');
+            var rect5 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect5.resize(maxNodeWidth, resizeWidth);
+            rect5.attr('label/cursor', 'context-menu');
+            rect5.attr('body/cursor', 'context-menu');
+            rect5.translate(1.1 * maxNodeWidth,107300);
+            rect5.attr('text/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-54: Call handle() on variable fileHandler    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.translate(0.0 * maxNodeWidth,107300);
+            rect6.attr('label/text', flowChartNode);
+            rect6.set('externalLink', 'JavaCodeVisualizer/main/java/com/triniti/java2flowchart/util/FileHandler/handle.html');
+            rect6.attr('body/stroke', 'blue');
+            rect6.attr('label/cursor', 'pointer');
+            rect6.attr('body/cursor', 'pointer');
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.translate(1.1 * maxNodeWidth,107300);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+            rect7.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+            rect8.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect9 = ellipse.clone();
+            rect9.attr('circle/cursor', 'context-menu');
+            rect9.attr('text/cursor', 'context-menu');
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('text/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.set('ifBlockStartLink', true);
+            link2.label(0, {attrs: {text: {text: 'Yes'}}});
+        link2.attr('line/stroke', 'green');
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect2);
+            rect2.attr('body/stroke', '#F400A1');
+            link5.set('loopConnector', true);
+            link5.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link5.attr('line/stroke', '#F400A1');
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect1);
+            link6.target(rect5);
+            link6.set('elseBlockStartLink', true);
+            link6.label(0, {attrs: {text: {text: 'No'}}});
+        link6.attr('line/stroke', 'red');
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect5);
+            link7.target(rect6);
+            link7.set('ifBlockStartLink', true);
+            link7.label(0, {attrs: {text: {text: 'Yes'}}});
+        link7.attr('line/stroke', 'green');
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect6);
+            link8.target(rect7);
+            link8.addTo(nlStatementsGraph);
+            link8.set('ifBlockEndLink', true);
+            link8.label(0, {attrs: {text: {text: 'Yes'}}});
+        link8.attr('line/stroke', 'green');
+
+            var link9 = link.clone();
+            link9.source(rect5);
+            link9.target(rect7);
+            link9.addTo(nlStatementsGraph);
+            link9.label(0, {attrs: {text: {text: 'No'}}});
+            link9.set('elseBlockStartAndEndLink', true);
+        link9.attr('line/stroke', 'red');
+
+            rect5.set('endIfConditionId', rect7.id);
+            rect7.set('ifConditionId', rect5.id);
+
+            var link10 = link.clone();
+            link10.source(rect4);
+            link10.target(rect8);
+            link10.addTo(nlStatementsGraph);
+            link10.set('ifBlockEndLink', true);
+            link10.label(0, {attrs: {text: {text: 'Yes'}}});
+        link10.attr('line/stroke', 'green');
+
+            var link11 = link.clone();
+            link11.source(rect7);
+            link11.target(rect8);
+            link11.addTo(nlStatementsGraph);
+            link11.set('elseBlockEndLink', true);
+            link11.label(0, {attrs: {text: {text: 'No'}}});
+        link11.attr('line/stroke', 'red');
+
+            rect1.set('endIfConditionId', rect8.id);
+            rect8.set('ifConditionId', rect1.id);
+
+            var link12 = link.clone();
+            link12.source(rect8);
+            link12.target(rect9);
+            link12.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect9.set('stopNode', 'true');
+            rect9.attr('circle/fill', 'red');
+            rect9.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect9);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 2100,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-40:  file.isDirectory()');
+            nodesArr.push('Line No-42: For each child in  file.listFiles() ');
+            nodesArr.push('Line No-45: explore(level + 1, path + "/" + child.getName(), child);');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-51: boolean flag01 = filter.filter(level, path, file);');
+            nodesArr.push('Line No-52:  flag01');
+            nodesArr.push('Line No-54: fileHandler.handle(level, path, file);');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect10 = ellipse.clone();
+            rect10.addTo(javaStatementsGraph);
+            rect10.attr('text/text', 'Start');
+            rect10.attr('circle/fill', 'green');
+
+            rootNode = rect10;
+
+            flowChartNode = getBrokenText('Line No-40:  file.isDirectory()');
+            var rect11 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect11.resize(maxNodeWidth, resizeWidth);
+            rect11.attr('label/cursor', 'context-menu');
+            rect11.attr('body/cursor', 'context-menu');
+            rect11.attr('text/text', flowChartNode);
+            rect11.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: For each child in  file.listFiles()     ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.translate(-1.1 * maxNodeWidth,107600);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: explore(level + 1, path + "/" + child.getName(), child);    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.translate(-1.1 * maxNodeWidth,107700);
+            rect13.attr('label/text', flowChartNode);
+            rect13.set('externalLink', 'JavaCodeVisualizer/main/java/com/triniti/java2flowchart/util/DirExplorer/explore.html');
+            rect13.attr('body/stroke', 'blue');
+            rect13.attr('label/cursor', 'pointer');
+            rect13.attr('body/cursor', 'pointer');
+            rect13.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.translate(-1.1 * maxNodeWidth,107800);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(javaStatementsGraph);
+            rect14.attr('body/stroke', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-51: boolean flag01 = filter.filter(level, path, file);    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.translate(1.1 * maxNodeWidth,107800);
+            rect15.attr('label/text', flowChartNode);
+            rect15.set('externalLink', 'JavaCodeVisualizer/main/java/com/triniti/java2flowchart/util/Filter/filter.html');
+            rect15.attr('body/stroke', 'blue');
+            rect15.attr('label/cursor', 'pointer');
+            rect15.attr('body/cursor', 'pointer');
+            rect15.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-52:  flag01');
+            var rect16 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect16.resize(maxNodeWidth, resizeWidth);
+            rect16.attr('label/cursor', 'context-menu');
+            rect16.attr('body/cursor', 'context-menu');
+            rect16.translate(1.1 * maxNodeWidth,107900);
+            rect16.attr('text/text', flowChartNode);
+            rect16.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-54: fileHandler.handle(level, path, file);    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.translate(0.0 * maxNodeWidth,107900);
+            rect17.attr('label/text', flowChartNode);
+            rect17.set('externalLink', 'JavaCodeVisualizer/main/java/com/triniti/java2flowchart/util/FileHandler/handle.html');
+            rect17.attr('body/stroke', 'blue');
+            rect17.attr('label/cursor', 'pointer');
+            rect17.attr('body/cursor', 'pointer');
+            rect17.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.translate(1.1 * maxNodeWidth,107900);
+            rect18.attr('label/text', flowChartNode);
+            rect18.addTo(javaStatementsGraph);
+            rect18.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(javaStatementsGraph);
+            rect19.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect20 = ellipse.clone();
+            rect20.attr('circle/cursor', 'context-menu');
+            rect20.attr('text/cursor', 'context-menu');
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.attr('text/text', flowChartNode);
+            rect20.addTo(javaStatementsGraph);
+
+
+            var link13 = link.clone();
+            link13.source(rect10);
+            link13.target(rect11);
+            link13.addTo(javaStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect11);
+            link14.target(rect12);
+            link14.set('ifBlockStartLink', true);
+            link14.label(0, {attrs: {text: {text: 'Yes'}}});
+        link14.attr('line/stroke', 'green');
+            link14.addTo(javaStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect12);
+            link15.target(rect13);
+            link15.addTo(javaStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect13);
+            link16.target(rect14);
+            link16.addTo(javaStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect14);
+            link17.target(rect12);
+            rect12.attr('body/stroke', '#F400A1');
+            link17.set('loopConnector', true);
+            link17.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link17.attr('line/stroke', '#F400A1');
+            link17.addTo(javaStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect11);
+            link18.target(rect15);
+            link18.set('elseBlockStartLink', true);
+            link18.label(0, {attrs: {text: {text: 'No'}}});
+        link18.attr('line/stroke', 'red');
+            link18.addTo(javaStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect15);
+            link19.target(rect16);
+            link19.addTo(javaStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect16);
+            link20.target(rect17);
+            link20.set('ifBlockStartLink', true);
+            link20.label(0, {attrs: {text: {text: 'Yes'}}});
+        link20.attr('line/stroke', 'green');
+            link20.addTo(javaStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect17);
+            link21.target(rect18);
+            link21.addTo(javaStatementsGraph);
+            link21.set('ifBlockEndLink', true);
+            link21.label(0, {attrs: {text: {text: 'Yes'}}});
+        link21.attr('line/stroke', 'green');
+
+            var link22 = link.clone();
+            link22.source(rect16);
+            link22.target(rect18);
+            link22.addTo(javaStatementsGraph);
+            link22.label(0, {attrs: {text: {text: 'No'}}});
+            link22.set('elseBlockStartAndEndLink', true);
+        link22.attr('line/stroke', 'red');
+
+            rect16.set('endIfConditionId', rect18.id);
+            rect18.set('ifConditionId', rect16.id);
+
+            var link23 = link.clone();
+            link23.source(rect14);
+            link23.target(rect19);
+            link23.addTo(javaStatementsGraph);
+            link23.set('ifBlockEndLink', true);
+            link23.label(0, {attrs: {text: {text: 'Yes'}}});
+        link23.attr('line/stroke', 'green');
+
+            var link24 = link.clone();
+            link24.source(rect18);
+            link24.target(rect19);
+            link24.addTo(javaStatementsGraph);
+            link24.set('elseBlockEndLink', true);
+            link24.label(0, {attrs: {text: {text: 'No'}}});
+        link24.attr('line/stroke', 'red');
+
+            rect11.set('endIfConditionId', rect19.id);
+            rect19.set('ifConditionId', rect11.id);
+
+            var link25 = link.clone();
+            link25.source(rect19);
+            link25.target(rect20);
+            link25.addTo(javaStatementsGraph);
+
+            rect10.set('startNode', 'true');
+            rect20.set('stopNode', 'true');
+            rect20.attr('circle/fill', 'red');
+            rect20.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect10, rect20);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

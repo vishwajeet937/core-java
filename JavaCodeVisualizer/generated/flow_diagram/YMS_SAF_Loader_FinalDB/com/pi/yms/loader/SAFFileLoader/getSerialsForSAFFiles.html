@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>SAFFileLoader.getSerialsForSAFFiles</title>
+        <script src='../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: message-box;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 20px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+   <script type='text/javascript'>
+   var textColor = '#000000';
+   var backGroundColor = '#FFFFFF';
+    var rhombus = new joint.shapes.basic.Rhombus({
+       size: {
+       width: 120, height: 60,
+       height: 60
+             },
+      attrs: {
+          path: {
+          d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+          fill: '#FFFFFF',
+          stroke: '#800020',
+          strokeWidth: 4,
+          cursor: 'context-menu'
+                 },
+       text: {
+       text: 'Rhombus',
+       fill: textColor,
+       cursor: 'context-menu'
+              }
+            }
+      });
+      rhombus.position(400, 30);
+      rhombus.set('nodeType', 'Rhombus');
+
+      var ellipse = new joint.shapes.basic.Circle({
+      size: { 
+         width: 100, height: 40 
+            },
+      attrs: { 
+            text: { 
+            text: 'Ellipse', fill: textColor,
+            cursor: 'context-menu'
+                  },
+          circle: { 
+               fill:'blue', 
+               strokeWidth:4,
+               cursor:'context-menu',
+                  }
+              }
+          });
+      ellipse.position(400, 30);
+
+    var rect = new joint.shapes.standard.Rectangle();
+    rect.attr({
+          body: {
+            fill: '#FFFFFF',
+            rx: 10,
+            ry: 10,
+            strokeWidth: 4,
+            stroke:'#9400D3',
+            cursor: 'context-menu',
+                },
+          label: {
+             text: 'Rectangle',
+             cursor:'context-menu'
+                 }
+            });
+     rect.position(400, 30);
+     rect.resize(100, 40);
+     rect.set('nodeType', 'Rectangle');
+
+    var link = new joint.shapes.standard.Link({
+    attrs: {
+      line: { 
+      strokeWidth: 1.5
+             }
+           }
+                                              });
+    link.connector('rounded', { radius: 15 });
+    </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+ <div class='flow-head'>
+   <div class='flow-1'>
+   <img height='50' width='150;' alt='Triniti' src='../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package-Name : com.pi.yms.loader</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class-Name : SAFFileLoader</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method-Name : getSerialsForSAFFiles</h4>
+      <p>This method is used to get the serials for SAF files</p>
+  <button class='natural_language' id='natural'  onClick='NaturalLanguage();'><b>&nbsp&nbsp;natural Language&nbsp&nbsp;</b></button>
+  <button class='java' id='java'  onClick='Java();'><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; java Language&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: blue;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Method calling</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Initialization & Assignment</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 5900,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('(4518,5): Get current time in milliseconds and assign the result to variable startTime');
+            nodesArr.push('( 4519, 5): Create an instance of Map<String, List<Integer>> and assign it to variable fileVsSerailsList');
+            nodesArr.push('( 4520, 5): Create an instance of Map<String, List<Map<String, Object>>> and assign it to variable fileVsSerailDetailsList');
+            nodesArr.push('( 4521, 5): Initialize variable serialDetails of type Map<String, Object> as null');
+            nodesArr.push('( 4523, 5): Create a List object from the Array of [filesList.split(",")]');
+            nodesArr.push('( 4524, 5): Initialize variable serialDetailsList of type List<Map<String, Object>> as null');
+            nodesArr.push('( 4526, 5): Initialize variable serial of type int as -1');
+            nodesArr.push('( 4528, 5): Initialize variable fileName of type String as null');
+            nodesArr.push('( 4529, 5): Initialize variable binPassFail of type String as null');
+            nodesArr.push('( 4530, 5): Initialize variable condPassFail of type String as null');
+            nodesArr.push('( 4531, 5): Create an SQL Select statement and assign the result to variable getSerialsInfoSql');
+            nodesArr.push('( 4551, 5): Print ("getSerialsInfoSql : " + getSerialsInfoSql)');
+            nodesArr.push('( 4553, 10): Call safFileLoaderConnection.prepareStatement with params [getSerialsInfoSql] and assign the result to variable preparedStatement');
+            nodesArr.push('( 4555, 9): Call executeQuery() on variable preparedStatement and assign the result to variable resultSet');
+            nodesArr.push('( 4558, 7): Call setFetchSize() on variable resultSet');
+            nodesArr.push('( 4559, 14): While ( rows are available in Result Set)');
+            nodesArr.push('( 4560, 9): Call getString on variable ResultSet and assign the result to variable fileName');
+            nodesArr.push('( 4561, 9): Call getInt on variable ResultSet and assign the result to variable serial');
+            nodesArr.push('( 4562, 9): Call getString on variable ResultSet and assign the result to variable binPassFail');
+            nodesArr.push('( 4563, 9): Call getString on variable ResultSet and assign the result to variable condPassFail');
+            nodesArr.push('( 4565, 9): Get value from Map fileVsSerailDetailsList for key fileName and assign the result to variable serialDetailsList');
+            nodesArr.push('( 4566, 13):  serialDetailsList is equal to null');
+            nodesArr.push('( 4567, 11): Create an instance of ArrayList<> and assign the result to variable serialDetailsList');
+            nodesArr.push('( 4568, 11): Put value serialDetailsList in Map fileVsSerailDetailsList for key fileName');
+            nodesArr.push('( 4571, 9): Create an instance of HashMap<> and assign the result to variable serialDetails');
+            nodesArr.push('( 4573, 9): Put value serial in Map serialDetails for key "SERIAL"');
+            nodesArr.push('( 4574, 9): Put value binPassFail in Map serialDetails for key "BIN_PASSFAIL"');
+            nodesArr.push('( 4575, 9): Put value condPassFail in Map serialDetails for key "COND_PASSFAIL"');
+            nodesArr.push('( 4577, 9): Add serialDetails value to List serialDetailsList');
+            nodesArr.push('End - While loop');
+            nodesArr.push('( 4583, 5): Create an instance of Map<String, Integer> and assign it to variable serialsCountByFile');
+            nodesArr.push('Put value fileVsSerailDetailsList.get(fileNameFromList).size() in Map serialsCountByFile for key fileNameFromList');
+            nodesArr.push('( 4591, 5): Print ("serialsCountByFile before filtering : " + serialsCountByFile)');
+            nodesArr.push('( 4593, 5): Create a List object from the Array of ["G", "P"]');
+            nodesArr.push('( 4594, 5): Create a List object from the Array of ["P"]');
+            nodesArr.push('Open stream on fileNamesList');
+            nodesArr.push('Map fileNameFromList.substring(1, fileNameFromList.length() - 1); to fileNamesList.stream()');
+            nodesArr.push('fileNamesList.stream().map(fileNameFromList -> fileNameFromList.substring(1, fileNameFromList.length() - 1)).forEach(fileNameFromList)');
+            nodesArr.push('( 4601, 15): Call safFilesWithRetestFlag.get with params [fileNameFromList] and assign the result to variable hasRetestFlag');
+            nodesArr.push('( 4602, 15): Get value from Map fileVsSerailDetailsList for key fileNameFromList and assign the result to variable serialDetailsListNew');
+            nodesArr.push('( 4604, 19):  hasRetestFlag is equal to null OR hasRetestFlag');
+            nodesArr.push('FILTER-START');
+            nodesArr.push('condPassFailForNonRetest contains "(String) serialDetailsNew.get("COND_PASSFAIL")" AND binPassFailForNonRetest contains "(String) serialDetailsNew.get("BIN_PASSFAIL")"');
+            nodesArr.push('FILTER-END');
+            nodesArr.push('( 4624, 15): Put value serialsList in Map fileVsSerailsList for key fileNameFromList');
+            nodesArr.push('Put value fileVsSerailDetailsList.get(fileNameFromList).size() in Map serialsCountByFile for key fileNameFromList');
+            nodesArr.push('( 4634, 5): Print ("serialsCountByFile after filtering  : " + serialsCountByFile)');
+            nodesArr.push('fileNamesList.forEach(eachFileName)');
+            nodesArr.push('( 4642, 11): Call eachFileName.substring with params [1, eachFileName.length() - 1] and assign the result to variable eachFileName');
+            nodesArr.push('( 4643, 15):  fileVsSerailsList doesn\'t containsKey "eachFileName"');
+            nodesArr.push('( 4644, 13): Put value new ArrayList<>() in Map fileVsSerailsList for key eachFileName');
+            nodesArr.push('( 4648, 5): Get current time in milliseconds and assign the result to variable endTime');
+            nodesArr.push('( 4649, 5): Print ("Time taken to execute getSerialsForSAFFiles() : " + TimeUtils.getTimeTaken(startTime, endTime))');
+            nodesArr.push('( 4652, 5): Return fileVsSerailsList');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/stroke', 'green',);
+            rect0.attr('circle/fill', 'white',);
+            rect0.attr('text/fill', 'black');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('(4518,5): Get current time in milliseconds and assign the result to variable startTime    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4519, 5): Create an instance of Map<String, List<Integer>> and assign it to variable fileVsSerailsList    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4520, 5): Create an instance of Map<String, List<Map<String, Object>>> and assign it to variable fileVsSerailDetailsList    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4521, 5): Initialize variable serialDetails of type Map<String, Object> as null    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4523, 5): Create a List object from the Array of [filesList.split(",")]    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.attr('label/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4524, 5): Initialize variable serialDetailsList of type List<Map<String, Object>> as null    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4526, 5): Initialize variable serial of type int as -1    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4528, 5): Initialize variable fileName of type String as null    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4529, 5): Initialize variable binPassFail of type String as null    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4530, 5): Initialize variable condPassFail of type String as null    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4531, 5): Create an SQL Select statement and assign the result to variable getSerialsInfoSql    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4551, 5): Print ("getSerialsInfoSql : " + getSerialsInfoSql)    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4553, 10): Call safFileLoaderConnection.prepareStatement with params [getSerialsInfoSql] and assign the result to variable preparedStatement    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4555, 9): Call executeQuery() on variable preparedStatement and assign the result to variable resultSet    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4558, 7): Call setFetchSize() on variable resultSet    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4559, 14): While ( rows are available in Result Set)    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4560, 9): Call getString on variable ResultSet and assign the result to variable fileName    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4561, 9): Call getInt on variable ResultSet and assign the result to variable serial    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.attr('label/text', flowChartNode);
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4562, 9): Call getString on variable ResultSet and assign the result to variable binPassFail    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4563, 9): Call getString on variable ResultSet and assign the result to variable condPassFail    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4565, 9): Get value from Map fileVsSerailDetailsList for key fileName and assign the result to variable serialDetailsList    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4566, 13):  serialDetailsList is equal to null');
+            var rect22 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect22.resize(maxNodeWidth, resizeWidth);
+            rect22.attr('label/cursor', 'context-menu');
+            rect22.attr('body/cursor', 'context-menu');
+            rect22.attr('text/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4567, 11): Create an instance of ArrayList<> and assign the result to variable serialDetailsList    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.translate(-1.1 * maxNodeWidth,400300);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4568, 11): Put value serialDetailsList in Map fileVsSerailDetailsList for key fileName    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.translate(-1.1 * maxNodeWidth,400300);
+            rect24.attr('label/text', flowChartNode);
+            rect24.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+            rect25.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4571, 9): Create an instance of HashMap<> and assign the result to variable serialDetails    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4573, 9): Put value serial in Map serialDetails for key "SERIAL"    ');
+            var rect27 = rect.clone();
+            rect27.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect27.attr('label/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4574, 9): Put value binPassFail in Map serialDetails for key "BIN_PASSFAIL"    ');
+            var rect28 = rect.clone();
+            rect28.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect28.attr('label/text', flowChartNode);
+            rect28.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4575, 9): Put value condPassFail in Map serialDetails for key "COND_PASSFAIL"    ');
+            var rect29 = rect.clone();
+            rect29.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect29.attr('label/text', flowChartNode);
+            rect29.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4577, 9): Add serialDetails value to List serialDetailsList    ');
+            var rect30 = rect.clone();
+            rect30.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect30.attr('label/text', flowChartNode);
+            rect30.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - While loop    ');
+            var rect31 = rect.clone();
+            rect31.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect31.attr('label/text', flowChartNode);
+            rect31.addTo(nlStatementsGraph);
+            rect31.attr('body/stroke', '#F400A1');
+
+            flowChartNode = getBrokenText('( 4583, 5): Create an instance of Map<String, Integer> and assign it to variable serialsCountByFile    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Put value fileVsSerailDetailsList.get(fileNameFromList).size() in Map serialsCountByFile for key fileNameFromList    ');
+            var rect33 = rect.clone();
+            rect33.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect33.attr('label/text', flowChartNode);
+            rect33.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4591, 5): Print ("serialsCountByFile before filtering : " + serialsCountByFile)    ');
+            var rect34 = rect.clone();
+            rect34.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect34.attr('label/text', flowChartNode);
+            rect34.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4593, 5): Create a List object from the Array of ["G", "P"]    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.attr('label/text', flowChartNode);
+            rect35.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4594, 5): Create a List object from the Array of ["P"]    ');
+            var rect36 = rect.clone();
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.attr('label/text', flowChartNode);
+            rect36.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Open stream on fileNamesList    ');
+            var rect37 = rect.clone();
+            rect37.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect37.attr('label/text', flowChartNode);
+            rect37.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Map fileNameFromList.substring(1, fileNameFromList.length() - 1); to fileNamesList.stream()    ');
+            var rect38 = rect.clone();
+            rect38.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect38.attr('label/text', flowChartNode);
+            rect38.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('fileNamesList.stream().map(fileNameFromList -> fileNameFromList.substring(1, fileNameFromList.length() - 1)).forEach(fileNameFromList)    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4601, 15): Call safFilesWithRetestFlag.get with params [fileNameFromList] and assign the result to variable hasRetestFlag    ');
+            var rect40 = rect.clone();
+            rect40.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect40.attr('label/text', flowChartNode);
+            rect40.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4602, 15): Get value from Map fileVsSerailDetailsList for key fileNameFromList and assign the result to variable serialDetailsListNew    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4604, 19):  hasRetestFlag is equal to null OR hasRetestFlag');
+            var rect42 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect42.resize(maxNodeWidth, resizeWidth);
+            rect42.attr('label/cursor', 'context-menu');
+            rect42.attr('body/cursor', 'context-menu');
+            rect42.attr('text/text', flowChartNode);
+            rect42.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('FILTER-START    ');
+            var rect43 = rect.clone();
+            rect43.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect43.translate(-1.1 * maxNodeWidth,402000);
+            rect43.attr('label/text', flowChartNode);
+            rect43.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('condPassFailForNonRetest contains "(String) serialDetailsNew.get("COND_PASSFAIL")" AND binPassFailForNonRetest contains "(String) serialDetailsNew.get("BIN_PASSFAIL")"    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.translate(-1.1 * maxNodeWidth,402000);
+            rect44.attr('label/text', flowChartNode);
+            rect44.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('FILTER-END    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.translate(-1.1 * maxNodeWidth,402000);
+            rect45.attr('label/text', flowChartNode);
+            rect45.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.attr('label/text', flowChartNode);
+            rect46.addTo(nlStatementsGraph);
+            rect46.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4624, 15): Put value serialsList in Map fileVsSerailsList for key fileNameFromList    ');
+            var rect47 = rect.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.attr('label/text', flowChartNode);
+            rect47.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Put value fileVsSerailDetailsList.get(fileNameFromList).size() in Map serialsCountByFile for key fileNameFromList    ');
+            var rect48 = rect.clone();
+            rect48.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect48.attr('label/text', flowChartNode);
+            rect48.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4634, 5): Print ("serialsCountByFile after filtering  : " + serialsCountByFile)    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.attr('label/text', flowChartNode);
+            rect49.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('fileNamesList.forEach(eachFileName)    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.attr('label/text', flowChartNode);
+            rect50.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4642, 11): Call eachFileName.substring with params [1, eachFileName.length() - 1] and assign the result to variable eachFileName    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.attr('label/text', flowChartNode);
+            rect51.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4643, 15):  fileVsSerailsList doesn\'t containsKey "eachFileName"');
+            var rect52 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect52.resize(maxNodeWidth, resizeWidth);
+            rect52.attr('label/cursor', 'context-menu');
+            rect52.attr('body/cursor', 'context-menu');
+            rect52.attr('text/text', flowChartNode);
+            rect52.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4644, 13): Put value new ArrayList<>() in Map fileVsSerailsList for key eachFileName    ');
+            var rect53 = rect.clone();
+            rect53.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect53.translate(-1.1 * maxNodeWidth,402600);
+            rect53.attr('label/text', flowChartNode);
+            rect53.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect54 = rect.clone();
+            rect54.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect54.attr('label/text', flowChartNode);
+            rect54.addTo(nlStatementsGraph);
+            rect54.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4648, 5): Get current time in milliseconds and assign the result to variable endTime    ');
+            var rect55 = rect.clone();
+            rect55.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect55.attr('label/text', flowChartNode);
+            rect55.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4649, 5): Print ("Time taken to execute getSerialsForSAFFiles() : " + TimeUtils.getTimeTaken(startTime, endTime))    ');
+            var rect56 = rect.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.attr('label/text', flowChartNode);
+            rect56.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4652, 5): Return fileVsSerailsList    ');
+            var rect57 = rect.clone();
+            rect57.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect57.attr('label/text', flowChartNode);
+            rect57.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect58 = ellipse.clone();
+            rect58.attr('circle/cursor', 'context-menu');
+            rect58.attr('text/cursor', 'context-menu');
+            rect58.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect58.attr('text/text', flowChartNode);
+            rect58.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect10);
+            link11.target(rect11);
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect11);
+            link12.target(rect12);
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect12);
+            link13.target(rect13);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect14);
+            link15.target(rect15);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect15);
+            link16.target(rect16);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect16);
+            link17.target(rect17);
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect17);
+            link18.target(rect18);
+            link18.addTo(nlStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect18);
+            link19.target(rect19);
+            link19.addTo(nlStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect19);
+            link20.target(rect20);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect20);
+            link21.target(rect21);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect21);
+            link22.target(rect22);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect22);
+            link23.target(rect23);
+            link23.set('ifBlockStartLink', true);
+            link23.label(0, {attrs: {text: {text: 'Yes'}}});
+        link23.attr('line/stroke', 'green');
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect23);
+            link24.target(rect24);
+            link24.addTo(nlStatementsGraph);
+
+            var link25 = link.clone();
+            link25.source(rect24);
+            link25.target(rect25);
+            link25.addTo(nlStatementsGraph);
+            link25.set('ifBlockEndLink', true);
+            link25.label(0, {attrs: {text: {text: 'Yes'}}});
+        link25.attr('line/stroke', 'green');
+
+            var link26 = link.clone();
+            link26.source(rect22);
+            link26.target(rect25);
+            link26.addTo(nlStatementsGraph);
+            link26.label(0, {attrs: {text: {text: 'No'}}});
+            link26.set('elseBlockStartAndEndLink', true);
+        link26.attr('line/stroke', 'red');
+
+            rect22.set('endIfConditionId', rect25.id);
+            rect25.set('ifConditionId', rect22.id);
+
+            var link27 = link.clone();
+            link27.source(rect25);
+            link27.target(rect26);
+            link27.addTo(nlStatementsGraph);
+
+            var link28 = link.clone();
+            link28.source(rect26);
+            link28.target(rect27);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect27);
+            link29.target(rect28);
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect28);
+            link30.target(rect29);
+            link30.addTo(nlStatementsGraph);
+
+            var link31 = link.clone();
+            link31.source(rect29);
+            link31.target(rect30);
+            link31.addTo(nlStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect30);
+            link32.target(rect31);
+            link32.addTo(nlStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect31);
+            link33.target(rect16);
+            rect16.set('whileStart', rect31.get('id'));
+            rect31.set('whileEnd', rect16.get('id'));
+            rect16.attr('body/stroke', '#F400A1');
+            link33.set('loopConnector', true);
+            link33.label(0, {attrs: {text: {text: breakText(50, 'While Loop')}}});
+        link33.attr('line/stroke', '#F400A1');
+            link33.addTo(nlStatementsGraph);
+
+            var link34 = link.clone();
+            link34.source(rect31);
+            link34.target(rect32);
+            link34.addTo(nlStatementsGraph);
+
+            var link35 = link.clone();
+            link35.source(rect32);
+            link35.target(rect33);
+            link35.addTo(nlStatementsGraph);
+
+            var link36 = link.clone();
+            link36.source(rect33);
+            link36.target(rect34);
+            link36.addTo(nlStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect34);
+            link37.target(rect35);
+            link37.addTo(nlStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect35);
+            link38.target(rect36);
+            link38.addTo(nlStatementsGraph);
+
+            var link39 = link.clone();
+            link39.source(rect36);
+            link39.target(rect37);
+            link39.addTo(nlStatementsGraph);
+
+            var link40 = link.clone();
+            link40.source(rect37);
+            link40.target(rect38);
+            link40.addTo(nlStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect38);
+            link41.target(rect39);
+            link41.addTo(nlStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect39);
+            link42.target(rect40);
+            link42.addTo(nlStatementsGraph);
+
+            var link43 = link.clone();
+            link43.source(rect40);
+            link43.target(rect41);
+            link43.addTo(nlStatementsGraph);
+
+            var link44 = link.clone();
+            link44.source(rect41);
+            link44.target(rect42);
+            link44.addTo(nlStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect42);
+            link45.target(rect43);
+            link45.set('ifBlockStartLink', true);
+            link45.label(0, {attrs: {text: {text: 'Yes'}}});
+        link45.attr('line/stroke', 'green');
+            link45.addTo(nlStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect43);
+            link46.target(rect44);
+            link46.addTo(nlStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect44);
+            link47.target(rect45);
+            link47.addTo(nlStatementsGraph);
+
+            var link48 = link.clone();
+            link48.source(rect45);
+            link48.target(rect46);
+            link48.addTo(nlStatementsGraph);
+            link48.set('ifBlockEndLink', true);
+            link48.label(0, {attrs: {text: {text: 'Yes'}}});
+        link48.attr('line/stroke', 'green');
+
+            var link49 = link.clone();
+            link49.source(rect42);
+            link49.target(rect46);
+            link49.addTo(nlStatementsGraph);
+            link49.label(0, {attrs: {text: {text: 'No'}}});
+            link49.set('elseBlockStartAndEndLink', true);
+        link49.attr('line/stroke', 'red');
+
+            rect42.set('endIfConditionId', rect46.id);
+            rect46.set('ifConditionId', rect42.id);
+
+            var link50 = link.clone();
+            link50.source(rect46);
+            link50.target(rect47);
+            link50.addTo(nlStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect47);
+            link51.target(rect39);
+            rect39.attr('body/stroke', '#F400A1');
+            link51.set('loopConnector', true);
+            link51.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link51.attr('line/stroke', '#F400A1');
+            link51.addTo(nlStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect47);
+            link52.target(rect48);
+            link52.addTo(nlStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect48);
+            link53.target(rect49);
+            link53.addTo(nlStatementsGraph);
+
+            var link54 = link.clone();
+            link54.source(rect49);
+            link54.target(rect50);
+            link54.addTo(nlStatementsGraph);
+
+            var link55 = link.clone();
+            link55.source(rect50);
+            link55.target(rect51);
+            link55.addTo(nlStatementsGraph);
+
+            var link56 = link.clone();
+            link56.source(rect51);
+            link56.target(rect52);
+            link56.addTo(nlStatementsGraph);
+
+            var link57 = link.clone();
+            link57.source(rect52);
+            link57.target(rect53);
+            link57.set('ifBlockStartLink', true);
+            link57.label(0, {attrs: {text: {text: 'Yes'}}});
+        link57.attr('line/stroke', 'green');
+            link57.addTo(nlStatementsGraph);
+
+            var link58 = link.clone();
+            link58.source(rect53);
+            link58.target(rect54);
+            link58.addTo(nlStatementsGraph);
+            link58.set('ifBlockEndLink', true);
+            link58.label(0, {attrs: {text: {text: 'Yes'}}});
+        link58.attr('line/stroke', 'green');
+
+            var link59 = link.clone();
+            link59.source(rect52);
+            link59.target(rect54);
+            link59.addTo(nlStatementsGraph);
+            link59.label(0, {attrs: {text: {text: 'No'}}});
+            link59.set('elseBlockStartAndEndLink', true);
+        link59.attr('line/stroke', 'red');
+
+            rect52.set('endIfConditionId', rect54.id);
+            rect54.set('ifConditionId', rect52.id);
+
+            var link60 = link.clone();
+            link60.source(rect54);
+            link60.target(rect50);
+            rect50.attr('body/stroke', '#F400A1');
+            link60.set('loopConnector', true);
+            link60.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link60.attr('line/stroke', '#F400A1');
+            link60.addTo(nlStatementsGraph);
+
+            var link61 = link.clone();
+            link61.source(rect54);
+            link61.target(rect55);
+            link61.addTo(nlStatementsGraph);
+
+            var link62 = link.clone();
+            link62.source(rect55);
+            link62.target(rect56);
+            link62.addTo(nlStatementsGraph);
+
+            var link63 = link.clone();
+            link63.source(rect56);
+            link63.target(rect57);
+            link63.addTo(nlStatementsGraph);
+
+            var link64 = link.clone();
+            link64.source(rect57);
+            link64.target(rect58);
+            link64.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect58.set('stopNode', 'true');
+            rect58.attr('circle/stroke', 'green',);
+            rect58.attr('circle/fill', 'white',);
+            rect58.attr('text/fill', 'black');
+            rect58.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect58);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 11800,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('(4518,5): long startTime = System.currentTimeMillis();');
+            nodesArr.push('( 4519, 5): Map<String, List<Integer>> fileVsSerailsList = new HashMap<>();');
+            nodesArr.push('( 4520, 5): Map<String, List<Map<String, Object>>> fileVsSerailDetailsList = new HashMap<>();');
+            nodesArr.push('( 4521, 5): Map<String, Object> serialDetails = null;');
+            nodesArr.push('( 4523, 5): List<String> fileNamesList = Arrays.asList(filesList.split(","));');
+            nodesArr.push('( 4524, 5): List<Map<String, Object>> serialDetailsList = null;');
+            nodesArr.push('( 4526, 5): int serial = -1;');
+            nodesArr.push('( 4528, 5): String fileName = null;');
+            nodesArr.push('( 4529, 5): String binPassFail = null;');
+            nodesArr.push('( 4530, 5): String condPassFail = null;');
+            nodesArr.push('( 4531, 5): String getSerialsInfoSql = // Commented the the below condition and implemented the same in the Java Program due to"SELECT FILELOG.FILENAME, SERIALS.SERIAL_ID, SERIALS.BIN_PASSFAIL, SERIALS.COND_PASSFAIL FROM PI_SAF_FILE_PROCESS_LOG FILELOG, " + "DC_LOT_AUDIT LOT_AUDIT, DC_LOT LOT, PI_SAF_SERIAL_METADATA_STG SERIALS " + "WHERE LOT.LOT_HANDLE = LOT_AUDIT.LOT_HANDLE AND SUBSTR(LOT_AUDIT.SOURCE_FILENAME, " + "INSTR(LOT_AUDIT.SOURCE_FILENAME, " + File.separator + ", -1) + 1) = FILELOG.FILENAME " + "AND SERIALS.FILE_ID = FILELOG.FILE_ID " + // performance issues with SQL// "AND ((LOT.RETEST <> 1 AND SERIALS.COND_PASSFAIL IN (G, P) AND// SERIALS.BIN_PASSFAIL = P) " +// "OR (LOT.RETEST = 1 AND SERIALS.COND_PASSFAIL IN (G, P, F) AND// SERIALS.BIN_PASSFAIL IN (P, F))) " +"AND FILELOG.FILENAME IN (" + filesList + ") " + "AND SERIALS.IS_DUPLICATE_SERIAL_PASSFAIL = FALSE ";');
+            nodesArr.push('( 4551, 5): logger.debug("getSerialsInfoSql : " + getSerialsInfoSql);');
+            nodesArr.push('( 4553, 10): PreparedStatement preparedStatement = safFileLoaderConnection.prepareStatement(getSerialsInfoSql)');
+            nodesArr.push('( 4555, 9): ResultSet resultSet = preparedStatement.executeQuery()');
+            nodesArr.push('( 4558, 7): resultSet.setFetchSize(2000);');
+            nodesArr.push('( 4559, 14): While ( resultSet.next())');
+            nodesArr.push('( 4560, 9): fileName = resultSet.getString(1);');
+            nodesArr.push('( 4561, 9): serial = resultSet.getInt(2);');
+            nodesArr.push('( 4562, 9): binPassFail = resultSet.getString(3);');
+            nodesArr.push('( 4563, 9): condPassFail = resultSet.getString(4);');
+            nodesArr.push('( 4565, 9): serialDetailsList = fileVsSerailDetailsList.get(fileName);');
+            nodesArr.push('( 4566, 13):  serialDetailsList == null');
+            nodesArr.push('( 4567, 11): serialDetailsList = new ArrayList<>();');
+            nodesArr.push('( 4568, 11): fileVsSerailDetailsList.put(fileName, serialDetailsList);');
+            nodesArr.push('( 4571, 9): serialDetails = new HashMap<>();');
+            nodesArr.push('( 4573, 9): serialDetails.put("SERIAL", serial);');
+            nodesArr.push('( 4574, 9): serialDetails.put("BIN_PASSFAIL", binPassFail);');
+            nodesArr.push('( 4575, 9): serialDetails.put("COND_PASSFAIL", condPassFail);');
+            nodesArr.push('( 4577, 9): serialDetailsList.add(serialDetails);');
+            nodesArr.push('End - While loop');
+            nodesArr.push('( 4583, 5): Map<String, Integer> serialsCountByFile = new HashMap<>();');
+            nodesArr.push('Call put() on variable serialsCountByFile');
+            nodesArr.push('( 4591, 5): logger.debug("serialsCountByFile before filtering : " + serialsCountByFile);');
+            nodesArr.push('( 4593, 5): List<String> condPassFailForNonRetest = Arrays.asList("G", "P");');
+            nodesArr.push('( 4594, 5): List<String> binPassFailForNonRetest = Arrays.asList("P");');
+            nodesArr.push('Open stream on fileNamesList');
+            nodesArr.push('Map fileNameFromList.substring(1, fileNameFromList.length() - 1); to fileNamesList.stream()');
+            nodesArr.push('fileNamesList.stream().map(fileNameFromList -> fileNameFromList.substring(1, fileNameFromList.length() - 1)).forEach(fileNameFromList)');
+            nodesArr.push('( 4601, 15): Boolean hasRetestFlag = safFilesWithRetestFlag.get(fileNameFromList);');
+            nodesArr.push('( 4602, 15): List<Map<String, Object>> serialDetailsListNew = fileVsSerailDetailsList.get(fileNameFromList);');
+            nodesArr.push('( 4604, 19):  hasRetestFlag == null || !hasRetestFlag.booleanValue()');
+            nodesArr.push('FILTER-START');
+            nodesArr.push('condPassFailForNonRetest contains "(String) serialDetailsNew.get("COND_PASSFAIL")" AND binPassFailForNonRetest contains "(String) serialDetailsNew.get("BIN_PASSFAIL")"');
+            nodesArr.push('FILTER-END');
+            nodesArr.push('( 4624, 15): fileVsSerailsList.put(fileNameFromList, serialsList);');
+            nodesArr.push('Call put() on variable serialsCountByFile');
+            nodesArr.push('( 4634, 5): logger.debug("serialsCountByFile after filtering  : " + serialsCountByFile);');
+            nodesArr.push('fileNamesList.forEach(eachFileName)');
+            nodesArr.push('( 4642, 11): eachFileName = eachFileName.substring(1, eachFileName.length() - 1);');
+            nodesArr.push('( 4643, 15):  !fileVsSerailsList.containsKey(eachFileName)');
+            nodesArr.push('( 4644, 13): fileVsSerailsList.put(eachFileName, new ArrayList<>());');
+            nodesArr.push('( 4648, 5): long endTime = System.currentTimeMillis();');
+            nodesArr.push('( 4649, 5): logger.info("Time taken to execute getSerialsForSAFFiles() : " + TimeUtils.getTimeTaken(startTime, endTime));');
+            nodesArr.push('( 4652, 5): return fileVsSerailsList;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect59 = ellipse.clone();
+            rect59.addTo(javaStatementsGraph);
+            rect59.attr('text/text', 'Start');
+            rect59.attr('circle/stroke', 'green',);
+            rect59.attr('circle/fill', 'white',);
+            rect59.attr('text/fill', 'black');
+
+            rootNode = rect59;
+
+            flowChartNode = getBrokenText('(4518,5): long startTime = System.currentTimeMillis();    ');
+            var rect60 = rect.clone();
+            rect60.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect60.attr('label/text', flowChartNode);
+            rect60.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4519, 5): Map<String, List<Integer>> fileVsSerailsList = new HashMap<>();    ');
+            var rect61 = rect.clone();
+            rect61.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect61.attr('label/text', flowChartNode);
+            rect61.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4520, 5): Map<String, List<Map<String, Object>>> fileVsSerailDetailsList = new HashMap<>();    ');
+            var rect62 = rect.clone();
+            rect62.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect62.attr('label/text', flowChartNode);
+            rect62.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4521, 5): Map<String, Object> serialDetails = null;    ');
+            var rect63 = rect.clone();
+            rect63.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect63.attr('label/text', flowChartNode);
+            rect63.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4523, 5): List<String> fileNamesList = Arrays.asList(filesList.split(","));    ');
+            var rect64 = rect.clone();
+            rect64.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect64.attr('label/text', flowChartNode);
+            rect64.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4524, 5): List<Map<String, Object>> serialDetailsList = null;    ');
+            var rect65 = rect.clone();
+            rect65.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect65.attr('label/text', flowChartNode);
+            rect65.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4526, 5): int serial = -1;    ');
+            var rect66 = rect.clone();
+            rect66.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect66.attr('label/text', flowChartNode);
+            rect66.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4528, 5): String fileName = null;    ');
+            var rect67 = rect.clone();
+            rect67.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect67.attr('label/text', flowChartNode);
+            rect67.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4529, 5): String binPassFail = null;    ');
+            var rect68 = rect.clone();
+            rect68.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect68.attr('label/text', flowChartNode);
+            rect68.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4530, 5): String condPassFail = null;    ');
+            var rect69 = rect.clone();
+            rect69.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect69.attr('label/text', flowChartNode);
+            rect69.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4531, 5): String getSerialsInfoSql = // Commented the the below condition and implemented the same in the Java Program due to"SELECT FILELOG.FILENAME, SERIALS.SERIAL_ID, SERIALS.BIN_PASSFAIL, SERIALS.COND_PASSFAIL FROM PI_SAF_FILE_PROCESS_LOG FILELOG, " + "DC_LOT_AUDIT LOT_AUDIT, DC_LOT LOT, PI_SAF_SERIAL_METADATA_STG SERIALS " + "WHERE LOT.LOT_HANDLE = LOT_AUDIT.LOT_HANDLE AND SUBSTR(LOT_AUDIT.SOURCE_FILENAME, " + "INSTR(LOT_AUDIT.SOURCE_FILENAME, " + File.separator + ", -1) + 1) = FILELOG.FILENAME " + "AND SERIALS.FILE_ID = FILELOG.FILE_ID " + // performance issues with SQL// "AND ((LOT.RETEST <> 1 AND SERIALS.COND_PASSFAIL IN (G, P) AND// SERIALS.BIN_PASSFAIL = P) " +// "OR (LOT.RETEST = 1 AND SERIALS.COND_PASSFAIL IN (G, P, F) AND// SERIALS.BIN_PASSFAIL IN (P, F))) " +"AND FILELOG.FILENAME IN (" + filesList + ") " + "AND SERIALS.IS_DUPLICATE_SERIAL_PASSFAIL = FALSE ";    ');
+            var rect70 = rect.clone();
+            rect70.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect70.attr('label/text', flowChartNode);
+            rect70.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4551, 5): logger.debug("getSerialsInfoSql : " + getSerialsInfoSql);    ');
+            var rect71 = rect.clone();
+            rect71.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect71.attr('label/text', flowChartNode);
+            rect71.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4553, 10): PreparedStatement preparedStatement = safFileLoaderConnection.prepareStatement(getSerialsInfoSql)    ');
+            var rect72 = rect.clone();
+            rect72.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect72.attr('label/text', flowChartNode);
+            rect72.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4555, 9): ResultSet resultSet = preparedStatement.executeQuery()    ');
+            var rect73 = rect.clone();
+            rect73.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect73.attr('label/text', flowChartNode);
+            rect73.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4558, 7): resultSet.setFetchSize(2000);    ');
+            var rect74 = rect.clone();
+            rect74.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect74.attr('label/text', flowChartNode);
+            rect74.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4559, 14): While ( resultSet.next())    ');
+            var rect75 = rect.clone();
+            rect75.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect75.attr('label/text', flowChartNode);
+            rect75.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4560, 9): fileName = resultSet.getString(1);    ');
+            var rect76 = rect.clone();
+            rect76.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect76.attr('label/text', flowChartNode);
+            rect76.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4561, 9): serial = resultSet.getInt(2);    ');
+            var rect77 = rect.clone();
+            rect77.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect77.attr('label/text', flowChartNode);
+            rect77.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4562, 9): binPassFail = resultSet.getString(3);    ');
+            var rect78 = rect.clone();
+            rect78.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect78.attr('label/text', flowChartNode);
+            rect78.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4563, 9): condPassFail = resultSet.getString(4);    ');
+            var rect79 = rect.clone();
+            rect79.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect79.attr('label/text', flowChartNode);
+            rect79.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4565, 9): serialDetailsList = fileVsSerailDetailsList.get(fileName);    ');
+            var rect80 = rect.clone();
+            rect80.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect80.attr('label/text', flowChartNode);
+            rect80.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4566, 13):  serialDetailsList == null');
+            var rect81 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect81.resize(maxNodeWidth, resizeWidth);
+            rect81.attr('label/cursor', 'context-menu');
+            rect81.attr('body/cursor', 'context-menu');
+            rect81.attr('text/text', flowChartNode);
+            rect81.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4567, 11): serialDetailsList = new ArrayList<>();    ');
+            var rect82 = rect.clone();
+            rect82.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect82.translate(-1.1 * maxNodeWidth,405200);
+            rect82.attr('label/text', flowChartNode);
+            rect82.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4568, 11): fileVsSerailDetailsList.put(fileName, serialDetailsList);    ');
+            var rect83 = rect.clone();
+            rect83.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect83.translate(-1.1 * maxNodeWidth,405200);
+            rect83.attr('label/text', flowChartNode);
+            rect83.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect84 = rect.clone();
+            rect84.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect84.attr('label/text', flowChartNode);
+            rect84.addTo(javaStatementsGraph);
+            rect84.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4571, 9): serialDetails = new HashMap<>();    ');
+            var rect85 = rect.clone();
+            rect85.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect85.attr('label/text', flowChartNode);
+            rect85.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4573, 9): serialDetails.put("SERIAL", serial);    ');
+            var rect86 = rect.clone();
+            rect86.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect86.attr('label/text', flowChartNode);
+            rect86.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4574, 9): serialDetails.put("BIN_PASSFAIL", binPassFail);    ');
+            var rect87 = rect.clone();
+            rect87.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect87.attr('label/text', flowChartNode);
+            rect87.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4575, 9): serialDetails.put("COND_PASSFAIL", condPassFail);    ');
+            var rect88 = rect.clone();
+            rect88.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect88.attr('label/text', flowChartNode);
+            rect88.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4577, 9): serialDetailsList.add(serialDetails);    ');
+            var rect89 = rect.clone();
+            rect89.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect89.attr('label/text', flowChartNode);
+            rect89.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - While loop    ');
+            var rect90 = rect.clone();
+            rect90.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect90.attr('label/text', flowChartNode);
+            rect90.addTo(javaStatementsGraph);
+            rect90.attr('body/stroke', '#F400A1');
+
+            flowChartNode = getBrokenText('( 4583, 5): Map<String, Integer> serialsCountByFile = new HashMap<>();    ');
+            var rect91 = rect.clone();
+            rect91.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect91.attr('label/text', flowChartNode);
+            rect91.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Call put() on variable serialsCountByFile    ');
+            var rect92 = rect.clone();
+            rect92.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect92.attr('label/text', flowChartNode);
+            rect92.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4591, 5): logger.debug("serialsCountByFile before filtering : " + serialsCountByFile);    ');
+            var rect93 = rect.clone();
+            rect93.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect93.attr('label/text', flowChartNode);
+            rect93.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4593, 5): List<String> condPassFailForNonRetest = Arrays.asList("G", "P");    ');
+            var rect94 = rect.clone();
+            rect94.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect94.attr('label/text', flowChartNode);
+            rect94.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4594, 5): List<String> binPassFailForNonRetest = Arrays.asList("P");    ');
+            var rect95 = rect.clone();
+            rect95.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect95.attr('label/text', flowChartNode);
+            rect95.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Open stream on fileNamesList    ');
+            var rect96 = rect.clone();
+            rect96.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect96.attr('label/text', flowChartNode);
+            rect96.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Map fileNameFromList.substring(1, fileNameFromList.length() - 1); to fileNamesList.stream()    ');
+            var rect97 = rect.clone();
+            rect97.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect97.attr('label/text', flowChartNode);
+            rect97.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('fileNamesList.stream().map(fileNameFromList -> fileNameFromList.substring(1, fileNameFromList.length() - 1)).forEach(fileNameFromList)    ');
+            var rect98 = rect.clone();
+            rect98.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect98.attr('label/text', flowChartNode);
+            rect98.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4601, 15): Boolean hasRetestFlag = safFilesWithRetestFlag.get(fileNameFromList);    ');
+            var rect99 = rect.clone();
+            rect99.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect99.attr('label/text', flowChartNode);
+            rect99.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4602, 15): List<Map<String, Object>> serialDetailsListNew = fileVsSerailDetailsList.get(fileNameFromList);    ');
+            var rect100 = rect.clone();
+            rect100.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect100.attr('label/text', flowChartNode);
+            rect100.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4604, 19):  hasRetestFlag == null || !hasRetestFlag.booleanValue()');
+            var rect101 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect101.resize(maxNodeWidth, resizeWidth);
+            rect101.attr('label/cursor', 'context-menu');
+            rect101.attr('body/cursor', 'context-menu');
+            rect101.attr('text/text', flowChartNode);
+            rect101.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('FILTER-START    ');
+            var rect102 = rect.clone();
+            rect102.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect102.translate(-1.1 * maxNodeWidth,406900);
+            rect102.attr('label/text', flowChartNode);
+            rect102.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('condPassFailForNonRetest contains "(String) serialDetailsNew.get("COND_PASSFAIL")" AND binPassFailForNonRetest contains "(String) serialDetailsNew.get("BIN_PASSFAIL")"    ');
+            var rect103 = rect.clone();
+            rect103.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect103.translate(-1.1 * maxNodeWidth,406900);
+            rect103.attr('label/text', flowChartNode);
+            rect103.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('FILTER-END    ');
+            var rect104 = rect.clone();
+            rect104.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect104.translate(-1.1 * maxNodeWidth,406900);
+            rect104.attr('label/text', flowChartNode);
+            rect104.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect105 = rect.clone();
+            rect105.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect105.attr('label/text', flowChartNode);
+            rect105.addTo(javaStatementsGraph);
+            rect105.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4624, 15): fileVsSerailsList.put(fileNameFromList, serialsList);    ');
+            var rect106 = rect.clone();
+            rect106.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect106.attr('label/text', flowChartNode);
+            rect106.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Call put() on variable serialsCountByFile    ');
+            var rect107 = rect.clone();
+            rect107.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect107.attr('label/text', flowChartNode);
+            rect107.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4634, 5): logger.debug("serialsCountByFile after filtering  : " + serialsCountByFile);    ');
+            var rect108 = rect.clone();
+            rect108.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect108.attr('label/text', flowChartNode);
+            rect108.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('fileNamesList.forEach(eachFileName)    ');
+            var rect109 = rect.clone();
+            rect109.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect109.attr('label/text', flowChartNode);
+            rect109.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4642, 11): eachFileName = eachFileName.substring(1, eachFileName.length() - 1);    ');
+            var rect110 = rect.clone();
+            rect110.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect110.attr('label/text', flowChartNode);
+            rect110.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4643, 15):  !fileVsSerailsList.containsKey(eachFileName)');
+            var rect111 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect111.resize(maxNodeWidth, resizeWidth);
+            rect111.attr('label/cursor', 'context-menu');
+            rect111.attr('body/cursor', 'context-menu');
+            rect111.attr('text/text', flowChartNode);
+            rect111.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4644, 13): fileVsSerailsList.put(eachFileName, new ArrayList<>());    ');
+            var rect112 = rect.clone();
+            rect112.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect112.translate(-1.1 * maxNodeWidth,407500);
+            rect112.attr('label/text', flowChartNode);
+            rect112.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect113 = rect.clone();
+            rect113.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect113.attr('label/text', flowChartNode);
+            rect113.addTo(javaStatementsGraph);
+            rect113.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('( 4648, 5): long endTime = System.currentTimeMillis();    ');
+            var rect114 = rect.clone();
+            rect114.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect114.attr('label/text', flowChartNode);
+            rect114.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4649, 5): logger.info("Time taken to execute getSerialsForSAFFiles() : " + TimeUtils.getTimeTaken(startTime, endTime));    ');
+            var rect115 = rect.clone();
+            rect115.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect115.attr('label/text', flowChartNode);
+            rect115.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('( 4652, 5): return fileVsSerailsList;    ');
+            var rect116 = rect.clone();
+            rect116.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect116.attr('label/text', flowChartNode);
+            rect116.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect117 = ellipse.clone();
+            rect117.attr('circle/cursor', 'context-menu');
+            rect117.attr('text/cursor', 'context-menu');
+            rect117.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect117.attr('text/text', flowChartNode);
+            rect117.addTo(javaStatementsGraph);
+
+
+            var link65 = link.clone();
+            link65.source(rect59);
+            link65.target(rect60);
+            link65.addTo(javaStatementsGraph);
+
+            var link66 = link.clone();
+            link66.source(rect60);
+            link66.target(rect61);
+            link66.addTo(javaStatementsGraph);
+
+            var link67 = link.clone();
+            link67.source(rect61);
+            link67.target(rect62);
+            link67.addTo(javaStatementsGraph);
+
+            var link68 = link.clone();
+            link68.source(rect62);
+            link68.target(rect63);
+            link68.addTo(javaStatementsGraph);
+
+            var link69 = link.clone();
+            link69.source(rect63);
+            link69.target(rect64);
+            link69.addTo(javaStatementsGraph);
+
+            var link70 = link.clone();
+            link70.source(rect64);
+            link70.target(rect65);
+            link70.addTo(javaStatementsGraph);
+
+            var link71 = link.clone();
+            link71.source(rect65);
+            link71.target(rect66);
+            link71.addTo(javaStatementsGraph);
+
+            var link72 = link.clone();
+            link72.source(rect66);
+            link72.target(rect67);
+            link72.addTo(javaStatementsGraph);
+
+            var link73 = link.clone();
+            link73.source(rect67);
+            link73.target(rect68);
+            link73.addTo(javaStatementsGraph);
+
+            var link74 = link.clone();
+            link74.source(rect68);
+            link74.target(rect69);
+            link74.addTo(javaStatementsGraph);
+
+            var link75 = link.clone();
+            link75.source(rect69);
+            link75.target(rect70);
+            link75.addTo(javaStatementsGraph);
+
+            var link76 = link.clone();
+            link76.source(rect70);
+            link76.target(rect71);
+            link76.addTo(javaStatementsGraph);
+
+            var link77 = link.clone();
+            link77.source(rect71);
+            link77.target(rect72);
+            link77.addTo(javaStatementsGraph);
+
+            var link78 = link.clone();
+            link78.source(rect72);
+            link78.target(rect73);
+            link78.addTo(javaStatementsGraph);
+
+            var link79 = link.clone();
+            link79.source(rect73);
+            link79.target(rect74);
+            link79.addTo(javaStatementsGraph);
+
+            var link80 = link.clone();
+            link80.source(rect74);
+            link80.target(rect75);
+            link80.addTo(javaStatementsGraph);
+
+            var link81 = link.clone();
+            link81.source(rect75);
+            link81.target(rect76);
+            link81.addTo(javaStatementsGraph);
+
+            var link82 = link.clone();
+            link82.source(rect76);
+            link82.target(rect77);
+            link82.addTo(javaStatementsGraph);
+
+            var link83 = link.clone();
+            link83.source(rect77);
+            link83.target(rect78);
+            link83.addTo(javaStatementsGraph);
+
+            var link84 = link.clone();
+            link84.source(rect78);
+            link84.target(rect79);
+            link84.addTo(javaStatementsGraph);
+
+            var link85 = link.clone();
+            link85.source(rect79);
+            link85.target(rect80);
+            link85.addTo(javaStatementsGraph);
+
+            var link86 = link.clone();
+            link86.source(rect80);
+            link86.target(rect81);
+            link86.addTo(javaStatementsGraph);
+
+            var link87 = link.clone();
+            link87.source(rect81);
+            link87.target(rect82);
+            link87.set('ifBlockStartLink', true);
+            link87.label(0, {attrs: {text: {text: 'Yes'}}});
+        link87.attr('line/stroke', 'green');
+            link87.addTo(javaStatementsGraph);
+
+            var link88 = link.clone();
+            link88.source(rect82);
+            link88.target(rect83);
+            link88.addTo(javaStatementsGraph);
+
+            var link89 = link.clone();
+            link89.source(rect83);
+            link89.target(rect84);
+            link89.addTo(javaStatementsGraph);
+            link89.set('ifBlockEndLink', true);
+            link89.label(0, {attrs: {text: {text: 'Yes'}}});
+        link89.attr('line/stroke', 'green');
+
+            var link90 = link.clone();
+            link90.source(rect81);
+            link90.target(rect84);
+            link90.addTo(javaStatementsGraph);
+            link90.label(0, {attrs: {text: {text: 'No'}}});
+            link90.set('elseBlockStartAndEndLink', true);
+        link90.attr('line/stroke', 'red');
+
+            rect81.set('endIfConditionId', rect84.id);
+            rect84.set('ifConditionId', rect81.id);
+
+            var link91 = link.clone();
+            link91.source(rect84);
+            link91.target(rect85);
+            link91.addTo(javaStatementsGraph);
+
+            var link92 = link.clone();
+            link92.source(rect85);
+            link92.target(rect86);
+            link92.addTo(javaStatementsGraph);
+
+            var link93 = link.clone();
+            link93.source(rect86);
+            link93.target(rect87);
+            link93.addTo(javaStatementsGraph);
+
+            var link94 = link.clone();
+            link94.source(rect87);
+            link94.target(rect88);
+            link94.addTo(javaStatementsGraph);
+
+            var link95 = link.clone();
+            link95.source(rect88);
+            link95.target(rect89);
+            link95.addTo(javaStatementsGraph);
+
+            var link96 = link.clone();
+            link96.source(rect89);
+            link96.target(rect90);
+            link96.addTo(javaStatementsGraph);
+
+            var link97 = link.clone();
+            link97.source(rect90);
+            link97.target(rect75);
+            rect75.set('whileStart', rect90.get('id'));
+            rect90.set('whileEnd', rect75.get('id'));
+            rect75.attr('body/stroke', '#F400A1');
+            link97.set('loopConnector', true);
+            link97.label(0, {attrs: {text: {text: breakText(50, 'While Loop')}}});
+        link97.attr('line/stroke', '#F400A1');
+            link97.addTo(javaStatementsGraph);
+
+            var link98 = link.clone();
+            link98.source(rect90);
+            link98.target(rect91);
+            link98.addTo(javaStatementsGraph);
+
+            var link99 = link.clone();
+            link99.source(rect91);
+            link99.target(rect92);
+            link99.addTo(javaStatementsGraph);
+
+            var link100 = link.clone();
+            link100.source(rect92);
+            link100.target(rect93);
+            link100.addTo(javaStatementsGraph);
+
+            var link101 = link.clone();
+            link101.source(rect93);
+            link101.target(rect94);
+            link101.addTo(javaStatementsGraph);
+
+            var link102 = link.clone();
+            link102.source(rect94);
+            link102.target(rect95);
+            link102.addTo(javaStatementsGraph);
+
+            var link103 = link.clone();
+            link103.source(rect95);
+            link103.target(rect96);
+            link103.addTo(javaStatementsGraph);
+
+            var link104 = link.clone();
+            link104.source(rect96);
+            link104.target(rect97);
+            link104.addTo(javaStatementsGraph);
+
+            var link105 = link.clone();
+            link105.source(rect97);
+            link105.target(rect98);
+            link105.addTo(javaStatementsGraph);
+
+            var link106 = link.clone();
+            link106.source(rect98);
+            link106.target(rect99);
+            link106.addTo(javaStatementsGraph);
+
+            var link107 = link.clone();
+            link107.source(rect99);
+            link107.target(rect100);
+            link107.addTo(javaStatementsGraph);
+
+            var link108 = link.clone();
+            link108.source(rect100);
+            link108.target(rect101);
+            link108.addTo(javaStatementsGraph);
+
+            var link109 = link.clone();
+            link109.source(rect101);
+            link109.target(rect102);
+            link109.set('ifBlockStartLink', true);
+            link109.label(0, {attrs: {text: {text: 'Yes'}}});
+        link109.attr('line/stroke', 'green');
+            link109.addTo(javaStatementsGraph);
+
+            var link110 = link.clone();
+            link110.source(rect102);
+            link110.target(rect103);
+            link110.addTo(javaStatementsGraph);
+
+            var link111 = link.clone();
+            link111.source(rect103);
+            link111.target(rect104);
+            link111.addTo(javaStatementsGraph);
+
+            var link112 = link.clone();
+            link112.source(rect104);
+            link112.target(rect105);
+            link112.addTo(javaStatementsGraph);
+            link112.set('ifBlockEndLink', true);
+            link112.label(0, {attrs: {text: {text: 'Yes'}}});
+        link112.attr('line/stroke', 'green');
+
+            var link113 = link.clone();
+            link113.source(rect101);
+            link113.target(rect105);
+            link113.addTo(javaStatementsGraph);
+            link113.label(0, {attrs: {text: {text: 'No'}}});
+            link113.set('elseBlockStartAndEndLink', true);
+        link113.attr('line/stroke', 'red');
+
+            rect101.set('endIfConditionId', rect105.id);
+            rect105.set('ifConditionId', rect101.id);
+
+            var link114 = link.clone();
+            link114.source(rect105);
+            link114.target(rect106);
+            link114.addTo(javaStatementsGraph);
+
+            var link115 = link.clone();
+            link115.source(rect106);
+            link115.target(rect98);
+            rect98.attr('body/stroke', '#F400A1');
+            link115.set('loopConnector', true);
+            link115.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link115.attr('line/stroke', '#F400A1');
+            link115.addTo(javaStatementsGraph);
+
+            var link116 = link.clone();
+            link116.source(rect106);
+            link116.target(rect107);
+            link116.addTo(javaStatementsGraph);
+
+            var link117 = link.clone();
+            link117.source(rect107);
+            link117.target(rect108);
+            link117.addTo(javaStatementsGraph);
+
+            var link118 = link.clone();
+            link118.source(rect108);
+            link118.target(rect109);
+            link118.addTo(javaStatementsGraph);
+
+            var link119 = link.clone();
+            link119.source(rect109);
+            link119.target(rect110);
+            link119.addTo(javaStatementsGraph);
+
+            var link120 = link.clone();
+            link120.source(rect110);
+            link120.target(rect111);
+            link120.addTo(javaStatementsGraph);
+
+            var link121 = link.clone();
+            link121.source(rect111);
+            link121.target(rect112);
+            link121.set('ifBlockStartLink', true);
+            link121.label(0, {attrs: {text: {text: 'Yes'}}});
+        link121.attr('line/stroke', 'green');
+            link121.addTo(javaStatementsGraph);
+
+            var link122 = link.clone();
+            link122.source(rect112);
+            link122.target(rect113);
+            link122.addTo(javaStatementsGraph);
+            link122.set('ifBlockEndLink', true);
+            link122.label(0, {attrs: {text: {text: 'Yes'}}});
+        link122.attr('line/stroke', 'green');
+
+            var link123 = link.clone();
+            link123.source(rect111);
+            link123.target(rect113);
+            link123.addTo(javaStatementsGraph);
+            link123.label(0, {attrs: {text: {text: 'No'}}});
+            link123.set('elseBlockStartAndEndLink', true);
+        link123.attr('line/stroke', 'red');
+
+            rect111.set('endIfConditionId', rect113.id);
+            rect113.set('ifConditionId', rect111.id);
+
+            var link124 = link.clone();
+            link124.source(rect113);
+            link124.target(rect109);
+            rect109.attr('body/stroke', '#F400A1');
+            link124.set('loopConnector', true);
+            link124.label(0, {attrs: {text: {text: breakText(50, 'For Loop')}}});
+        link124.attr('line/stroke', '#F400A1');
+            link124.addTo(javaStatementsGraph);
+
+            var link125 = link.clone();
+            link125.source(rect113);
+            link125.target(rect114);
+            link125.addTo(javaStatementsGraph);
+
+            var link126 = link.clone();
+            link126.source(rect114);
+            link126.target(rect115);
+            link126.addTo(javaStatementsGraph);
+
+            var link127 = link.clone();
+            link127.source(rect115);
+            link127.target(rect116);
+            link127.addTo(javaStatementsGraph);
+
+            var link128 = link.clone();
+            link128.source(rect116);
+            link128.target(rect117);
+            link128.addTo(javaStatementsGraph);
+
+            rect59.set('startNode', 'true');
+            rect117.set('stopNode', 'true');
+            rect117.attr('circle/stroke', 'green',);
+            rect117.attr('circle/fill', 'white',);
+            rect117.attr('text/fill', 'black');
+            rect117.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect59, rect117);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

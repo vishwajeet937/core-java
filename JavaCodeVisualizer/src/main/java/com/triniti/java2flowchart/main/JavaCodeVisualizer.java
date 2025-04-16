@@ -1,0 +1,3120 @@
+package com.triniti.java2flowchart.main;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.FileUtils;
+
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.WhileStmt;
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import com.triniti.formattertestcases.FormatterTest;
+import com.triniti.java2flowchart.generator.FlowChartGenerator;
+import com.triniti.java2flowchart.model.FlowChartNode;
+import com.triniti.java2flowchart.util.Java2NatualLanguageConverter;
+import com.triniti.java2flowchart.util.JavaCodeParser;
+import com.triniti.testcases.Connect;
+import com.triniti.testcases.ConnectFetch;
+
+import eDynamo.classes.T_CLASS_DECLARATIONS;
+import eDynamo.classes.T_IMPORTS;
+import eDynamo.classes.T_MODULES;
+import eDynamo.classes.T_PROJECTS;
+import eDynamo.classes.T_STATEMENTS;
+import eDynamo.classes.T_SUBROUTINES;
+
+public class JavaCodeVisualizer {
+	private String projectName;
+	private String projectFolder;
+
+	private String srcFolder;
+	private String currentJavaFile;
+	private String currentClassName;
+	private String currentMethod;
+	private String flowDiagramFolder;
+	private String mainClass;
+	private String mainMethodName;
+	private String[] classesAndMethods;
+	private String firstClassAndMethod;
+	private static int count;
+	private static int lineNum;
+
+	public List<String> getClassesAndMethods() {
+		String[] arr = configProps.getProperty("MainClass.method").split(",");
+		return Arrays.asList(arr);
+	}
+	
+	public List<String> getClassesAndMethodsFromDB(String mainClass) {
+		String[] arr = mainClass.split(",");
+		return Arrays.asList(arr);
+	}
+
+	public String getFirstClassAndMethodFromDB(String mainClass) {
+		try {
+			this.firstClassAndMethod = getClassesAndMethodsFromDB(mainClass).get(0);
+			return firstClassAndMethod;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getFirstClassAndMethod() {
+		try {
+			this.firstClassAndMethod = getClassesAndMethods().get(0);
+			return firstClassAndMethod;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+
+	private boolean setStartHereGenerate;
+
+	private LinkedList lineNoList;
+	private LinkedList lineNoList01;
+	private LinkedList columnNoList;
+	private LinkedList columnNoList01;
+	private List gloabalLineNo;
+	private List gloabalLineNo01;
+	private List gloabalColumnNo;
+	private List gloabalColumnNo01;
+	private Iterator globalIterator;
+	private Iterator globalIterator01;
+	private Iterator globalIterator02;
+	private Iterator globalIterator03;
+	private boolean isChartgenerateFromDB;
+	private String DBprojectName;
+	private int DBProjectVersion;
+	private boolean isStatWouldBeInsert;
+	private boolean haveToGenerateJavaFile;
+	private String DBStatFormattedFileLocation;
+	private String runTimeFormattedStatFileLocation;
+	private boolean haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart;
+	
+	
+	public boolean isSetStartHereGenerate() {
+		return this.setStartHereGenerate;
+	}
+
+	public void setStartHereGenerate(boolean setStartHereGenerate) {
+		this.setStartHereGenerate = setStartHereGenerate;
+	}
+
+	public String getMainMethodName() {
+		try {
+			String mainClassWithMethod = getFirstClassAndMethod();
+			return mainClassWithMethod.substring(mainClassWithMethod.indexOf(".") + 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+	
+	public String getMainMethodNameFromDB(String mainClass) {
+		try {
+			String mainClassWithMethod = getFirstClassAndMethodFromDB(mainClass);
+			return mainClassWithMethod.substring(mainClassWithMethod.indexOf(".") + 1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
+	public void setMainMethodName(String mainMethodName) {
+		this.mainMethodName = mainMethodName;
+	}
+
+	public String getMainClass() {
+		try {
+			// String mainClassWithMethod=configProps.getProperty("MainClass.method");
+			String firstClassAndMethod = getFirstClassAndMethod();
+			return firstClassAndMethod.substring(0, firstClassAndMethod.indexOf("."));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+	
+	public String getMainClassFromDB() {
+		try {
+			// String mainClassWithMethod=configProps.getProperty("MainClass.method");
+			String firstClassAndMethod = getFirstClassAndMethodFromDB(mainClass);
+			return firstClassAndMethod.substring(0, firstClassAndMethod.indexOf("."));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
+	public void setMainClass(String mainClass) {
+		this.mainClass = mainClass;
+	}
+
+	private static Map<String, String> mainMap;
+
+	private Map<String, String> javaClassAndFileMap = new HashMap<>();
+	private Map<String, String> importedClassDetailsMap = new HashMap<>();
+	private Map<String, String> variableAndClassNamesMap = new HashMap<>();
+
+	private Map<String, List<String>> classMethodsDetails = new HashMap<>();
+
+	// List of statements that are prepared to generate a flowchart
+	private List<Object> statementsForFlowchart;
+
+	// List of statements in java language that are prepared to generate a flowchart
+	private List<Object> javaStatementsForFlowchart;
+	// List of statements in natural language that are prepared to generate a
+	// flowchart
+	private List<Object> naturalStatementsForFlowchart;
+
+	// If we want to ignore any classes in this process, we can specify the
+	// classnames with comma separated
+	private List<String> listOfClassesToIgnore;
+
+	// A flag to specify whether to use natural language or not
+	private boolean useNaturalLanguage;
+
+	// Holds the configuration properties from config.properties file
+	private static Properties configProps;
+
+	private int noOfMethodsWithDescription = 0;
+	private int noOfMethodsWithoutDescription = 0;
+
+	// This is used to convert the java statements into Natuarl language
+	private Java2NatualLanguageConverter java2NLConverter = new Java2NatualLanguageConverter(this);
+
+	// This is used to generate the flow chart diagrams
+	private FlowChartGenerator flowChartGenerator = new FlowChartGenerator();
+
+	// To hold the no.of classes in the given project
+	private static int totalNoOfClasses = 0;
+	// To hold the no.of method in the given project
+	private static int totalNoOfMethods = 0;
+
+	public static void main(String[] args) throws Exception
+	{
+		System.out.println("************* STARTED **************");
+		System.out.println("Getting application starting time..");
+		long startTime = System.currentTimeMillis();
+		String projectFolder = null;
+		String mainClass = null;
+		JavaCodeVisualizer codeVisualizer = new JavaCodeVisualizer();
+		codeVisualizer.readProperties();
+		projectFolder = configProps.getProperty("projectFolder");
+		//mainClass = codeVisualizer.getMainClass();
+		String flowChartGenerateFromDB=configProps.getProperty("isChartGenerateFromDB");
+		String InsertionWouldHappenInDB=configProps.getProperty("isInsertionWouldHappen");
+		String projectNameReagrdingDB=configProps.getProperty("projectNameForDBBasedChart");
+		String versionReagrdingDB=configProps.getProperty("version");
+		String javaFileCreation=configProps.getProperty("haveToGenerateJavaFileOrNot");
+		codeVisualizer.DBStatFormattedFileLocation=configProps.getProperty("DBStatFormattedjavaFileFolder");
+		codeVisualizer.runTimeFormattedStatFileLocation=configProps.getProperty("runTimeStatFormattedJavaFileFolder");
+		ConnectFetch.setProjectId(configProps.getProperty("projectId"));
+		if(flowChartGenerateFromDB.equalsIgnoreCase("YES"))
+            codeVisualizer.isChartgenerateFromDB=true;
+            else
+            	codeVisualizer.isChartgenerateFromDB=false;
+		
+		if(InsertionWouldHappenInDB.equalsIgnoreCase("YES"))
+            codeVisualizer.isStatWouldBeInsert=true;
+            else
+            	codeVisualizer.isStatWouldBeInsert=false;
+		if(javaFileCreation.equalsIgnoreCase("YES"))
+			codeVisualizer.haveToGenerateJavaFile=true;
+		else
+			codeVisualizer.haveToGenerateJavaFile=false;
+		
+		String allInOneStep=configProps.getProperty("haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart");
+		if(allInOneStep.equalsIgnoreCase("YES"))
+			codeVisualizer.haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart=true;
+		else if(allInOneStep.equalsIgnoreCase("NO"))
+			codeVisualizer.haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart=false;
+		ConnectFetch.setHaveToGenerateRuntimeDataAndDBContainDataBasedFlowChart(codeVisualizer.haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart);
+		codeVisualizer.DBprojectName=projectNameReagrdingDB;
+		codeVisualizer.DBProjectVersion=Integer.valueOf(versionReagrdingDB);
+		//ConnectFetch.setProjectName(projectNameReagrdingDB);
+		//ConnectFetch.setVersion(Integer.valueOf(versionReagrdingDB));
+		
+		codeVisualizer.getClassesToIgnore();
+		codeVisualizer.setMainClass(mainClass);
+
+		codeVisualizer.setProjectName(new File(projectFolder).getName());
+		codeVisualizer.setProjectFolder(projectFolder);
+		codeVisualizer.setSrcFolder(configProps.getProperty("srcFolder"));
+		codeVisualizer.setFlowDiagramFolder(configProps.getProperty("flowDiagramFolder"));
+		if(!codeVisualizer.isChartgenerateFromDB)
+		codeVisualizer.generateDiagramsForAllClasses();
+		else
+		codeVisualizer.generateDiagramForAllClassessStatFromDB();
+
+		System.out.println("totalNoOfClasses : " + totalNoOfClasses);
+		System.out.println("totalNoOfMethods : " + totalNoOfMethods);
+		System.out.println("************* ENDED **************");
+
+		// printAllStatements(allStatements);
+
+		long endTime = System.currentTimeMillis();
+		System.out.println(
+				"Total time taken : " + String.format("%.3f", ((float) (endTime - startTime)) / 1000) + " seconds");
+	}
+
+	private static void printAllStatements(Map allStatements) {
+		List classNamesList = new ArrayList(allStatements.keySet());
+		Collections.sort(classNamesList);
+
+		List methodsList = null;
+		Map allStatementsByClass = null;
+		Map allStatementsByMethod = null;
+		for (Object className : classNamesList) {
+			allStatementsByClass = (Map) allStatements.get(className);
+			methodsList = new ArrayList(allStatementsByClass.keySet());
+			Collections.sort(methodsList);
+
+		}
+	}
+
+	private void getClassesToIgnore() {
+		String classesToIngore = configProps.getProperty("classesToIngore");
+		if (classesToIngore == null) {
+			classesToIngore = "";
+		}
+		listOfClassesToIgnore = Arrays.asList(classesToIngore.split(",")).stream().collect(Collectors.toList());
+	}
+
+	private void readProperties() throws Exception {
+		configProps = new Properties();
+		try (InputStream inputStream = new FileInputStream("config.properties")) {
+			configProps.load(inputStream);
+		}
+	}
+	
+	
+	public Object generateFormattedJavaFile(String filePath,String packageName,String projectName,String className) {
+		
+		File file=new File(filePath);
+		File file01=new File(runTimeFormattedStatFileLocation+File.separator+projectName+File.separator+packageName+File.separator+className+".java");
+		file01.getParentFile().mkdirs();
+		String projectFolder=runTimeFormattedStatFileLocation+File.separator+projectName;
+		StringBuilder readedData=new StringBuilder();
+		try {
+			BufferedReader reader=new BufferedReader(new FileReader(file));
+			FileWriter writer=new FileWriter(file01);
+			String value=null;
+			while((value=reader.readLine())!=null) {
+				if(value.length()>0)
+					readedData.append("\r\n"+value);		
+			}
+			//System.out.println("readedData:: "+readedData);
+			//Thread.sleep(5000);
+			
+			Formatter format=new Formatter();
+			String formattedData=format.formatSource(readedData.toString());
+			//System.out.println("formattedData: "+formattedData);
+			writer.write(formattedData);
+			writer.close();
+			reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FormatterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return projectFolder;
+	}
+
+	private void generateDiagramsForAllClasses() throws Exception {
+		JavaCodeParser javaCodeParser = new JavaCodeParser();
+
+		String projectSrcFolder01 = projectFolder
+				+ ((srcFolder != null && srcFolder.trim().length() > 0) ? File.separator + srcFolder : "");
+
+		String sourceFolder01 = projectSrcFolder01.replace("/", File.separator).replace("\\", File.separator);
+System.out.println("sourceFolder:: "+sourceFolder01);
+		
+		Map<String, List<ClassOrInterfaceDeclaration>> classesOrInterfaces01 = javaCodeParser
+				.listClassesFromSourceCode(new File(sourceFolder01));
+		
+		//new function regarding code.
+		File deleteFile=new File(runTimeFormattedStatFileLocation+File.separator+projectName);
+		try {
+			FileUtils.deleteDirectory(deleteFile);
+			deleteFile.delete();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		classesOrInterfaces01.forEach((javaFilePath,classRef)->{
+			StringBuilder packageName=new StringBuilder();
+			if (javaFilePath.indexOf(sourceFolder01) + sourceFolder01.length() + 1 < javaFilePath
+					.lastIndexOf(File.separator)) {
+				packageName.append(
+						javaFilePath.substring(javaFilePath.indexOf(sourceFolder01) + sourceFolder01.length() + 1,
+								javaFilePath.lastIndexOf(File.separator)));
+				
+				
+				System.out.println(sourceFolder01);
+			}
+				String className001=javaFilePath.substring(javaFilePath.lastIndexOf(File.separator),javaFilePath.indexOf("."));
+				
+				
+				// generateFormattedJavaFile(javaFilePath, packageName.toString(), projectName,className001);
+			
+		});
+		//this.projectFolder=runTimeFormattedStatFileLocation+File.separator+projectName;
+		String projectSrcFolder = projectFolder
+				+ ((srcFolder != null && srcFolder.trim().length() > 0) ? "" :  srcFolder);
+		String sourceFolder = projectSrcFolder.replace("/", File.separator).replace("\\", File.separator).trim();
+		
+		System.out.println(sourceFolder+"::"+sourceFolder01);
+		Map<String, List<ClassOrInterfaceDeclaration>> classesOrInterfaces = javaCodeParser
+				.listClassesFromSourceCode(new File(sourceFolder));
+		
+
+		Map<String, List<ClassOrInterfaceDeclaration>> classesOrInterfacesNew = new HashMap<>();
+
+		flowChartGenerator.setJavaClassAndFileMap(javaClassAndFileMap);
+		flowChartGenerator.setProjectName(projectName);
+		flowChartGenerator.setSourceFolder(sourceFolder);
+		flowChartGenerator.setFlowDiagramFolder(flowDiagramFolder);
+		try {
+			classesOrInterfaces.keySet().stream()
+
+					.forEach((javaFilePath) -> classesOrInterfacesNew.put(javaFilePath,
+							classesOrInterfaces.get(javaFilePath)));
+
+			classesOrInterfacesNew.values().stream().forEach(listVal -> {
+				listVal.stream().filter(classOrInterface10 -> {
+					return !listOfClassesToIgnore.contains(classOrInterface10.getName().toString());
+				}).forEach(val -> {
+					List<String> methodsList = val.getMethods().stream().map(MethodDeclaration::getNameAsString)
+							.collect(Collectors.toList());
+
+					classMethodsDetails.put(val.getNameAsString(), methodsList);
+
+				});
+
+			});
+
+			classesOrInterfacesNew.keySet().stream().forEach(filePath -> {
+				StringBuilder packageName=new StringBuilder();
+				if (filePath.indexOf(sourceFolder) + sourceFolder.length() + 1 < filePath
+						.lastIndexOf(File.separator)) {
+					packageName.append(
+							filePath.substring(filePath.indexOf(sourceFolder) + sourceFolder.length() + 1,
+									filePath.lastIndexOf(File.separator)));
+				}
+				List<ClassOrInterfaceDeclaration> className = classesOrInterfacesNew.get(filePath);
+				className.stream().filter((val) -> {
+					return !listOfClassesToIgnore.contains(val.getName().toString());
+
+				}).forEach((value) -> {
+					javaClassAndFileMap.put(value.getNameAsString(), packageName.toString());
+				});
+			});
+
+			List projectDetails=new ArrayList<>();
+			List moduleDetails=new ArrayList<>();
+			LinkedHashMap classDecDetails=new LinkedHashMap();
+			LinkedHashMap methodDetailsMap=new LinkedHashMap<>();
+			LinkedHashMap importStatements=new LinkedHashMap<>();
+			LinkedHashMap methodStatements=new LinkedHashMap<>();
+			classesOrInterfacesNew.keySet().stream().forEach(javaFilePath -> {
+				List<ClassOrInterfaceDeclaration> value = classesOrInterfacesNew.get(javaFilePath);
+				value.stream().filter((val) -> {
+					return !listOfClassesToIgnore.contains(val.getName().toString());
+
+				}).forEach((classOrInterface) -> {
+					LinkedList methodDetails=new LinkedList<>();
+					LinkedList methodState=new LinkedList<>();
+					LinkedHashMap methodMap01=new LinkedHashMap<>();
+					 methodDetails.clear();
+					LinkedHashMap classDecMap=new LinkedHashMap();
+					//System.out.println(value.get(0).getExtendedTypes());
+					//System.out.println(classOrInterface.getFields());
+				for(FieldDeclaration obj:classOrInterface.getFields()) {
+						System.out.println(obj.getBegin().get().line+" -:- "+obj);
+						classDecMap.put(String.valueOf(obj),String.valueOf(obj.getBegin().get().line));
+						//classDecMap.put("stat", );
+					}
+				
+		//System.out.println("class Fields: "+classOrInterface.getFields());
+					this.setStartHereGenerate(false);
+					totalNoOfClasses++;
+					variableAndClassNamesMap.clear();
+
+					Map<String, String> statementsWithLineNum = (Map<String, String>) readClassStatements(javaFilePath).get(1);
+					StringBuilder packageName = new StringBuilder();
+					Map<String, String> methodDescriptions = new HashMap<>();
+					String classDescription = getClassDescription(classOrInterface);
+					List<MethodDeclaration> methods = null;
+
+					setCurrentJavaFile(javaFilePath);
+					methods = classOrInterface.getMethods();
+					List<Object> importsAndFieldsFromJavaClass = javaCodeParser
+							.listImportsAndFieldsAClass(new File(sourceFolder), javaFilePath, classOrInterface);
+
+					List<ImportDeclaration> imports = (List<ImportDeclaration>) importsAndFieldsFromJavaClass.get(0);
+					List<FieldDeclaration> fields = (List<FieldDeclaration>) importsAndFieldsFromJavaClass.get(1);
+
+					for (ImportDeclaration importDeclaration : imports) {
+						extractImportedClassDetails(importDeclaration);
+					}
+
+					for (FieldDeclaration field : fields) {
+						extractClassAndVariableNamesFromThisStatement(field);
+					}
+					if (javaFilePath.indexOf(sourceFolder) + sourceFolder.length() + 1 < javaFilePath
+							.lastIndexOf(File.separator)) {
+						packageName.append(
+								javaFilePath.substring(javaFilePath.indexOf(sourceFolder) + sourceFolder.length() + 1,
+										javaFilePath.lastIndexOf(File.separator)));
+					}
+
+					java2NLConverter.setImportedClassDetailsMap(importedClassDetailsMap);
+
+					System.out.println(javaFilePath+" ImportedClassDetailmap: "+importedClassDetailsMap);
+					String mainMethod;
+					LinkedHashMap classMap=new LinkedHashMap();
+					
+					classMap.put("name",classOrInterface.getName().toString());
+					classMap.put("package",packageName.toString());
+					classMap.put("comments","");
+					classMap.put("classDescrip", classDescription);
+					LinkedHashMap<String,String> importStat=(LinkedHashMap<String, String>) readClassStatements(javaFilePath).get(0);
+					//System.out.println("-------------------??>"+importStat);
+					LinkedHashMap<String,String> classStat=(LinkedHashMap<String, String>) readClassStatements(javaFilePath).get(1);
+				//generateFormattedJavaFile(javaFilePath, packageName.toString(), projectName, classOrInterface.getName().toString());
+					//if(classStat.keySet().toArray().length>=0) {
+					Object lineNum=classStat.keySet().toArray()[0];
+					Object statment=classStat.get(lineNum);
+					
+					classMap.put("stat", String.valueOf(statment));
+					classMap.put("lineNum",String.valueOf(lineNum));
+					//System.out.println(":::------------>>>"+classMap);
+					//}
+					moduleDetails.add(classMap);
+					
+					
+					methods.stream().forEach(method -> {
+						if (!method.getName().toString().contains("main")) {
+							// return;
+						}
+						//System.out.println("##---------->"+method.getName().getBegin().get().line+" @@ "+method.getDeclarationAsString());
+						// System.out.println(method.getParameters().toArray());
+						Object[] objArr = method.getParameters().toArray();
+						HashMap<String, String> map = new HashMap<>();
+						for (Object obj : objArr) {
+							String param = obj.toString();
+							String className = param.substring(0, param.indexOf(" ")).trim();
+							String refname = param.substring(param.indexOf(" ")).trim();
+							System.out.println("refName:: " + refname + " : className: " + className + " : " + mainMap);
+							map.put(refname, className);
+							if (mainMap != null)
+								mainMap.putAll(map);
+							else
+								mainMap = map;
+							System.out.println("->->" + mainMap);
+						}
+						String mainMethod01 = method.getNameAsString();
+						String className = classOrInterface.getNameAsString();
+						List<Node> statementsFromMethod = null;
+
+						/*if (className.equals(getMainClass()) && mainMethod01.equals(getMainMethodName())) {
+							setStartHereGenerate(true);
+						}*/
+						for (int i = 0; i < getClassesAndMethods().size(); i++) {
+							String className01 = getClassesAndMethods().get(i).substring(0,
+									getClassesAndMethods().get(i).indexOf("."));
+							String methodName01 = getClassesAndMethods().get(i)
+									.substring(getClassesAndMethods().get(i).indexOf(".") + 1);
+							if (className.equals(className01) && mainMethod01.equals(methodName01)) {
+								setStartHereGenerate(true);
+							}
+						}
+						NodeList<Parameter> nodesList = method.getParameters();
+						Map<String, String> parametersMap = getParametersMapFromMethodDefinition(nodesList);
+						variableAndClassNamesMap.putAll(parametersMap);
+
+						Optional<BlockStmt> methodBody = method.getBody();
+//System.out.println("------------------====??????????"+method.getBody().get().getStatements());
+						if (methodBody.isPresent()) {
+							BlockStmt blockStmt = methodBody.get();
+//							blockStmt.addStatement("while(i <= number)\r\n" + 
+//									"		{\r\n" + 
+//									"			System.out.println(\"i value is : \" + 10);\r\n" + 
+//									"			i++;\r\n" + 
+//									"		}");
+							String methodDescription = getMethodDescription(method);
+							
+							methodDescriptions.put(method.getNameAsString(), methodDescription);
+
+							setCurrentClassName(classOrInterface.getNameAsString());
+							setCurrentMethod(method.getNameAsString());
+
+							if (blockStmt != null) {
+								statementsFromMethod = blockStmt.getChildNodes();
+								if (statementsFromMethod != null) {
+									totalNoOfMethods++;
+									 LinkedHashMap methodMap=new LinkedHashMap<>();
+                                   methodMap.put("name", method.getNameAsString());
+                                   methodMap.put("description",String.valueOf( methodDescription));
+                                   methodMap.put("signature", method.getDeclarationAsString());
+                                  
+                                  // System.out.println("===>>>>..>"+blockStmt+"methodDesc"+methodDescription+method.getNameAsString()+":"+method.getDeclarationAsString());
+                                   
+                                  // System.out.println("------>> "+method.getComment().get().getContent());
+                                  // methodStat.put("actalCode", "");
+                                   LinkedHashMap statAndLine=new LinkedHashMap<>();
+                                  lineNoList=new LinkedList();
+                                  lineNoList01=new LinkedList();
+                                  columnNoList=new LinkedList();
+                                  columnNoList01=new LinkedList();
+                                  // methodStat.put("statAndLine",statAndLine);
+                                   //System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{------>"+statementsFromMethod);
+									// Generate flow chart statements for Java code lines
+									useNaturalLanguage = false;
+									System.out.println("real statemnt01():: "+statementsFromMethod);
+									summarizeMethodCode(statementsFromMethod);
+									javaStatementsForFlowchart = new ArrayList<>(statementsForFlowchart);
+									System.out.println("----------------------::::::::: " + javaStatementsForFlowchart);
+									// Generate flow chart statements in natual language
+									useNaturalLanguage = true;
+									summarizeMethodCode(statementsFromMethod);
+									System.out.println("real statemnt02():: "+statementsFromMethod);
+									naturalStatementsForFlowchart = new ArrayList<>(statementsForFlowchart);
+									// printing db insertion data
+									int beginLine = method.getBegin().get().line;
+									int endLineNumber = method.getEnd().get().line;
+									System.out.println("ProjectName:: " + projectName + "\n" + "Mainclass:: "
+											+ mainClass + "\n" + "ProgramingLang:: " + "Java");
+									System.out.println("ClassName:: " + classOrInterface.getNameAsString()
+											+ " packageName:: " + packageName);
+									System.out.println("MethodName:: " + method.getNameAsString() + "\n"
+											+ "Method Description:: " + methodDescription);
+									// System.out.println("List:: "+javaStatementsForFlowchart);
+									System.out.println();
+									System.out.println("Java Type Statemnt Printing....");
+									// List al=new ArrayList<>();
+									LinkedHashMap javaStat=new LinkedHashMap<>();
+									LinkedHashMap naturalStat=new LinkedHashMap<>();
+									int[] arr01=new int[] {1};
+									List list =null;
+									LinkedList natuList=new LinkedList<>();
+									LinkedList javaList=new LinkedList<>();
+									for (Object obj : javaStatementsForFlowchart) {
+										// List li=(List)obj;
+										// System.out.println(obj.getClass());
+
+										list = (List) getStatement(obj);
+										// if(list.size()==1) {
+										
+										list.forEach(val -> {
+											System.out.println(val);
+											javaList.add(val);
+											//if(String.valueOf(val).contains(":") && String.valueOf(val).contains("-")) {
+											//String lineNum01=String.valueOf(val).substring(String.valueOf(val).indexOf("-")+1,String.valueOf(val).indexOf(":"));
+											String stat=String.valueOf(val);
+											//javaStat.put(lineNum,stat);
+											// al.add(val);
+											javaStat.put(String.valueOf(arr01[0]),String.valueOf(val));
+											arr01[0]++;
+											// System.out.println("ClassName:: "+val.getClass());
+										//	}
+											System.out.println("Statement:: " + val);
+										});
+
+									}
+									System.out.println();
+									System.out.println("Printing Natural Language Statements.....");
+									List list01 =null;
+									
+									for (Object obj01 : naturalStatementsForFlowchart) {
+										list01 = (List) getStatement(obj01);
+										list01.forEach(val -> {
+											natuList.add(val);
+											//if(String.valueOf(val).contains(":") && String.valueOf(val).contains("-")) {
+											//String lineNum02=String.valueOf(val).substring(String.valueOf(val).indexOf("-")+1,String.valueOf(val).indexOf(":"));
+											String stat=String.valueOf(val);
+											naturalStat.put(String.valueOf(arr01[0]),stat);
+											System.out.println(val);
+											arr01[0]++;
+											//}
+										});
+									}
+									LinkedList methodStatList=new LinkedList<>();
+									Iterator<Object> itr=javaList.iterator();
+									Iterator<Object> itr01=natuList.iterator();
+									Iterator<Node> itr02=statementsFromMethod.iterator();
+									//System.out.println("javaLsit--------------->>>"+javaList);
+									//for(Node stat:statementsFromMethod) {
+									while(itr.hasNext() || itr01.hasNext()) {
+	                                	 //  System.out.println(stat+"::"+stat.getBegin().get().line);
+	                                	  // statAndLine.put(String.valueOf(stat.getBegin().get().line),String.valueOf(stat));
+										LinkedHashMap methodStat=new LinkedHashMap<>();
+										if(itr02.hasNext()) {  
+										Node stat=itr02.next();
+	                                	   methodStat.put("comments", "");
+	                                       methodStat.put("refLink", "");
+	                                       methodStat.put("lineNum",String.valueOf(stat.getBegin().get().line));
+	                                       methodStat.put("stat",String.valueOf(stat));
+	                                       //methodStat.put(String.valueOf(stat.getBegin().get().line),String.valueOf(stat));
+	                                      methodStat.put("colNum", String.valueOf(stat.getBegin().get().column));
+										}
+	                                     // System.out.println(javaList);
+	                                  if(itr.hasNext()) {
+	                                	  //System.out.println("000000000000000000000000000111111111111111-->"+itr.next());
+	                                	 methodStat.put("java", itr.next());
+	                                  }
+	                                  if(itr01.hasNext())
+	                                	  methodStat.put("natural",itr01.next());
+									//methodStat.put("JS", javaStat);
+									//methodStat.put("NS", naturalStat);
+									methodStatList.add(methodStat);
+									}
+									methodMap01.put(method.getNameAsString(),methodStatList);
+									//System.out.println();
+									//very important line of code.
+									  methodMap.put("lineNum", String.valueOf(method.getName().getBegin().get().line));
+	                               lineNoList.add(lineNoList01);
+	                               columnNoList.add(columnNoList01);
+									methodMap.put("lineNumList", lineNoList); 
+									methodMap.put("colNumList", columnNoList);
+									methodDetails.add(methodMap);
+									System.out.println(lineNoList);
+									if(lineNoList.size()>0 && columnNoList.size()>0 && lineNoList01.size()>0 && columnNoList01.size()>0) {
+									String javaLineNums=lineNoList.toString().substring(0,lineNoList.toString().lastIndexOf("[")-2);
+									String naturalLinesNums=lineNoList.toString().substring(lineNoList.toString().lastIndexOf("["),lineNoList.toString().indexOf("]"));
+									String javaColNums=columnNoList.toString().substring(0,columnNoList.toString().lastIndexOf("[")-2);
+									String naturalColNums=columnNoList.toString().substring(columnNoList.toString().lastIndexOf("["),columnNoList.toString().indexOf("]"));
+									
+									System.out.println("lineList:> "+this.lineNoList+" : methodName: "+method.getNameAsString()+": natural: "+naturalLinesNums+" :java: "+javaLineNums);
+									System.out.println("colNumList:> "+this.columnNoList+" : methodName: "+method.getNameAsString()+": natural: "+naturalColNums+" :java: "+javaColNums);
+									//System.out.println("--------++++"+javaStatementsForFlowchart);
+									//System.out.println("--------++++"+naturalStatementsForFlowchart);
+									//methodState.add(methodMap01);
+									}
+									flowChartGenerator.generateFlowChart(packageName.toString(),
+											classOrInterface.getName().toString(), method.getName().toString(),
+											javaStatementsForFlowchart, naturalStatementsForFlowchart,
+											methodDescription);
+
+								}
+
+							}
+						}
+					});
+					classDecDetails.put(classOrInterface.getNameAsString(),classDecMap);
+                    methodDetailsMap.put(classOrInterface.getName().toString(),methodDetails);
+                    importStatements.put(classOrInterface.getName().toString(), importStat);
+                    methodStatements.put(classOrInterface.getNameAsString(),methodMap01);
+					getStatement(packageName.toString());
+					String val01 = packageName.toString();
+					String classOrInterface01 = classOrInterface.getName().toString();
+					generateClassSummary(val01, classOrInterface01, classDescription, methodDescriptions, mainClass);
+				});
+			});
+			LinkedList projList=new LinkedList<>();
+			LinkedList modList=new LinkedList<>();
+			LinkedList importList=new LinkedList<>();
+			LinkedList classDec=new LinkedList();
+			LinkedList subRoutineList=new LinkedList();
+			LinkedList modulelist=new LinkedList<>();
+			LinkedList<T_STATEMENTS> statList=new LinkedList<>();
+			
+			Map projectsDetailMap=new LinkedHashMap();
+			projectsDetailMap.put("name",projectName);
+			projectsDetailMap.put("mainClass",configProps.getProperty("MainClass.method"));
+			projectsDetailMap.put("version",1.0);
+			projectsDetailMap.put("progLang","JAVA");
+			projectsDetailMap.put("statusCode",1.0);
+			projectDetails.add(projectsDetailMap);
+			for(int i=0;i<projectDetails.size();i++) {
+				projList.clear();
+				LinkedHashMap map=(LinkedHashMap)projectDetails.get(i);
+				T_PROJECTS tProj=new T_PROJECTS();
+				tProj.setNAME((String)map.get("name"));
+				tProj.setMAIN_CLASS((String)map.get("mainClass"));
+				tProj.setVERSION(Double.valueOf(String.valueOf(map.get("version"))));
+				tProj.setPROG_LANG((String)map.get("progLang"));
+				tProj.setSTATUS_CODE(Double.valueOf(String.valueOf(map.get("statusCode"))));
+				tProj.setTRINITIACDFLAG("A");
+				
+				
+				
+				for(int j=0;j<moduleDetails.size();j++) {
+					modList.clear();
+					subRoutineList.clear();
+					importList.clear();
+					classDec.clear();
+					LinkedHashMap map01=(LinkedHashMap)moduleDetails.get(j);
+					String className=(String)map01.get("name");
+					T_MODULES tModules=new T_MODULES();
+					
+					tModules.setNAME((String)map01.get("name"));
+					tModules.setPACKAGE((String)map01.get("package"));
+					tModules.setCOMMENTS((String)map01.get("comments"));
+					tModules.setACTUAL_CODE((String)map01.get("stat"));
+					tModules.setLINE_NUMBER(Double.valueOf(String.valueOf(map01.get("lineNum"))));
+					tModules.setDESCRIPTION(String.valueOf(map01.get("classDescrip")));
+					tModules.setTRINITIACDFLAG("A");
+					modList.add(tModules);
+					//System.out.println(map01);
+					//System.out.println(";;;;;;;;;;;;;;"+lineStat);
+					//tModules.
+					
+					
+					
+					
+					//tProj.setT_MODULES(new T_MODULES[] {tModules});
+					LinkedList<LinkedHashMap> list02=(LinkedList) methodDetailsMap.get(className);
+					//LinkedList<LinkedHashMap> list03=(LinkedList<LinkedHashMap>)methodStatements.get(className);
+					//LinkedHashMap map02=(LinkedHashMap) methodDetailsMap.get(className);
+					//System.out.println("=========-=-=-=-=-=-=-=-=-=-=-=-==>"+map02);
+					//for(int k=0;k<map02.size();k++) {
+						list02.forEach(map02->{
+							statList.clear();
+							T_SUBROUTINES tSubRout=new T_SUBROUTINES();
+							tSubRout.setNAME((String)map02.get("name"));
+							//System.out.println("methodName: =0=0=0=0: "+map02.get("name"));
+							tSubRout.setDESCRIPTION((String)map02.get("description"));
+							tSubRout.setACTUAL_CODE(String.valueOf(map02.get("signature")));
+							tSubRout.setLINE_NUM(String.valueOf(map02.get("lineNum")));
+							tSubRout.setLINE_NUMBERS_LIST(String.valueOf(map02.get("lineNumList")));
+							tSubRout.setCOLUMN_NUMBERS_LIST(String.valueOf(map02.get("colNumList")));
+							//tSubRout.setL
+							tSubRout.setTRINITIACDFLAG("A");
+							subRoutineList.add(tSubRout);
+								LinkedHashMap lhm=(LinkedHashMap)methodStatements.get(className);
+								LinkedList<LinkedHashMap> list03=(LinkedList) lhm.get((String)map02.get("name"));
+								list03.forEach(map03->{
+									T_STATEMENTS tStatement=new T_STATEMENTS();
+									if(map03.get("stat")!=null)
+									tStatement.setACTUAL_CODE(String.valueOf(map03.get("stat")));
+									if(map03.get("lineNum")!=null)
+									tStatement.setLINE_NUMBER(String.valueOf(map03.get("lineNum")));
+									if(map03.get("colNum")!=null)
+									tStatement.setCOL_NUMBER(Double.valueOf((String.valueOf(map03.get("colNum")))));
+									if(map03.get("comments")!=null)
+									tStatement.setCOMMENTS(String.valueOf(map03.get("comments")));
+									if(map03.get("refLink")!=null)
+									tStatement.setREF_LINK(String.valueOf(map03.get("refLink")));
+									tStatement.setSTATMENT_TYPE("PL");
+									tStatement.setSTATMENT(String.valueOf(map03.get("java")));
+									
+									T_STATEMENTS tStatement01=new T_STATEMENTS();
+									if(map03.get("stat")!=null)
+									tStatement01.setACTUAL_CODE(String.valueOf(map03.get("stat")));
+									if(map03.get("lineNum")!=null)
+									tStatement01.setLINE_NUMBER(String.valueOf(map03.get("lineNum")));
+									if(map03.get("colNum")!=null)
+									tStatement01.setCOL_NUMBER(Double.valueOf((String.valueOf(map03.get("colNum")))));
+									if(map03.get("comments")!=null)
+									tStatement01.setCOMMENTS(String.valueOf(map03.get("comments")));
+									if(map03.get("refLink")!=null)
+									tStatement01.setREF_LINK(String.valueOf(map03.get("refLink")));
+									tStatement01.setSTATMENT_TYPE("NL");
+									tStatement01.setSTATMENT(String.valueOf(map03.get("natural")));
+									statList.add(tStatement01);
+									statList.add(tStatement);
+									//System.out.println("---->>>>???++"+map03.get("stat"));
+								});
+								T_STATEMENTS[] t_stat=new T_STATEMENTS[statList.toArray().length];
+								int aarr04=0;
+								for(Object obj:statList.toArray()) {
+									
+									t_stat[aarr04]=(T_STATEMENTS) obj;
+									aarr04++;
+								}
+								//tSubRout.setT_STATEMENTS( (T_STATEMENTS[]) statList.toArray());
+								tSubRout.setT_STATEMENTS(t_stat);
+									System.out.println();
+									//tStatement.setACTUAL_CODE(ACTUAL_CODE);
+									//tStatement.setLINE_NUMBER(LINE_NUMBER);
+//									tStatement.setCOL_NUMBER(Double.valueOf((String.valueOf(lhm.get("")))));
+//									tStatement.setCOMMENTS(String.valueOf(lhm.get("comments")));
+//									
+//									tStatement.setREF_LINK(String.valueOf(lhm.get("refLink")));
+									//tStatement.setSTATMENT_TYPE(STATMENT_TYPE);
+							//System.out.println("????????????????????????=====>"+map02);
+						});
+						
+						
+				//	}
+					LinkedHashMap map03=(LinkedHashMap) importStatements.get(className);
+					
+						
+						map03.forEach((lineNum,stat)->{
+							T_IMPORTS tImport=new T_IMPORTS();
+							
+							tImport.setACTUAL_CODE((String)stat);
+							tImport.setLINE_NUMBER(Double.valueOf((String)lineNum));
+							tImport.setTRINITIACDFLAG("A");
+							importList.add(tImport);
+							//System.out.println("-->>>>===>>>>"+lineNum);
+						});
+						
+						
+					LinkedHashMap map04=(LinkedHashMap) classDecDetails.get(className);
+						
+						map04.keySet().forEach(stat->{
+							T_CLASS_DECLARATIONS tClassDec=new T_CLASS_DECLARATIONS();
+							tClassDec.setACTUAL_CODE((String)stat);
+							tClassDec.setLINE_NUMBER(Integer.valueOf((String)map04.get(stat)));
+							tClassDec.setTRINITIACDFLAG("A");
+							classDec.add(tClassDec);
+							//System.out.println("==========00000000000000000000000000============"+stat);
+						});
+						T_IMPORTS[] t_import=new T_IMPORTS[importList.size()];
+						T_SUBROUTINES[] t_subRout=new T_SUBROUTINES[subRoutineList.toArray().length];
+						T_CLASS_DECLARATIONS[] t_classDec=new T_CLASS_DECLARATIONS[classDec.toArray().length];
+						T_MODULES[] t_module=new T_MODULES[modList.toArray().length];
+						int aarr03=0;
+						for(Object obj:modList.toArray()) {
+							
+							t_module[aarr03]=(T_MODULES) obj;
+							aarr03++;
+						}
+						int aarr02=0;
+						for(Object obj:importList.toArray()) {
+							
+							t_import[aarr02]=(T_IMPORTS) obj;
+							aarr02++;
+						}
+						int aarr01=0;
+						for(Object obj:subRoutineList.toArray()) {
+							
+							t_subRout[aarr01]=(T_SUBROUTINES) obj;
+							aarr01++;
+						}
+						int aarr=0;
+						for(Object obj:classDec.toArray()) {
+							
+							t_classDec[aarr]=(T_CLASS_DECLARATIONS) obj;
+							aarr++;
+						}
+						
+//					tModules.setT_IMPORTS((T_IMPORTS[]) importList.toArray());
+						tModules.setT_IMPORTS(t_import);
+//					tModules.setT_SUBROUTINES((T_SUBROUTINES[]) subRoutineList.toArray());
+						tModules.setT_SUBROUTINES(t_subRout);
+//					tModules.setT_CLASS_DECLARATIONS((T_CLASS_DECLARATIONS[]) classDec.toArray());
+						tModules.setT_CLASS_DECLARATIONS(t_classDec);
+						modulelist.add(tModules);
+//					tProj.setT_MODULES((T_MODULES[])modList.toArray());
+						//tProj.setT_MODULES(t_module);
+						
+						//if(isStatWouldBeInsert) {
+							//String msg=Connect.insertIntoDB(tProj);
+					//System.out.println("Message:----"+msg);
+						//}
+				}
+				T_MODULES[] objArr=new T_MODULES[modulelist.size()];
+				int count=0;
+				for(Object obj:modulelist) {
+					objArr[count]=(T_MODULES) obj;
+					count++;
+				}
+				tProj.setT_MODULES(objArr);
+				if(isStatWouldBeInsert) {
+				String msg=Connect.insertIntoDB(tProj);
+				}
+				if(haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart) {
+				isChartgenerateFromDB=true;
+				generateDiagramForAllClassessStatFromDB();
+				}
+			}
+		} catch (Exception e) {
+			Thread.sleep(10000);
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void generateDiagramForAllClassessStatFromDB() {
+		try {
+		List statementForFlowChart=null;
+		List statementFromMethod=null;
+		
+		String projectSrcFolder = projectFolder
+				+ ((srcFolder != null && srcFolder.trim().length() > 0) ? File.separator + srcFolder : "");
+
+		String sourceFolder = projectSrcFolder.replace("/", File.separator).replace("\\", File.separator);
+
+
+		
+	//	flowChartGenerator.setJavaClassAndFileMap(javaClassAndFileMap);
+		//flowChartGenerator.setProjectName(projectName);
+		//flowChartGenerator.setSourceFolder(sourceFolder);
+		flowChartGenerator.setFlowDiagramFolder(flowDiagramFolder);
+		if(haveToGenerateRuntimeDataAndDBContainDataBasedFlowChart) {
+		int version=ConnectFetch.getLatestVersion(projectName);
+		ConnectFetch.setCurrentVersion(version);
+		ConnectFetch.setProjectName(projectName);
+		}
+		LinkedHashMap map=ConnectFetch.getData();
+		System.out.println("Map:: "+map);
+		String mainClass=(String) map.get("mainClass");
+		String projectName=String.valueOf(map.get("projectName")+"DB");
+		flowChartGenerator.setProjectName(projectName);
+		this.projectName=projectName;
+		//String className=null;
+		
+		LinkedList classList=(LinkedList) map.get("classList");
+		//LinkedList methodList=null;
+		classList.forEach(map01->{
+			if(haveToGenerateJavaFile)
+			FormatterTest.generateJavaFile(projectName, map01,this.DBStatFormattedFileLocation);
+			String className=(String) ((LinkedHashMap)map01).get("className");
+			String packageName=(String) ((LinkedHashMap)map01).get("package");
+			LinkedList methodList=(LinkedList)((LinkedHashMap)map01).get("methodList");
+			javaClassAndFileMap.put(className, packageName);
+		//	LinkedHashMap methodMap=new LinkedHashMap<>();
+			LinkedList methodNameList=new LinkedList<>();
+			methodList.forEach(methodMap01->{
+				String methodName=String.valueOf(((LinkedHashMap)methodMap01).get("name"));
+				//methodMap.put(key, value)
+				methodNameList.add(methodName);
+			//	methodMap.put(key, value)
+			});
+			classMethodsDetails.put(className, methodNameList);
+		});
+		flowChartGenerator.setJavaClassAndFileMap(javaClassAndFileMap);
+		classList.forEach(map01->{
+			String className=(String) ((LinkedHashMap)map01).get("className");
+			String classDescrp=String.valueOf(((LinkedHashMap)map01).get("classDescrip"));
+			this.currentClassName=className;
+			java2NLConverter.setImportedClassDetailsMap(((LinkedHashMap)((LinkedHashMap)map01).get("importStat")));
+			String packageName=(String) ((LinkedHashMap)map01).get("package");
+			LinkedHashMap methodDescriptions=new LinkedHashMap<>();
+			LinkedList methodList=(LinkedList) ((LinkedHashMap)map01).get("methodList");
+			//classMethodsDetails.put(className, methodList);
+			methodList.forEach(method->{
+				String methodName=(String) ((LinkedHashMap)method).get("name");
+				String methodDescription=(String) ((LinkedHashMap)method).get("description");
+				String actualCode=String.valueOf(((LinkedHashMap)method).get("actualCode"));
+				String lineNumList=String.valueOf(((LinkedHashMap)method).get("lineNumList"));
+				String colNumList=String.valueOf(((LinkedHashMap)method).get("colNumList"));
+				System.out.println(className+" : "+methodName+" : "+lineNumList);
+				String javaLineNums="";
+				String naturalLinesNums="";
+				String javaColNums="";
+				String naturalColNums="";
+				if(!lineNumList.equals("null") && lineNumList.lastIndexOf("[")-2>0)
+				 javaLineNums=lineNumList.substring(0,lineNumList.lastIndexOf("[")-2);
+				if(!lineNumList.equals("null")  && lineNumList.indexOf("]")>lineNumList.lastIndexOf("["))
+				 naturalLinesNums=lineNumList.substring(lineNumList.lastIndexOf("["),lineNumList.indexOf("]"));
+				if(!colNumList.equals("null")  && colNumList.lastIndexOf("[")-2>0)
+				 javaColNums=colNumList.substring(0,colNumList.lastIndexOf("[")-2);
+				if(!colNumList.equals("null")  && colNumList.indexOf("]")>colNumList.lastIndexOf("["))
+				 naturalColNums=colNumList.substring(colNumList.lastIndexOf("["),colNumList.indexOf("]"));
+				//String lines[]=lineNum.replace("[", "").replace("]","").split(",");
+				String naturalLines[]=naturalLinesNums.replace("[", "").split(",");
+				String javaLines[]=javaLineNums.replace("[", "").split(",");
+				String naturalCol[]=naturalColNums.replace("[", "").split(",");
+				String javaCol[]=javaColNums.replace("[", "").split(",");
+				gloabalLineNo=Arrays.asList(javaLines);
+				gloabalLineNo01=Arrays.asList(naturalLines);
+				gloabalColumnNo=Arrays.asList(javaCol);
+				gloabalColumnNo01=Arrays.asList(naturalCol);
+				globalIterator=gloabalLineNo.iterator();
+				globalIterator01=gloabalLineNo01.iterator();
+				
+				globalIterator02=gloabalColumnNo.iterator();
+				globalIterator03=gloabalColumnNo01.iterator();
+				LinkedHashMap methodParamMap=new LinkedHashMap<>();
+				String methodParamter="";
+				if(!actualCode.equals("null"))
+						methodParamter=actualCode.substring(actualCode.indexOf("(")+1,actualCode.lastIndexOf(")"));
+				String[] methodParam=methodParamter.split(",");
+				//System.out.println((actualCode));
+				for(String param:methodParam) {
+					System.out.println("^^^^ :"+methodParamter);
+					if(param!=null && param.trim().length()>0 && !param.contains(">") && !param.contains("<")) {
+					String paramClassName=param.substring(0,param.indexOf(" ")).trim();
+					String paramRefrenceName=param.substring(param.indexOf(" ")).trim();
+					
+					methodParamMap.put(paramRefrenceName,paramClassName);
+					}
+					
+				}
+				if(mainMap!=null)
+				mainMap.putAll(methodParamMap);
+				else
+					mainMap=methodParamMap;
+				/*if (className.equals(getMainClassFromDB()) && methodName.equals(getMainMethodNameFromDB(mainClass))) {
+					setStartHereGenerate(true);
+				}*/
+				for (int i = 0; i < getClassesAndMethodsFromDB(mainClass).size(); i++) {
+					String className01 = getClassesAndMethodsFromDB(mainClass).get(i).substring(0,
+							getClassesAndMethodsFromDB(mainClass).get(i).indexOf("."));
+					String methodName01 = getClassesAndMethodsFromDB(mainClass).get(i)
+							.substring(getClassesAndMethodsFromDB(mainClass).get(i).indexOf(".") + 1);
+					if (className.equals(className01) && methodName.equals(methodName01)) {
+						System.out.println("===================================================================="+getClassesAndMethodsFromDB(mainClass).size());
+						try {
+							Thread.sleep(5000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						setStartHereGenerate(true);
+					}
+				}
+				if(methodDescription==null) {
+					methodDescription="";
+				}
+				methodDescriptions.put(methodName, methodDescription);
+				LinkedList statList=(LinkedList)((LinkedHashMap)method).get("statement");
+				BlockStmt blckStmt=new BlockStmt();
+				//blckStmt.addStatement("this.TRINITIEXCEPTIONMESSAGE = TRINITIEXCEPTIONMESSAGE;");
+				statList.forEach(statemnt->{
+				//	lineNum=Integer.valueOf(((T_STATEMENTS)statemnt).LINE_NUMBER);
+					//System.out.println(lineNum);
+					System.out.println(className+" : "+methodName+" : "+((T_STATEMENTS)statemnt).ACTUAL_CODE);
+					/*if(((T_STATEMENTS)statemnt).ACTUAL_CODE.contains("/**") && ((T_STATEMENTS)statemnt).ACTUAL_CODE.contains(".....")) {
+						((T_STATEMENTS)statemnt).ACTUAL_CODE="";
+					}*/
+					try {
+					blckStmt.addStatement(String.valueOf(((T_STATEMENTS)statemnt).ACTUAL_CODE));
+					}catch (Exception e) {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						e.printStackTrace();
+					}
+				});
+				//System.out.println("============>>"+blckStmt.getChildNodes());
+				List<Node> statmentFromMethod=blckStmt.getChildNodes();
+				//System.out.println("============>>"+statmentFromMethod.get(0).getClass());
+				
+      			this.useNaturalLanguage=false;
+				summarizeMethodCode(statmentFromMethod);
+				this.javaStatementsForFlowchart=new ArrayList<>(this.statementsForFlowchart);
+				
+				this.useNaturalLanguage=true;
+				summarizeMethodCode(statmentFromMethod);
+				naturalStatementsForFlowchart=new ArrayList<>(this.statementsForFlowchart);
+				//System.out.println("=============>"+naturalStatementsForFlowchart);
+				//System.out.println("=============>"+this.statementsForFlowchart);
+				totalNoOfMethods++;
+				flowChartGenerator.generateFlowChart(packageName, className, methodName, javaStatementsForFlowchart, naturalStatementsForFlowchart, methodDescription);
+			});
+			totalNoOfClasses++;
+			if(classDescrp.equals("null"))
+				classDescrp="";
+			generateClassSummary(packageName, className, classDescrp, methodDescriptions, mainClass);
+		});
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private LinkedList<LinkedHashMap<String, String>> readClassStatements(String filePath) {
+		File file = new File(filePath);
+		LinkedHashMap<String, String> map = new LinkedHashMap<>();
+		LinkedList<LinkedHashMap<String, String>> mainList=new LinkedList<>();
+		 int cond=0;
+			String value=null;
+			LinkedHashMap<String, String> map01=new LinkedHashMap<>();//class stat
+			LinkedHashMap<String, String> locMap=new LinkedHashMap<>();//import stat
+		try {
+			 BufferedReader scan=new BufferedReader(new FileReader(file));	
+			int count = 1;
+
+			ArrayList<String> al = new ArrayList<>();
+			//while (scan.hasNextLine()) {
+			try {
+				while ((value=scan.readLine())!=null) {
+					//value = scan.nextLine();
+					//if(!value.contains("*") && !(value.indexOf("//")>=0) && (value.contains("import") || value.contains("package"))){
+					if((value.contains("public class") || value.contains("public interface")) && cond==0) {
+				         locMap.putAll(map);
+							map=map01;
+							cond++;
+						}
+						map.put(String.valueOf(count),value.trim());
+						//map.put("stat", value.trim());
+
+					
+				//}
+					count++;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // while
+			mainList.add(locMap);//import stat
+			mainList.add(map);//class stat
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			try {
+				// Thread.sleep(5000);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				// e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		return mainList;
+	}
+
+	private Object getStatement(Object value) {
+		List list01 = new ArrayList<>();
+		if (!(value instanceof List)) {
+			list01.add(value);
+			return list01;
+		} // if
+		else if (value instanceof List) {
+			List list = (List) value;
+			for (Object obj : list) {
+				if (!(obj instanceof List)) {
+					list01.add(obj);
+					// return list01;
+				} // if
+				else if (obj instanceof List) {
+					try {
+						Object obj01 = getStatement(obj);
+						List list02 = (List) obj01;
+
+						// obj;
+						list01.addAll(list02);
+					} catch (StackOverflowError e) {
+						try {
+							System.out.println("Yes Error...............");
+							Thread.sleep(5000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							// e1.printStackTrace();
+						}
+					}
+					// list01.add(list02);
+				} // else if
+
+			} // forEach
+			return list01;
+		} // else if
+		else
+			return null;
+	}// method
+
+	private Map<String, String> getParametersMapFromMethodDefinition(NodeList<Parameter> nodesList) {
+		Map<String, String> parametersMap = new HashMap<>();
+		if (nodesList != null) {
+			String className;
+			String variableName;
+			for (Parameter parameter : nodesList) {
+				if (parameter.toString().contains(" ")) {
+					className = parameter.toString().substring(0, parameter.toString().lastIndexOf(" ")).trim();
+					variableName = parameter.toString().substring(parameter.toString().lastIndexOf(" ")).trim();
+
+					addVariableAndClassToMap(variableName, className, variableAndClassNamesMap);
+				}
+			}
+		}
+		return parametersMap;
+	}
+
+	private void generateClassSummary(String packageName, String className, String classDescription,
+			Map<String, String> methodDescriptions, String mainClass) {
+		int noOfMethodsInTheClass;
+		StringBuilder classFilePathBuilder = new StringBuilder();
+		if (className != null) {
+			classFilePathBuilder.append(flowDiagramFolder);
+			classFilePathBuilder.append(projectName).append(File.separator);
+System.out.println(packageName+"Project Name:=================== "+projectName);
+			if (packageName != null) {
+				String tempLoc = null;
+				tempLoc = classFilePathBuilder.toString().concat(packageName).concat(File.separator).concat(className)
+						.concat(File.separator).concat("index.html");
+				/*if (className.equals(mainClass) && isSetStartHereGenerate()) {
+					generateMainClassDiagram(classFilePathBuilder, tempLoc, packageName, className, mainClass, 1,
+							getMainMethodName());
+
+				}*/
+
+			if(isChartgenerateFromDB) {
+				for (int i = 0; i < getClassesAndMethodsFromDB(mainClass).size(); i++) {
+					String className01 = getClassesAndMethodsFromDB(mainClass).get(i).substring(0,
+							getClassesAndMethodsFromDB(mainClass).get(i).indexOf("."));
+					String methodName01 = getClassesAndMethodsFromDB(mainClass).get(i)
+							.substring(getClassesAndMethodsFromDB(mainClass).get(i).indexOf(".") + 1);
+					if (className.equals(className01) && isSetStartHereGenerate()) {
+						generateMainClassDiagram(classFilePathBuilder, tempLoc, packageName, className, className01, 2,
+								methodName01);
+					}
+				}
+			}else{
+				
+				for (int i = 0; i < getClassesAndMethods().size(); i++) {
+					String className01 = getClassesAndMethods().get(i).substring(0,
+							getClassesAndMethods().get(i).indexOf("."));
+		
+					System.out.println("message:"+className01);
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String methodName01 = getClassesAndMethods().get(i)
+							.substring(getClassesAndMethods().get(i).indexOf(".") + 1);
+					//System.out.println(className+" : yes true.................: "+className01);
+					if (className.equals(className01) && isSetStartHereGenerate()) {
+						
+						generateMainClassDiagram(classFilePathBuilder, tempLoc, packageName, className, className01, 2,
+								methodName01);
+					}
+				}
+				}
+				classFilePathBuilder.append(packageName).append(File.separator);
+
+			}
+			classFilePathBuilder.append(className);
+		} else {
+			return;
+		}
+
+		String methodSummary = getMethodSummaryContent(packageName, className, classDescription, methodDescriptions);
+		File methodSummaryFile = new File(classFilePathBuilder.toString() + File.separator + "index.html");
+		methodSummaryFile.getParentFile().mkdirs();
+
+		try (FileWriter fw = new FileWriter(methodSummaryFile);) {
+			fw.write(methodSummary);
+			fw.flush();
+
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
+	}
+
+	// genarting a specific class(taken name of class dynimacally from properies
+	// file) based diagram.
+	private void generateMainClassDiagram(StringBuilder location, String forwardPage, String packageName,
+			String className, String mainClass, int priority, String methodName) {
+		try {
+			String filePath = "";
+			// filePath= location.toString().concat("starthere.html");
+
+			filePath = location.toString().concat("starthere-" + mainClass + ".html");
+			String redirectPath = "";
+			if (priority == 1)
+				redirectPath = packageName.concat(File.separator + mainClass)
+						.concat(File.separator + getMainMethodName() + ".html");
+
+			else
+				redirectPath = packageName.concat(File.separator + mainClass)
+						.concat(File.separator + methodName + ".html");
+			StringBuilder htmlContent = new StringBuilder();
+			htmlContent.append("<html>");
+			htmlContent.append("<head>");
+			htmlContent.append("<meta http-equiv='refresh' content='0; url=" + redirectPath + "'/>");
+			htmlContent.append("</head>");
+			htmlContent.append("<body>");
+			htmlContent.append("<b> please Wait Some Time..</b>");
+			htmlContent.append("</body>");
+			htmlContent.append("</html>");
+
+			File mainFile = new File(filePath);
+			FileWriter fileWrite = new FileWriter(mainFile);
+			fileWrite.write(htmlContent.toString());
+			fileWrite.flush();
+			fileWrite.close();
+			mainFile.createNewFile();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
+	private String getMethodSummaryContent(String packageName, String className, String classDescription,
+			Map<String, String> methodDescriptions) {
+		StringBuilder methodSummaryBuilder = new StringBuilder();
+
+		List<String> methodsList = new ArrayList<String>(methodDescriptions.keySet());
+		Collections.sort(methodsList);
+
+		methodSummaryBuilder.append("<html>");
+		methodSummaryBuilder.append("\n	<head>");
+		methodSummaryBuilder.append("<link rel='icon' href='" + flowChartGenerator.getLogoPath()
+				+ configProps.getProperty("favicon") + "' >  ");
+		methodSummaryBuilder.append("\n		<style type=\"text/css\">");
+		methodSummaryBuilder.append("\n			th {");
+		methodSummaryBuilder.append("\n				text-align: start;");
+		methodSummaryBuilder.append("\n				border-color: grey;");
+		methodSummaryBuilder.append("\n				padding: 0.2em 0.5em;");
+		methodSummaryBuilder.append("\n			}");
+		methodSummaryBuilder.append("\n			th > a {");
+		methodSummaryBuilder.append("\n				color: inherit;");
+		methodSummaryBuilder.append("\n			}");
+		methodSummaryBuilder.append("\n			td {");
+		methodSummaryBuilder.append("\n				border-color: grey;");
+		methodSummaryBuilder.append("\n				padding: 0.2em 0.5em;");
+		methodSummaryBuilder.append("\n			}");
+		methodSummaryBuilder.append("\n			table.ellipsis {");
+		methodSummaryBuilder.append("\n				width: 100%;");
+		methodSummaryBuilder.append("\n				border-color: grey;");
+		methodSummaryBuilder.append("\n				border-radius: 10px;");
+		methodSummaryBuilder.append("\n				border-spacing: 0px;");
+		methodSummaryBuilder.append("\n				border-collapse: collapse;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			:root {");
+		methodSummaryBuilder.append("\n				background-color: -moz-dialog;");
+		methodSummaryBuilder.append("\n				font: message-box;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			div#div1 {");
+		methodSummaryBuilder.append("\n				border: 1px solid ThreeDShadow;");
+		methodSummaryBuilder.append("\n				border-radius: 10px;");
+		methodSummaryBuilder.append("\n				padding: 3em;");
+		methodSummaryBuilder.append("\n				min-width: 30em;");
+		methodSummaryBuilder.append("\n				max-width: 65em;");
+		methodSummaryBuilder.append("\n				margin: 4em auto;");
+		methodSummaryBuilder.append("\n				background-color: -moz-field;");
+		methodSummaryBuilder.append("\n				color: -moz-fieldtext;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			a {");
+		methodSummaryBuilder.append("\n				text-decoration: none;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			a:hover {");
+		methodSummaryBuilder.append("\n				text-decoration: underline;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			p {");
+		methodSummaryBuilder.append("\n				font-size: 110%;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n			table {");
+		methodSummaryBuilder.append("\n				margin: 0 auto;");
+		methodSummaryBuilder.append("\n			}");
+		methodSummaryBuilder.append("\n			thead {");
+		methodSummaryBuilder.append("\n				font-size: 120%;");
+		methodSummaryBuilder.append("\n			}");
+
+		methodSummaryBuilder.append("\n		</style>");
+		methodSummaryBuilder.append("\n	</head>");
+		methodSummaryBuilder.append("\n	<body>");
+		methodSummaryBuilder.append("\n             <img height='" + configProps.getProperty("logo-icon-height")
+				+ "' width='" + configProps.getProperty("logo-icon-width") + "'  alt='Triniti' src='"
+				+ flowChartGenerator.getLogoPath() + configProps.getProperty("logo-icon") + "'  />  ");
+		methodSummaryBuilder.append("\n	<div id='div1'>");
+		methodSummaryBuilder.append("\n	    <h1>" + ((packageName == null || packageName.trim().length() == 0) ? ""
+				: packageName.replace(File.separator, ".") + ".") + className + "</h1>");
+		methodSummaryBuilder.append("\n	    <h2 style=\"font-weight:normal\">" + classDescription + "</h2>");
+		methodSummaryBuilder.append("\n	    <body>");
+
+		int noOfMethodsInTheClass = methodsList.size();
+		noOfMethodsWithDescription = 0;
+		noOfMethodsWithoutDescription = 0;
+
+		methodsList.stream().forEach(methodName -> {
+			String methodDescription = methodDescriptions.get(methodName);
+			if (methodDescription != null && methodDescription.trim().length() > 0) {
+				noOfMethodsWithDescription++;
+			} else {
+				noOfMethodsWithoutDescription++;
+			}
+		});
+
+		methodSummaryBuilder.append("\n		<table class='ellipsis' border='1' align=center >");
+		methodSummaryBuilder.append("\n			<thead style=\"font-size: 120%;\">");
+		methodSummaryBuilder.append("\n			<tr>");
+		methodSummaryBuilder.append("\n				<th>No. of Methods</th>");
+		methodSummaryBuilder.append("\n				<th>With Description</th>");
+		methodSummaryBuilder.append("\n				<th>Without Description</th>");
+		methodSummaryBuilder.append("\n			</tr>");
+		methodSummaryBuilder.append("\n			</thead>");
+
+		methodSummaryBuilder.append("\n			<tr>");
+		methodSummaryBuilder.append("\n				<td>" + noOfMethodsInTheClass + "</td>");
+		methodSummaryBuilder.append("\n				<td>" + noOfMethodsWithDescription + "</td>");
+		methodSummaryBuilder.append("\n				<td>" + noOfMethodsWithoutDescription + "</td>");
+		methodSummaryBuilder.append("\n			</tr>");
+
+		methodSummaryBuilder.append("\n		</table>");
+		methodSummaryBuilder.append("\n		<hr>");
+
+		methodSummaryBuilder.append("\n		<table class='ellipsis' border='1' align=center >");
+		methodSummaryBuilder.append("\n			<thead style=\"font-size: 120%;\">");
+		methodSummaryBuilder.append("\n			<tr>");
+		methodSummaryBuilder.append("\n				<th>Method</th>");
+		methodSummaryBuilder.append("\n				<th>Description</th>");
+		methodSummaryBuilder.append("\n			</tr>");
+		methodSummaryBuilder.append("\n			</thead>");
+
+		for (String eachMethod : methodsList) {
+			methodSummaryBuilder.append("\n			<tr>");
+			methodSummaryBuilder
+					.append("\n				<td><a style='style=\"text-decoration: none;\"' target='_blank' href='"
+							+ eachMethod + ".html" + "'>" + eachMethod + "</td>");
+			methodSummaryBuilder.append("\n				<td>" + methodDescriptions.get(eachMethod) + "</td>");
+			methodSummaryBuilder.append("\n			</tr>");
+		}
+
+		methodSummaryBuilder.append("\n		</table>");
+		methodSummaryBuilder.append("\n	</div>");
+		methodSummaryBuilder.append("\n	</body>");
+		methodSummaryBuilder.append("\n</html>");
+
+		return methodSummaryBuilder.toString();
+	}
+
+	public void summarizeMethodCode(List<Node> statementsFromMethod) {
+		try {
+			HashMap<String, String> map = new HashMap<>();
+
+			clearStatementsForFlowChart();
+			for (Node node01 : statementsFromMethod) {
+				System.out.println("original Node: "+node01+" : "+node01.getClass());
+				node01 = node01.removeComment();
+				String val = "";
+				if (node01.toString().contains("new") && node01.toString().contains("=")
+						&& !node01.toString().contains("->")) {
+					val = node01.toString().replace(" ", "");
+				}
+				if (!node01.toString().contains("+") && node01 instanceof ExpressionStmt
+						&& node01.toString().contains("new") && !node01.toString().contains("->")
+						&& node01.toString().indexOf("new") != 0 && node01.toString().contains("=")
+						&& val.charAt(val.indexOf("new") - 1) == '=' && node01.toString().charAt(0) != '/'
+						&& !node01.toString().contains("[")) {
+					System.out.println("condition true");
+					int length = node01.toString().substring(0, node01.toString().indexOf(" ")).length();
+					String className = node01.toString().substring(0, node01.toString().indexOf(" "));
+					String temp = node01.toString().replaceAll("\\s", "");
+					int val1 = temp.indexOf("new") + 3;
+					int val2 = temp.indexOf("(");
+					String temClass = "";
+					if (val2 > val1) {
+						temClass = temp.substring(val1, val2);
+					}
+					int index = node01.toString().indexOf("=");
+					String ref = "";
+					boolean condition = node01.toString().charAt(0) >= 65 && node01.toString().charAt(0) <= 90;
+					boolean condition01 = node01.toString().charAt(0) >= 97 && node01.toString().charAt(0) <= 122;
+					boolean flag;
+					if (condition01)
+						ref = node01.toString().substring(0, node01.toString().indexOf("="));
+					else if (condition) {
+						for (int i = index - 2; node01.toString().charAt(i) != ' '; i--) {
+							ref = ref.concat(String.valueOf(node01.toString().charAt(i)));
+						} // for loop
+						StringBuilder refBuilder = new StringBuilder(ref);
+						ref = refBuilder.reverse().toString();
+					} // else if
+					String refName = node01.toString().substring(length, node01.toString().indexOf("=")).trim();
+					map.put(ref.trim(), temClass.trim());
+
+				} // if loop
+				if ((!node01.toString().contains("+") && !node01.toString().contains("->")
+						&& node01.toString().contains("=")) && (node01.toString().contains("new"))
+						&& node01 instanceof ExpressionStmt
+						&& node01.toString().substring(0, node01.toString().indexOf("=")).contains("new")
+						&& node01.toString()
+								.substring(node01.toString().indexOf("=") + 1, node01.toString().indexOf(";"))
+								.contains("new")) {
+					String newRef = "";
+					if (node01.toString().charAt(0) >= 97 && node01.toString().charAt(0) <= 122) {
+						int begin101 = 0;
+						int end101 = node01.toString().indexOf(" ");
+						if (end101 > begin101)
+							newRef = node01.toString().substring(0, end101);
+					} else {
+						int index = node01.toString().indexOf("=");
+						for (int i = index - 2; node01.toString().charAt(i) != ' '; i--) {
+
+							newRef = newRef.concat(String.valueOf(node01.toString().charAt(i)));
+						} // for loop
+						StringBuilder refBuilder = new StringBuilder(newRef);
+						newRef = refBuilder.reverse().toString();
+					}
+
+					String temp = node01.toString().replaceAll("\\s", "");
+					String subString = temp.substring(temp.indexOf("=") + 1, temp.indexOf(";"));
+					int firstVal = (subString.indexOf("new") + 3);
+					int secondVal = subString.indexOf("(");
+					String temClass = "";
+					String className = "";
+					if (secondVal > firstVal) {
+						temClass = subString.substring(firstVal, secondVal);
+						className = temClass;
+						map.put(newRef, className);
+					}
+				} // if loop
+				if (mainMap != null)
+					mainMap.putAll(map);
+				else
+					mainMap = map;
+
+			} // for each loop
+
+			for (Node node : statementsFromMethod) {
+
+				node = node.removeComment();
+				// System.out.println("Real Node:: "+node+" : class- "+node.getClass());
+				if (node instanceof BlockStmt) {
+					// No need of this for now, as all the statements of the block are traversed in
+					// the subsequent elses'
+					// statementsForFlowchart.addAll(getStatementsFromBlock((BlockStmt) node));
+				} else if (node instanceof TryStmt) {
+					System.out.println("try-catch blck:: " + node);
+					statementsForFlowchart.addAll(getStatementsFromTryBlock((TryStmt) node));
+				} else if (node instanceof IfStmt) {
+					statementsForFlowchart.add(getStatementsFromIfBlock((IfStmt) node));
+					System.out.println("ifstmt::::::: " + statementsForFlowchart);
+				} else if (node instanceof ForStmt) {
+					// System.out.println("yes For loop");
+					statementsForFlowchart.add(getStatementsFromForBlock((ForStmt) node));
+				} else if (node instanceof ForEachStmt) {
+					statementsForFlowchart.add(getStatementsFromForEachBlock((ForEachStmt) node));
+				} else if (node instanceof WhileStmt) {
+					statementsForFlowchart.add(getStatementsFromWhileBlock((WhileStmt) node));
+				} else if (hasLambdaExpressionInIt(node)) {
+					System.out.println("yes this one is lambda expr..." + node);
+					List<Object> statementsFromLambdaExpr = getStatementsFromLambdaExpr(node);
+					System.out.println("new fetaure: " + statementsFromLambdaExpr);
+					if (statementsFromLambdaExpr != null && statementsFromLambdaExpr.size() > 0) {
+						statementsForFlowchart.addAll(statementsFromLambdaExpr);
+					}
+				} else if (node instanceof ExpressionStmt) {
+					System.out.println(hasLambdaExpressionInIt(node) + " Expression::-------> " + node);
+					node.removeComment();
+					addFlowChartNode(statementsForFlowchart, node);
+				} else if (node.toString().contains("synchronized")) {
+					node.removeComment();
+					System.out.println("Main Node--:: " + node);
+					System.out.println("Child Node--:: " + node.getChildNodes());
+					statementsForFlowchart.addAll(getStatementFromSynchonizedBlock(node));
+				} else {
+					System.out.println("in else block--------------");
+					node = (Node) node.removeComment();
+					System.out.println("yes node is:----- " + node);
+					addFlowChartNode(statementsForFlowchart, node);
+
+				}
+			}
+		} catch (IndexOutOfBoundsException e) {
+
+			e.printStackTrace();
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e1) {
+				System.out.println();
+
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			try {
+				// Thread.sleep(5000);
+			} catch (Exception e1) {
+				// e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+	}
+
+	private String getClassDescription(ClassOrInterfaceDeclaration classOrInterface) {
+		String classDescription = null;
+		classDescription = classOrInterface.getComment().orElse(new JavadocComment("")).getContent();
+
+		if (classDescription.contains("\n")) {
+			classDescription = Arrays.asList(classDescription.split("\n")).stream().map(eachLine -> {
+				eachLine = eachLine.trim();
+				if (eachLine.startsWith("*")) {
+					eachLine = eachLine.substring(eachLine.indexOf("*") + 1);
+				}
+				return eachLine;
+			}).filter(eachLine -> {
+				return !eachLine.contains("@");
+			}).reduce("", (methodDesc, eachLine) -> methodDesc.concat("\n").concat(eachLine.trim()));
+		} else {
+			classDescription = classDescription.trim();
+			if (classDescription.startsWith("*")) {
+				classDescription = classDescription.substring(classDescription.indexOf("*") + 1);
+			}
+		}
+
+		return classDescription.trim();
+	}
+
+	private String getMethodDescription(MethodDeclaration method) {
+		int count = 1;
+		count++;
+		String methodDescription = null;
+		methodDescription = method.getComment().orElse(new JavadocComment("")).getContent();
+
+		if (methodDescription.contains("\n")) {
+			methodDescription = Arrays.asList(methodDescription.split("\n")).stream().map(eachLine -> {
+				eachLine = eachLine.trim();
+				if (eachLine.startsWith("*")) {
+					eachLine = eachLine.substring(eachLine.indexOf("*") + 1);
+				}
+				return eachLine;
+			}).filter(eachLine -> {
+				return !eachLine.contains("@");
+			}).reduce("", (methodDesc, eachLine) -> methodDesc.concat("\n").concat(eachLine.trim()));
+		} else {
+			methodDescription = methodDescription.trim();
+			if (methodDescription.startsWith("*")) {
+				methodDescription = methodDescription.substring(methodDescription.indexOf("*") + 1);
+			}
+		}
+
+		return methodDescription.trim();
+	}
+
+	private void addFlowChartNode(List<Object> nodesList, Node node) {
+		System.out.println("Entry with node:: "+node);
+		String val = node.toString();
+		boolean flag01 = val.contains("serialVersionUID");
+
+		if (flag01) {
+			return;
+		} else if (node instanceof EmptyStmt) {
+			return;
+		}
+
+		String nodeType = null;
+		String nodeText = null;
+		FlowChartNode flowChartNode = null;
+		boolean hasMethodCall = false;
+		List<String> methodCallDetails = null;
+
+		try {
+			if (node != null) {
+				if (node instanceof Comment) {
+					System.out.println("Comments:: " + node.toString());
+					return;
+				} else {
+					if (containComments(node)) {
+						node = removeComments(node);
+					}
+
+					node = node.removeComment();
+					String lineNum="";
+					String colNum="";
+					if(!isChartgenerateFromDB) {
+					 lineNum = String.valueOf(node.getBegin().get().line);
+					 colNum=String.valueOf(node.getBegin().get().column);
+						if(!useNaturalLanguage) {
+					this.lineNoList.add(lineNum);
+					this.columnNoList.add(colNum);
+						}
+						/*if(useNaturalLanguage)
+							this.lineNoList01.add(lineNum);*/
+					//Iterator itr=gloabalLineNo.iterator();
+					
+					}else {
+						if(globalIterator.hasNext() && globalIterator02.hasNext()) {	
+		                       lineNum=String.valueOf(globalIterator.next());
+		                       colNum=String.valueOf(globalIterator02.next());
+		                       System.out.println(lineNum+"************---------***************"+globalIterator.hasNext());
+							}
+					}
+				
+					
+					//System.out.println(lineNum+","+node.getBegin().get().column+"----"+node);
+					//System.out.println(lineNum+"***************************************");
+					
+					
+					nodeText = ("(").concat(lineNum+","+colNum+")").concat(": ").concat(node.toString());
+
+					if (nodeText.contains("'")) {
+						nodeText = nodeText.replace("'", "");
+					}
+
+					nodeType = "";
+
+					nodeType += nodeText;
+
+					List<Object> statementInNaturalLanguage = null;
+					List<Object> statementsList = null;
+					String nodeMeaning = null;
+
+					if (useNaturalLanguage) {
+						extractClassAndVariableNamesFromThisStatement(node);
+
+						java2NLConverter.setVariablesMap(variableAndClassNamesMap);
+						System.out.println("class And variable:::=====>"+variableAndClassNamesMap);
+						statementInNaturalLanguage = java2NLConverter.getStatementInNaturalLanguage(node);
+						System.out.println("If Block..." + statementInNaturalLanguage + " Node:: " + node);
+						if (statementInNaturalLanguage != null && statementInNaturalLanguage.size() > 0
+								&& statementInNaturalLanguage.get(0).toString().trim().length() > 0) {
+
+							for (Object object : statementInNaturalLanguage) {
+								
+								if (object instanceof String) {
+									System.out.println("start-yes working and class is: "+object);
+									nodeMeaning = (String) object;
+									String lineNum001 = "";
+									String colNum001="";
+									if(!isChartgenerateFromDB) {
+									lineNum001=String.valueOf(node.getBegin().get().line);
+									colNum001=String.valueOf(node.getBegin().get().column);
+									}
+									if (nodeMeaning.length() > 0) {
+										if(!isChartgenerateFromDB)
+										if(useNaturalLanguage) {
+											this.lineNoList01.add(lineNum);
+											this.columnNoList01.add(colNum001);
+										}
+										if(isChartgenerateFromDB) {
+										String lineNum01="";
+										if(globalIterator01.hasNext() && globalIterator03.hasNext()) {	
+						                       lineNum01=String.valueOf(globalIterator01.next());
+						                       colNum001=String.valueOf(globalIterator03.next());
+						                       System.out.println(lineNum01+"***************************************"+globalIterator.hasNext());
+											}
+										
+										nodeType = ("(").concat(lineNum01+","+colNum001+")").concat(": ").concat(nodeMeaning);
+									}else
+										nodeType=("(").concat(lineNum001+","+colNum001+")").concat(": ").concat(nodeMeaning);
+									}
+									flowChartNode = new FlowChartNode(nodeType);
+									nodesList.add(flowChartNode);
+									System.out.println(nodesList+"end-yes working and class is: "+object.getClass());
+								} else if (object instanceof List) {
+									statementsList = (List<Object>) object;
+
+									if (flowChartGenerator.isItAForLoop(statementsList)) {
+										List conditionList = (List) statementsList.get(1);
+										List forStatementsList = (List) statementsList.get(2);
+
+										for (int index = 0; index < conditionList.size(); index++) {
+											conditionList.set(index,
+													new FlowChartNode((String) conditionList.get(index)));
+										}
+
+										for (int index = 0; index < forStatementsList.size(); index++) {
+											forStatementsList.set(index,
+													new FlowChartNode((String) forStatementsList.get(index)));
+										}
+
+										nodesList.add(statementsList);
+									} else if (flowChartGenerator.isItAnIfBlock(statementsList)) {
+										List ifCondition = (List) statementsList.get(1);
+										List ifBlock = (List) statementsList.get(2);
+										List elseBlock = null;
+
+										ifCondition.set(0, new FlowChartNode(ifCondition.get(0).toString()));
+
+										for (int index = 0; index < ifBlock.size(); index++) {
+											ifBlock.set(index, new FlowChartNode(ifBlock.get(index).toString()));
+										}
+
+										if (statementsList.size() > 3) {
+											elseBlock = (List) statementsList.get(3);
+
+											for (int index = 0; index < elseBlock.size(); index++) {
+												elseBlock.set(index,
+														new FlowChartNode(elseBlock.get(index).toString()));
+											}
+										}
+
+										nodesList.add(statementsList);
+									} else if (isItAPlainList(statementsList)) {
+										for (Object object2 : statementsList) {
+											if (object2 instanceof String) {
+												nodeMeaning = (String) object2;
+											}
+
+											if (nodeMeaning.length() > 0) {
+												nodeType = nodeMeaning;
+											}
+
+											flowChartNode = new FlowChartNode(nodeType);
+											nodesList.add(flowChartNode);
+										}
+									}
+								}
+							}
+						} else {
+
+						}
+					} else {
+						System.out.println("yes ---------------yes -----------yes");
+						flowChartNode = new FlowChartNode(nodeType);
+						nodesList.add(flowChartNode);
+					}
+				}
+			}
+
+			if (flowChartNode != null) {
+				hasMethodCall = checkIfThisNodeHasAMethodCall(node);
+				 System.out.println("Node:: " + nodeType + " :: " + hasMethodCall+" :: "+mainMap);
+				if (hasMethodCall) {
+					methodCallDetails = getMethodCallDetailsFromThisNode(node, mainMap);
+					System.out.println("methodCallDetails:: " + methodCallDetails);
+					if (methodCallDetails != null && methodCallDetails.size() == 2) {
+						flowChartNode.setMethodCall(true);
+						flowChartNode.setMethodCallDetails(methodCallDetails);
+					}
+				}
+			}
+			System.out.println("last stat "+nodesList);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("yes Another One");
+			e.printStackTrace();
+
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+e.printStackTrace();
+		}
+
+		catch (Throwable t) {
+
+		}
+
+	}
+
+	private boolean isItAPlainList(List<Object> statementsList) {
+		for (Object object : statementsList) {
+			if (!(object instanceof String)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void extractImportedClassDetails(ImportDeclaration importDeclaration) {
+		String importStmt = importDeclaration.toString();
+
+		if (importStmt.contains(" ")) {
+			String className = null;
+			importStmt = importStmt.substring(importStmt.indexOf(" ") + 1).trim();
+
+			if (importStmt.endsWith(";")) {
+				importStmt = importStmt.substring(0, importStmt.length() - 1);
+			}
+
+			if (importStmt.contains(".")) {
+				className = importStmt.substring(importStmt.lastIndexOf(".") + 1);
+			}
+
+			importedClassDetailsMap.put(className, importStmt);
+		}
+	}
+
+	private Map<String, String> extractClassAndVariableNamesFromThisStatement(Node node) {
+		Map<String, String> variablesMap = new HashMap<>();
+
+		node = node.removeComment();
+		List<Node> childNodes = node.getChildNodes();
+
+		String className = null;
+		String variableName = null;
+		String variableDeclarationStmt = null;
+
+		String variablePart = null;
+
+		if (node instanceof FieldDeclaration) {
+			variableDeclarationStmt = node.toString();
+
+			if (variableDeclarationStmt.contains("=")) {
+				variablePart = variableDeclarationStmt.substring(0, variableDeclarationStmt.indexOf("="));
+				if (variablePart.contains(" ")) {
+					className = variablePart.substring(0, variablePart.indexOf(" ")).trim();
+					variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+
+					if (className.equals("private") || className.equals("public") || className.equals("protected")) {
+						className = variableName.substring(0, variableName.lastIndexOf(" ")).trim();
+						variableName = variableName.substring(variableName.lastIndexOf(" ") + 1).trim();
+					}
+
+					addVariableAndClassToMap(variableName, className, variablesMap);
+				}
+			} else {
+				variablePart = variableDeclarationStmt;
+				className = variablePart.substring(0, variablePart.indexOf(" ")).trim();
+				variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+
+				if (className.equals("private") || className.equals("public") || className.equals("protected")) {
+					className = variableName.substring(0, variableName.lastIndexOf(" ")).trim();
+					variableName = variableName.substring(variableName.lastIndexOf(" ") + 1).trim();
+				}
+
+				addVariableAndClassToMap(variableName, className, variablesMap);
+			}
+		} else if (childNodes.size() > 0) {
+			if (childNodes.get(0) instanceof VariableDeclarationExpr) {
+				extractVariablesFromVariableDeclarationExpr((VariableDeclarationExpr) childNodes.get(0), variablesMap);
+			} else if (childNodes.get(0) instanceof VariableDeclarator) {
+				if (node.toString().contains("=")) {
+					variablePart = node.toString().substring(0, node.toString().indexOf("=")).trim();
+				} else {
+					variablePart = node.toString().trim();
+				}
+
+				if (variablePart.contains(" ")) {
+					className = variablePart.substring(0, variablePart.indexOf(" ")).trim();
+					variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+					addVariableAndClassToMap(variableName, className, variablesMap);
+				}
+			}
+		}
+
+		variableAndClassNamesMap.putAll(variablesMap);
+
+		return variablesMap;
+	}
+
+	private void extractVariablesFromVariableDeclarationExpr(VariableDeclarationExpr variableDeclarationExpr,
+			Map<String, String> variablesMap) {
+		String variableDeclarationStmt = variableDeclarationExpr.toString();
+		boolean isObjectCreationStmt = checkIfItsObjectCreationStmt(variableDeclarationStmt);
+
+		String variablePart = null;
+		String className = null;
+		String variableName = null;
+
+		List<Node> childNodes = variableDeclarationExpr.getChildNodes();
+
+		if (isObjectCreationStmt) {
+			if (variableDeclarationStmt.contains("=")) {
+				variablePart = variableDeclarationStmt.substring(0, variableDeclarationStmt.indexOf("=")).trim();
+				if (variablePart.contains(" ")) {
+					className = variablePart.substring(0, variablePart.lastIndexOf(" "));
+					variableName = variablePart.substring(variablePart.lastIndexOf(" ") + 1).trim();
+					addVariableAndClassToMap(variableName, className, variablesMap);
+				}
+			}
+		} else {
+			childNodes = childNodes.get(0).getChildNodes();
+
+			if (variableDeclarationStmt.contains("=")) {
+				variablePart = variableDeclarationStmt.substring(0, variableDeclarationStmt.indexOf("=")).trim();
+				if (variablePart.contains(" ")) {
+					className = variablePart.substring(0, variablePart.lastIndexOf(" "));
+					variableName = variablePart.substring(variablePart.lastIndexOf(" ") + 1).trim();
+					addVariableAndClassToMap(variableName, className, variablesMap);
+				}
+			} else if (variableDeclarationStmt.contains(" ")) {
+				variablePart = variableDeclarationStmt.trim();
+
+				className = variablePart.substring(0, variablePart.indexOf(" "));
+				variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+				if (variableName.contains(" ")) {
+					variableName = variableName.substring(0, variableName.indexOf(" "));
+				}
+
+				addVariableAndClassToMap(variableName, className, variablesMap);
+			} else {
+			}
+		}
+	}
+
+	private void addVariableAndClassToMap(String variableName, String className, Map<String, String> variablesMap) {
+		variableName = variableName.trim();
+		if (variableName.endsWith(";")) {
+			variableName = variableName.substring(0, variableName.length() - 1);
+		}
+
+		if (className.contains("<")) {
+			className = className.substring(0, className.indexOf("<"));
+		}
+
+		if (variableName.contains(">")) {
+			variableName = variableName.substring(0, variableName.lastIndexOf(">"));
+		}
+		if (variableName.contains(" ")) {
+			variableName = variableName.substring(variableName.indexOf(" ")).trim();
+		}
+
+		variablesMap.put(variableName, className);
+	}
+
+	private List<String> getMethodCallDetailsFromThisNode(Node node, Map<String, String> map) {
+		List<Node> childNodes = null;
+		List<Node> chNodes = null;
+		List<Node> previousChildNodes = null;
+
+		List<String> classAndMethodDetails = null;
+		List<String> methodsList = null;
+
+		String className = null;
+		String variableName = null;
+		String methodName = null;
+		String methodCallExpr = null;
+		String variableDeclarationStmt = null;
+		String variablePart = null;
+		boolean flag = true;
+		boolean isObjectCreationStmt = false;
+
+		try {
+			childNodes = node.getChildNodes();
+
+			// System.out.println("yes see:- " + node.toString() + " : " + node.getClass());
+			if (node instanceof MethodCallExpr) {
+				methodCallExpr = node.toString();
+				if (methodCallExpr.replace(" ", "").contains("()") && methodCallExpr.contains(".")
+						&& methodCallExpr.indexOf(".") < methodCallExpr.replace(" ", "").indexOf("()")) {
+					variableName = childNodes.get(0).toString();
+					methodName = childNodes.get(1).toString();
+					int begin = 0;
+					int end = methodCallExpr.indexOf("." + methodName);
+					String tempClassName = "";
+					if (end > begin) {
+						tempClassName = methodCallExpr.substring(begin, end);
+						if (tempClassName.charAt(0) >= 65 && tempClassName.charAt(0) <= 90)
+							className = tempClassName;
+						else if (tempClassName.charAt(0) >= 97 && tempClassName.charAt(0) <= 122) {
+							if (mainMap != null) {
+
+								className = mainMap.get(tempClassName);
+							}
+						}
+						flag = false;
+
+					}
+					flag = false;
+				} else {
+					className = currentClassName;
+					methodName = childNodes.get(0).toString();
+				}
+			} else if (childNodes.get(0) instanceof VariableDeclarationExpr) {
+				System.out.println("variable dec....");
+				variableDeclarationStmt = childNodes.get(0).toString();
+				checkIfItsObjectCreationStmt(variableDeclarationStmt);
+				if (isObjectCreationStmt) {
+					variablePart = variableDeclarationStmt.substring(0, variableDeclarationStmt.indexOf("="));
+					if (variablePart.contains(" ")) {
+						className = variablePart.substring(0, variablePart.indexOf(" "));
+						variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+						variableAndClassNamesMap.put(variableName, className);
+					}
+				} else {
+					if (variableDeclarationStmt.contains(" ")) {
+
+						if (!variableDeclarationStmt.contains(".")) {
+							className = currentClassName.trim();
+							int start = (variableDeclarationStmt.indexOf("=") + 1);
+							int end = variableDeclarationStmt.indexOf("(");
+							if (end > start)
+								methodName = variableDeclarationStmt.substring(start, end).trim();
+
+						} else {
+							if (node.toString().indexOf(".") > node.toString().indexOf("(")) {
+								className = currentClassName;
+								int start = (variableDeclarationStmt.indexOf("=") + 1);
+								int end = variableDeclarationStmt.indexOf("(");
+								if (end > start)
+									methodName = variableDeclarationStmt.substring(start, end).trim();
+								flag = false;
+							} else {
+								int ind01 = (variableDeclarationStmt.indexOf("=") + 1);
+								int ind02 = variableDeclarationStmt.indexOf(".");
+								int ind03 = (variableDeclarationStmt.indexOf(".") + 1);
+								int ind04 = variableDeclarationStmt.indexOf("(");
+								if (ind02 > ind01 && ind04 > ind03) {
+									String val = variableDeclarationStmt.substring(ind01, ind02).trim();
+									String methodName01 = methodName01 = variableDeclarationStmt.substring(ind03,
+											ind04);
+									if (val.charAt(0) >= 97 && val.charAt(0) <= 122)
+										className = mainMap.get(val);
+									else
+										className = val;
+									methodName = methodName01.trim();
+								}
+							}
+							variablePart = variableDeclarationStmt;
+							variableName = variablePart.substring(variablePart.indexOf(" ") + 1).trim();
+							variableAndClassNamesMap.put(variableName, className);
+						}
+					}
+				}
+			}
+
+			else if (childNodes.get(0) instanceof MethodCallExpr) {
+				methodCallExpr = childNodes.get(0).toString();
+				previousChildNodes = childNodes;
+				childNodes = childNodes.get(0).getChildNodes();
+				System.out.println("454545454544444444444444444444444444444444444444");
+				if (childNodes.size() == 1) {
+					className = currentClassName;
+					methodName = childNodes.get(0).toString();
+				} else if (childNodes.size() == 2 || childNodes.size() > 2) {
+					System.out.println(childNodes.size() + currentClassName + "[[[[[[" + methodCallExpr.length()
+							+ " :: " + (methodCallExpr.replaceAll(".", "")) + " -- " + childNodes.get(0).toString()
+							+ (methodCallExpr.length() - methodCallExpr.replaceAll(".", "").length() > 1));
+
+					if (methodCallExpr.replace(" ", "").contains("(") && methodCallExpr.contains(".")
+							&& methodCallExpr.indexOf(".") < methodCallExpr.replace(" ", "").indexOf(")")) {
+						if (methodCallExpr.indexOf(".") > methodCallExpr.indexOf("(")) {
+							className = currentClassName;
+							methodName = childNodes.get(0).toString();
+							flag = false;
+						} else {
+							
+							variableName = childNodes.get(0).toString();
+							methodName = childNodes.get(1).toString();
+							System.out.println(methodCallExpr+"yes in else block..........."+methodName);
+							int ind = methodCallExpr.indexOf("." + methodName);
+							if (ind > 0) {
+								String tempClassName = methodCallExpr.substring(0, ind);
+								if (tempClassName.charAt(0) >= 65 && tempClassName.charAt(0) <= 90)
+									className = tempClassName;
+								else if (tempClassName.charAt(0) >= 97 && tempClassName.charAt(0) <= 122) {
+									if (mainMap != null) {
+
+										className = mainMap.get(tempClassName);
+										System.out.println("||||||||||||||->" + mainMap);
+									}
+								}
+
+							}
+							flag = false;
+						}
+					} else {
+
+						className = currentClassName;
+						methodName = childNodes.get(0).toString();
+					}
+				} else {
+					className = currentClassName;
+					methodName = previousChildNodes.get(0).toString();
+				}
+			} else if (childNodes.get(0) instanceof VariableDeclarator) {
+				chNodes = childNodes.get(0).getChildNodes();
+
+				for (Node childNode : chNodes) {
+					if (childNode instanceof MethodCallExpr) {
+						methodCallExpr = childNode.toString();
+						childNodes = childNode.getChildNodes();
+
+						if (childNodes.size() == 1) {
+							className = currentClassName;
+							methodName = childNodes.get(0).toString();
+						} else if (childNodes.size() == 2) {
+							if (methodCallExpr.replace(" ", "").contains("()") && methodCallExpr.contains(".")
+									&& methodCallExpr.indexOf(".") < methodCallExpr.replace(" ", "").indexOf("()")) {
+								variableName = childNodes.get(0).toString();
+								methodName = childNodes.get(1).toString();
+							} else {
+								className = currentClassName;
+								methodName = childNodes.get(0).toString();
+							}
+						}
+					}
+				}
+			}
+			if (childNodes.size() == 1) {
+				childNodes = childNodes.get(0).getChildNodes();
+
+			}
+
+			if (childNodes.size() == 2) {
+				if (childNodes.get(0) instanceof ObjectCreationExpr) {
+					className = childNodes.get(0).getChildNodes().get(0).toString();
+				} else {
+
+					if (childNodes.get(0).getChildNodes().size() > 0) {
+						if (flag) {
+
+							className = getClassNameForThisVariable(
+									childNodes.get(0).getChildNodes().get(0).toString());
+							System.out.println("Node:- " + node.toString() + " :: " + className + " :: " + methodName);
+							if (!node.toString().contains(".")) {
+								className = currentClassName;
+								int start = node.toString().indexOf("=") + 1;
+								int end = node.toString().indexOf("(");
+								if (end > start)
+									methodName = node.toString().substring(start, end).trim();
+							}
+							if (className == null && !node.toString().contains("!")) {
+
+								if (node.toString().indexOf(".") > node.toString().indexOf("(")) {
+									int begin=node.toString().indexOf("=") + 1;
+									int end=node.toString().indexOf("(");
+									className = currentClassName;
+									if(end>begin)
+									methodName = node.toString().substring(begin,end ).trim();
+											
+									System.out.println(node.toString() + " : " + className
+											+ "yes we are in if of if block: " + methodName);
+									flag = false;
+								} else {
+									String tempClassName = node.toString().replace(" ", "");
+									int start = tempClassName.indexOf("=") + 1;
+									int end = tempClassName.indexOf(".");
+									if (end > start)
+										tempClassName = tempClassName.substring(start, end);
+									if (tempClassName.charAt(0) >= 97 && tempClassName.charAt(0) <= 122)
+										className = mainMap.get(tempClassName.trim());
+									else
+										className = tempClassName;
+									int start01 = node.toString().indexOf(".") + 1;
+									int end01 = node.toString().indexOf("(");
+									if (end01 > start01) {
+										String methodName01 = node.toString().substring(start01, end01);
+										methodName = methodName01.trim();
+										System.out.println(className+"-----&&&%%%%>> "+methodName);
+									}
+								}
+							} // if
+							else {
+								System.out.println("yes we are in else block");
+								try {
+									if (node.toString().contains(".")) {
+										String tempClassName = node.toString().replace(" ", "");
+										int start = tempClassName.indexOf("=") + 1;
+										int end = tempClassName.indexOf(".");
+										if (end > start)
+											tempClassName = tempClassName.substring(start, end);
+										if (tempClassName.charAt(0) >= 97 && tempClassName.charAt(0) <= 122)
+											className = mainMap.get(tempClassName.trim());
+										else
+											className = tempClassName;
+										int start01 = node.toString().indexOf(".") + 1;
+										int end01 = node.toString().indexOf("(");
+										if (end01 > start01) {
+											String methodName01 = node.toString().substring(start01, end01);
+											methodName = methodName01.trim();
+										}
+									}
+								} catch (Exception e) {
+									System.out.println("===========Yes Error");
+								}
+							}
+						} // if
+					} else {
+						if (flag)
+							className = currentClassName;
+						methodName = childNodes.get(0).toString();
+					}
+				}
+
+				if (childNodes.get(1) instanceof SimpleName) {
+					methodName = childNodes.get(1).toString();
+				}
+			} else if (childNodes.size() == 1) {
+				if (childNodes.get(0) instanceof VariableDeclarationExpr) {
+					variableDeclarationStmt = childNodes.get(0).toString();
+					if (variableDeclarationStmt.contains("=") && variableDeclarationStmt.contains("new ")) {
+						if (variableDeclarationStmt.indexOf("new ") > variableDeclarationStmt.indexOf("=")) {
+
+						}
+					}
+					childNodes = childNodes.get(0).getChildNodes();
+					className = childNodes.get(0).toString();
+					variableName = childNodes.get(1).toString();
+					variableAndClassNamesMap.put(variableName, className);
+				}
+			}
+
+			if (className != null && methodName != null) {
+				methodsList = classMethodsDetails.get(className);
+				if (methodsList != null && methodsList.contains(methodName)) {
+					classAndMethodDetails = new ArrayList<>();
+
+					classAndMethodDetails.add(className);
+					classAndMethodDetails.add(methodName);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return classAndMethodDetails;
+	}
+
+	private boolean checkIfItsObjectCreationStmt(String variableDeclarationStmt) {
+		return ((variableDeclarationStmt.contains("=") && variableDeclarationStmt.contains("new ")
+				&& (variableDeclarationStmt.indexOf("new ") > variableDeclarationStmt.indexOf("="))));
+	}
+
+	public String getClassNameForThisVariable(String variableName) {
+		return variableAndClassNamesMap.get(variableName);
+	}
+
+	private boolean checkIfThisNodeHasAMethodCall(Node node) {
+		if (node instanceof MethodCallExpr
+				|| (node.getChildNodes().size() > 0 && node.getChildNodes().get(0) instanceof MethodCallExpr)) {
+			return true;
+		} else if (node.getChildNodes().size() > 0 && node.getChildNodes().get(0) instanceof VariableDeclarator) {
+			for (Node chNode : node.getChildNodes().get(0).getChildNodes()) {
+				if (chNode instanceof MethodCallExpr) {
+					return true;
+				}
+			}
+		} else if (node.toString().replace(" ", "").contains("(")
+				&& !node.toString().replace(" ", "").contains("new")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private Node removeComments(Node node) {
+		Node nodeWithoutComments = node.getChildNodes().get(0);
+		return nodeWithoutComments;
+	}
+
+	private boolean containComments(Node node) {
+		String nodeText = node.toString().trim();
+
+		if (nodeText.startsWith("/*") || nodeText.startsWith("//")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private String getStatementType(Node node) {
+		String nodeType = getNodeType(node);
+		if (nodeType != null) {
+			return nodeType;
+		} else if (node.getChildNodes() != null && node.getChildNodes().size() == 1) {
+			Node childNode = node.getChildNodes().get(0);
+			nodeType = getNodeType(childNode);
+			return nodeType;
+		} else {
+		}
+		return node.getClass().getSimpleName();
+	}
+
+	private String getNodeType(Node node) {
+		String nodeType = null;
+		if (node instanceof VariableDeclarationExpr) {
+			nodeType = "ASSIGNMENT";
+		} else if (node instanceof AssignExpr) {
+			nodeType = "ASSIGNMENT";
+		} else if (node instanceof MethodCallExpr) {
+			nodeType = "METHOD-CALL";
+		} else if (node instanceof IfStmt) {
+			nodeType = "IF-STATEMENT";
+		} else if (node instanceof BinaryExpr) {
+			nodeType = "BINARY-OPERATION";
+		} else if (node instanceof VariableDeclarator) {
+			nodeType = "DECLARATION";
+		} else if (node instanceof FieldAccessExpr) {
+			nodeType = "FIELD-ACCESS";
+		} else if (node instanceof ReturnStmt) {
+			nodeType = "RETURN-STMT";
+		} else if (node instanceof EmptyStmt) {
+			nodeType = "EMPTY-CHECK";
+		} else if (node instanceof Parameter) {
+			nodeType = "PARAMETER";
+		}
+
+		return nodeType;
+	}
+
+	private void clearStatementsForFlowChart() {
+		if (statementsForFlowchart != null) {
+			statementsForFlowchart.clear();
+		} else {
+			statementsForFlowchart = new ArrayList<>();
+		}
+	}
+
+	public boolean hasLambdaExpressionInIt(Node node) {
+		boolean hasLambdaExpression = false;
+		List<Node> childNodes = node.getChildNodes();
+		Node childNode = null;
+		for (int eachChildIndex = 0; eachChildIndex < childNodes.size() && !hasLambdaExpression; eachChildIndex++) {
+			childNode = childNodes.get(eachChildIndex);
+			if (childNode instanceof LambdaExpr) {
+				hasLambdaExpression = true;
+				break;
+			} else if (childNode.getChildNodes() != null && childNode.getChildNodes().size() > 0) {
+				hasLambdaExpression = hasLambdaExpressionInIt(childNode);
+			}
+		}
+
+		return hasLambdaExpression;
+	}
+
+	private List<Object> getStatementsFromTryBlock(TryStmt tryStmt) {
+		List<Object> tryBlockStatements = new ArrayList<>();
+
+		for (Node childNode : tryStmt.getChildNodes()) {
+			if (childNode instanceof BlockStmt) {
+				tryBlockStatements.addAll(getStatementsFromBlock((BlockStmt) childNode));
+			} else if (childNode instanceof CatchClause) {
+				/**
+				 * TODO
+				 */
+			} else {
+				addFlowChartNode(tryBlockStatements, childNode);
+			}
+		}
+
+		return tryBlockStatements;
+	}
+
+	private List<Object> getStatementsFromIfBlock(IfStmt stmt) {
+		List<Object> ifBlockStatements = null;
+		List<Object> elseBlockStatements = null;
+
+		List<Object> ifConditionStatements = new ArrayList<>();
+		List<Object> ifConditionSummary = new ArrayList<>();
+
+		List<Node> ifChilds = stmt.getChildNodes();
+		Node ifCondition = ifChilds.get(0);
+		Node ifBlock = ifChilds.get(1);
+		Node elseBlock = null;
+
+		FlowChartNode ifConditionNode = null;
+
+		if (ifChilds.size() > 2) {
+			elseBlock = ifChilds.get(2);
+		}
+
+		addFlowChartNode(ifConditionStatements, ifCondition);
+		ifConditionNode = (FlowChartNode) ifConditionStatements.get(0);
+		String lineNum = ifConditionNode.getNodeName().substring(0, ifConditionNode.getNodeName().indexOf(":") + 1)
+				.concat(" ");
+
+		ifConditionNode.setNodeName(lineNum 
+				+ ifConditionNode.getNodeName().substring(ifConditionNode.getNodeName().indexOf(":") + 1));
+
+		ifConditionSummary.add("IF");
+		ifConditionSummary.add(ifConditionStatements);
+
+		if (ifBlock instanceof BlockStmt) {
+			ifBlockStatements = getStatementsFromBlock((BlockStmt) ifBlock);
+			System.out.println("ifblockstatemets:: " + ifBlockStatements);
+		} else if (ifBlock instanceof ReturnStmt) {
+			ifBlockStatements = new ArrayList<>();
+			ifBlockStatements.add(new FlowChartNode(java2NLConverter.getStatementFromReturnStmt((ReturnStmt) ifBlock)));
+		} else {
+			ifBlockStatements = new ArrayList<>();
+		}
+
+		ifConditionSummary.add(ifBlockStatements);
+
+		if (elseBlock != null) {
+			if (elseBlock instanceof BlockStmt) {
+				System.out.println("yes else block:---------- " + elseBlock);
+				elseBlockStatements = getStatementsFromBlock((BlockStmt) elseBlock);
+				ifConditionSummary.add(elseBlockStatements);
+				//ifConditionSummary.add("END IF-ELSE");
+				System.out.println("yes yes yes " + ifConditionSummary);
+			} else {
+				elseBlockStatements = new ArrayList<>();
+				if (elseBlock instanceof IfStmt) {
+					elseBlockStatements.add(getStatementsFromIfBlock((IfStmt) elseBlock));
+					ifConditionSummary.add(elseBlockStatements);
+				} else {
+					addFlowChartNode(elseBlockStatements, elseBlock);
+					ifConditionSummary.add(elseBlockStatements);
+				}
+			}
+		}
+
+		return ifConditionSummary;
+	}
+
+	private List<Object> getStatementFromSynchonizedBlock(Node node) {
+		List<Object> synchronizedBlockStatements = new ArrayList<Object>();
+		List<Object> synchronizedLockingClassName = new ArrayList<>();
+		List<Object> synchronizedBlockSummary = new ArrayList<>();
+		List<Node> synchronizedChilds = node.getChildNodes();
+
+		Node synchronizedLockClass = synchronizedChilds.get(0);
+		Node synchronizedBlock = synchronizedChilds.get(1);
+
+		FlowChartNode synchronizedLockNode = null;
+
+		addFlowChartNode(synchronizedLockingClassName, synchronizedLockClass);
+
+		synchronizedLockNode = (FlowChartNode) synchronizedLockingClassName.get(0);
+
+		String lineNum = synchronizedLockNode.getNodeName()
+				.substring(0, synchronizedLockNode.getNodeName().indexOf(":") + 1).concat(" ");
+		synchronizedLockNode.setNodeName(lineNum + "Start -SYNCHRONIZED BLOCK  ");
+
+		synchronizedBlockStatements.add(synchronizedLockingClassName.get(0));
+
+		if (synchronizedBlock instanceof BlockStmt) {
+			List synchronizedBlockStatements01 = getStatementsFromBlock((BlockStmt) synchronizedBlock);
+			synchronizedBlockStatements.addAll(synchronizedBlockStatements01);
+			System.out.println("+++++++++++++++++++++++++??? " + synchronizedBlockStatements);
+		} else {
+			synchronizedBlockStatements = new ArrayList<>();
+			synchronizedBlockStatements.addAll(synchronizedBlockSummary);
+		}
+
+		synchronizedBlockStatements.add(new FlowChartNode("End - SYNCHRONIZED BLOCK"));
+		synchronizedBlockSummary.addAll(synchronizedBlockStatements);
+
+		return synchronizedBlockSummary;
+
+	}
+
+	private List<Object> getStatementsFromWhileBlock(WhileStmt stmt) {
+		List<Object> whileBlockStatements = null;
+		List<Object> whileConditionStatements = new ArrayList<>();
+		List<Object> whileBlockSummary = new ArrayList<>();
+		List<Node> whileChilds = stmt.getChildNodes();
+
+		Node whileCondition = whileChilds.get(0);
+		Node whileBlock = whileChilds.get(1);
+
+		FlowChartNode whileConditionNode = null;
+
+		addFlowChartNode(whileConditionStatements, whileCondition);
+
+		whileConditionNode = (FlowChartNode) whileConditionStatements.get(0);
+
+		String lineNum = whileConditionNode.getNodeName()
+				.substring(0, whileConditionNode.getNodeName().indexOf(":") + 1).concat(" ");
+		whileConditionNode.setNodeName(lineNum + "While ("
+				+ whileConditionNode.getNodeName().substring(whileConditionNode.getNodeName().indexOf(":") + 1) + ")");
+
+		whileBlockSummary.add("WHILE");
+		whileBlockSummary.add(whileConditionStatements);
+
+		if (whileBlock instanceof BlockStmt) {
+			whileBlockStatements = getStatementsFromBlock((BlockStmt) whileBlock);
+		} else {
+			whileBlockStatements = new ArrayList<>();
+			whileBlockStatements.add(whileBlockSummary);
+		}
+
+		whileBlockStatements.add(new FlowChartNode("End - While loop"));
+		whileBlockSummary.add(whileBlockStatements);
+
+		return whileBlockSummary;
+	}
+
+	public List<Object> getStatementsFromBlock(BlockStmt stmt) {
+
+		List<Object> stmtsFromBlock = new ArrayList<>();
+		List<Node> childNodes = stmt.getChildNodes();
+		HashMap<String, String> map = new HashMap<>();
+		for (Node childNode : childNodes) {
+
+			if (!childNode.toString().contains("//") && !childNode.toString().contains("[")
+					&& !childNode.toString().contains("->") && childNode.toString().contains("new")
+					&& childNode.toString().contains("=") && childNode.toString().indexOf("new") != 0
+					&& !(childNode instanceof BlockStmt) && !(childNode instanceof TryStmt)
+					&& !(childNode instanceof IfStmt) && !(childNode instanceof WhileStmt)
+					&& !(childNode instanceof ForEachStmt) && !(childNode instanceof ForStmt)) {
+				childNode = childNode.removeComment();
+				String val = childNode.toString().replace(" ", "");
+				if (!childNode.toString().contains("+") && !childNode.toString().contains("//")
+						&& childNode.toString().contains("new") && !childNode.toString().contains("->")
+						&& val.charAt(val.indexOf("new") - 1) == '=' && childNode.toString().charAt(0) != '/') {
+					String temp = childNode.toString().replaceAll("\\s", "");
+					int begin01 = temp.indexOf("new") + 3;
+					int end01 = temp.indexOf("(");
+					if (end01 > begin01) {
+						String temClass = temp.substring(begin01, end01);
+						int index = childNode.toString().indexOf("=");
+						String ref = "";
+						boolean condition = childNode.toString().charAt(0) >= 65
+								&& childNode.toString().charAt(0) <= 90;
+						boolean condition01 = childNode.toString().charAt(0) >= 97
+								&& childNode.toString().charAt(0) <= 122;
+						boolean flag;
+						if (condition01)
+							ref = childNode.toString().substring(0, childNode.toString().indexOf("="));
+						else if (condition) {
+							for (int i = index - 2; childNode.toString().charAt(i) != ' '; i--) {
+								ref = ref.concat(String.valueOf(childNode.toString().charAt(i)));
+							} // for loop
+							StringBuilder refBuilder = new StringBuilder(ref);
+							ref = refBuilder.reverse().toString();
+						} // else if
+						String className = childNode.toString().trim().substring(0, childNode.toString().indexOf(" "));
+						String refName = childNode.toString().trim().substring(className.length(),
+								childNode.toString().indexOf("="));
+						map.put(ref.trim(), temClass.trim());
+					} // if
+				}
+			} // if
+			int begin00 = childNode.toString().indexOf("=") + 1;
+			int end00 = childNode.toString().indexOf(";");
+			int begin01 = 0;
+			int end01 = childNode.toString().indexOf("=");
+			if (!childNode.toString().contains("//") && (childNode.toString().contains("="))
+					&& (childNode.toString().contains("new")) && !childNode.toString().contains("->")
+					&& !(childNode instanceof BlockStmt) && !(childNode instanceof TryStmt)
+					&& !(childNode instanceof IfStmt) && !(childNode instanceof WhileStmt)
+					&& !(childNode instanceof ForEachStmt) && !(childNode instanceof ForStmt)
+					&& (end00 > begin00 && end01 > begin01)
+					&& childNode.toString().substring(begin01, end01).contains("new")
+					&& childNode.toString().substring(begin00, end00).contains("new")) {
+				childNode = childNode.removeComment();
+				String newRef = "";
+				if (childNode.toString().charAt(0) >= 97 && childNode.toString().charAt(0) <= 122) {
+					newRef = childNode.toString().substring(0, childNode.toString().indexOf(" "));
+				} else {
+					int index = childNode.toString().indexOf("=");
+					for (int i = index - 2; childNode.toString().charAt(i) != ' '; i--) {
+
+						newRef = newRef.concat(String.valueOf(childNode.toString().charAt(i)));
+					} // for loop
+					StringBuilder refBuilder = new StringBuilder(newRef);
+					newRef = refBuilder.reverse().toString();
+				}
+
+				String temp = childNode.toString().replaceAll("\\s", "");
+				String subString = temp.substring(temp.indexOf("=") + 1, temp.indexOf(";"));
+
+				int begin = subString.indexOf("new") + 3;
+				int end = subString.indexOf("(");
+				if (end > begin) {
+					String temClass = subString.substring(begin, end);
+					String className = temClass;
+					map.put(newRef, className);
+				}
+			}
+		} // for
+		if (mainMap != null)
+			mainMap.putAll(map);
+		else
+			mainMap = map;
+		for (Node childNode : childNodes) {
+			childNode = childNode.removeComment();
+		 System.out.println(":>"+childNode+" : "+childNode.removeComment());
+			// childNode=childNode.removeComment();
+			// System.out.println("----------------->"+childNode+" :
+			// "+childNode.getAllContainedComments());
+			if (childNode instanceof BlockStmt) {
+				stmtsFromBlock.addAll(getStatementsFromBlock((BlockStmt) childNode));
+			} else if (childNode instanceof TryStmt) {
+				stmtsFromBlock.addAll(getStatementsFromTryBlock((TryStmt) childNode));
+			} else if (childNode instanceof IfStmt) {
+				stmtsFromBlock.add(getStatementsFromIfBlock((IfStmt) childNode));
+			} else if (childNode instanceof ForStmt) {
+				stmtsFromBlock.add(getStatementsFromForBlock((ForStmt) childNode));
+			} else if (childNode instanceof WhileStmt) {
+				stmtsFromBlock.add(getStatementsFromWhileBlock((WhileStmt) childNode));
+			} else if (childNode instanceof ForEachStmt) {
+				stmtsFromBlock.add(getStatementsFromForEachBlock((ForEachStmt) childNode));
+			} else if (hasLambdaExpressionInIt(childNode)) {
+				System.out.println("yes this one is lambda expr..." + childNode);
+				List<Object> statementsFromLambdaExpr = getStatementsFromLambdaExpr(childNode);
+				System.out.println("before;;;;;; " + statementsFromLambdaExpr);
+				if (statementsFromLambdaExpr != null && statementsFromLambdaExpr.size() > 0) {
+					stmtsFromBlock.addAll(statementsFromLambdaExpr);
+				}
+				System.out.println("after;;;;;; " + stmtsFromBlock);
+			} else if (childNode instanceof ExpressionStmt) {
+				System.out.println("else block with an expression statements: " + childNode);
+				// childNode.removeComment();
+				// System.out.println("++++++++++++++>"+childNode);
+				addFlowChartNode(stmtsFromBlock, childNode);
+			} else if (childNode.toString().contains("synchronized")) {
+				childNode.removeComment();
+				System.out.println("Main Node::++ " + childNode);
+				System.out.println("Child Node::++ " + childNode);
+				stmtsFromBlock.addAll(getStatementFromSynchonizedBlock(childNode));
+			}else {
+				addFlowChartNode(stmtsFromBlock, childNode);
+			}
+
+		}
+
+		return stmtsFromBlock;
+	}
+
+	private Object getStatementsFromForBlock(ForStmt stmt) {
+		List<Object> forBlockStatements = null;
+		List<Object> forConditionStatements = new ArrayList<>();
+		List<Object> forBlockSummary = new ArrayList<>();
+		List<Node> forChilds = stmt.getChildNodes();
+		// System.out.println("Size: "+forChilds.size()+"0th: "+forChilds.get(0)+"1st:
+		// "+forChilds.get(1)+"2nd: "+forChilds.get(2));
+		// System.out.println("1st: "+forChilds.get(1)+"2nd: "+forChilds.get(2)+"3rd:
+		// "+forChilds.get(3));
+		Node forCondition = null;
+		Node forBlock = null;
+
+		if (forChilds.size() > 3) {
+			forCondition = forChilds.get(1);
+			forBlock = forChilds.get(3);
+		} else {
+			forCondition = forChilds.get(1);
+			forBlock = forChilds.get(2);
+		}
+		FlowChartNode forConditionNode = null;
+
+		addFlowChartNode(forConditionStatements, forCondition);
+		forConditionNode = (FlowChartNode) forConditionStatements.get(0);
+		String lineNum = forConditionNode.getNodeName().substring(0, forConditionNode.getNodeName().indexOf(":") + 1)
+				.concat(" ");
+		forConditionNode.setNodeName(lineNum + " For("
+				+ forConditionNode.getNodeName().substring(forConditionNode.getNodeName().indexOf(":") + 1) + ")");
+
+		forBlockSummary.add("FOR");
+		forBlockSummary.add(forConditionStatements);
+
+		if (forBlock instanceof BlockStmt) {
+			forBlockStatements = getStatementsFromBlock((BlockStmt) forBlock);
+		} else {
+			forBlockStatements = new ArrayList<>();
+			forBlockStatements.add(forBlockSummary);
+		}
+
+		forBlockStatements.add(new FlowChartNode("End - For loop"));
+		forBlockSummary.add(forBlockStatements);
+
+		return forBlockSummary;
+	}
+
+	private Object getStatementsFromForEachBlock(ForEachStmt stmt) {
+		List<Object> forBlockStatements = null;
+		List<Object> forEachConditionStatements = new ArrayList<>();
+		List<Object> forEachBlockSummary = new ArrayList<>();
+		List<Node> forEachChilds = stmt.getChildNodes();
+
+		Node forEachVariable = forEachChilds.get(0);
+		Node forEachCondition = forEachChilds.get(1);
+		Node forEachBlock = forEachChilds.get(2);
+		FlowChartNode forEachConditionNode = null;
+
+		
+		addFlowChartNode(forEachConditionStatements, forEachCondition);
+		System.out.println(forEachConditionStatements+"before calling==================================================="+forEachCondition);
+		forEachConditionNode = (FlowChartNode) forEachConditionStatements.get(0);
+
+		String lineNum = forEachConditionNode.getNodeName()
+				.substring(0, forEachConditionNode.getNodeName().indexOf(":") + 1).concat(" ");
+
+		forEachConditionNode.setNodeName(
+				lineNum + "For each " + forEachVariable.getChildNodes().get(0) + " in " + forEachConditionNode
+						.getNodeName().substring(forEachConditionNode.getNodeName().indexOf(":") + 1).concat(" "));
+
+		forEachBlockSummary.add("FOR");// This is to identify that this is a FOR loop
+		forEachBlockSummary.add(forEachConditionStatements);
+
+		if (forEachBlock instanceof BlockStmt) {
+			forBlockStatements = getStatementsFromBlock((BlockStmt) forEachBlock);
+		} else {
+			forBlockStatements = new ArrayList<>();
+			forBlockStatements.add(forEachBlockSummary);
+		}
+
+		forBlockStatements.add(new FlowChartNode("End - For loop"));
+		forEachBlockSummary.add(forBlockStatements);
+
+		return forEachBlockSummary;
+	}
+
+	private List<Object> getStatementsFromLambdaExpr(Node nodeWithLambdaExpr) {
+		List<Object> statementsFromLambdaExpr = new ArrayList<>();
+		Node previousNode = null;
+		System.out.println("welcome lambda expr statements..." + nodeWithLambdaExpr.getChildNodes().get(0));
+		if (nodeWithLambdaExpr.getChildNodes().size() == 1) {
+			nodeWithLambdaExpr = nodeWithLambdaExpr.getChildNodes().get(0);
+		}
+
+		if (!nodeWithLambdaExpr.toString().contains("forEach") && !nodeWithLambdaExpr.toString().contains("stream")
+				&& !nodeWithLambdaExpr.toString().contains(".filter(")	|| (nodeWithLambdaExpr.toString().indexOf("forEach") > nodeWithLambdaExpr.toString().indexOf("->")
+						&& !nodeWithLambdaExpr.toString().contains(".filter("))) {
+
+			System.out.println("yes it's not containing..");
+			List<Object> forBlockStatements = null;
+			for (Node childNode : nodeWithLambdaExpr.getChildNodes()) {
+				System.out.println("not containg forEach and  instance of LambdaExpr : " + childNode + " : "
+						+ childNode.getChildNodes() + " : " + previousNode);
+				Node simpleNode = null;
+				Node loopBlock = null;
+				if (childNode.getChildNodes().size() == 2) {
+					simpleNode = childNode.getChildNodes().get(0);
+					loopBlock = childNode.getChildNodes().get(1);
+				} else {
+					if (childNode.getChildNodes().size() > 0) {
+						simpleNode = childNode.getChildNodes().get(0);
+						loopBlock = childNode.getChildNodes().get(childNode.getChildNodes().size() - 1);
+					}
+					if (loopBlock instanceof LambdaExpr)
+						loopBlock = loopBlock.getChildNodes().get(0);
+					// System.out.println("loopBlock:: " +
+					// loopBlock.getChildNodes().get(0).getClass());
+				}
+
+				if (loopBlock instanceof BlockStmt) {
+					System.out.println("yes blockstmt instance....." + loopBlock);
+					forBlockStatements = getStatementsFromBlock((BlockStmt) loopBlock);
+					System.out.println("=====> " + forBlockStatements);
+				} else if (loopBlock instanceof ExpressionStmt) {
+					List<Object> statementsListFromExpr = java2NLConverter.getStatementInNaturalLanguage(loopBlock);
+					forBlockStatements = new ArrayList<>();
+					for (Object object : statementsListFromExpr) {
+						forBlockStatements.add(new FlowChartNode(object.toString()));
+					}
+				} else {
+					forBlockStatements = new ArrayList<>();
+					// forBlockStatements.add(forEachBlockSummary);
+				}
+				statementsFromLambdaExpr.addAll(forBlockStatements);
+
+			}
+
+		} else if (nodeWithLambdaExpr.toString().contains("forEach")) {
+			System.out.println(
+					"yes this one is contain forEach: " + nodeWithLambdaExpr.getChildNodes().get(0));
+			String forEachVal=nodeWithLambdaExpr.getChildNodes().get(0).toString();
+			for (Node childNode : nodeWithLambdaExpr.getChildNodes()) {
+				// System.out.println("wait......"+childNode);
+				//if(childNode.toString().contains(".filter") && !childNode.toString().contains(".forEach"))
+				if (previousNode != null) {
+					if (previousNode.toString().contains("forEach") && childNode instanceof LambdaExpr) {
+						System.out.println("containg forEach and also instance of LambdaExpr : " + childNode + " : "
+								+ childNode.getChildNodes() + " : " + previousNode);
+						List<Object> forBlockStatements = null;
+						List<Object> forEachBlockSummary = new ArrayList<>();
+						List<Object> forEachConditionStatements = new ArrayList<>();
+                        forEachVal=forEachVal.concat("."+previousNode.toString());
+						Node simpleNode = null;
+						Node loopBlock = null;
+						if (childNode.getChildNodes().size() == 2) {
+							simpleNode = childNode.getChildNodes().get(0);
+							loopBlock = childNode.getChildNodes().get(1);
+							System.out.println("simpleNode1:: " + simpleNode);
+						} else {
+							simpleNode = childNode.getChildNodes().get(0);
+							loopBlock = childNode.getChildNodes().get(childNode.getChildNodes().size() - 1);
+							System.out.println("simpleNode2:: " + simpleNode);
+						}
+						forEachVal=forEachVal.concat("("+simpleNode.toString()+")");
+
+						FlowChartNode fNode=new FlowChartNode(forEachVal);
+						addFlowChartNode(forEachConditionStatements, simpleNode);
+						forEachConditionStatements.set(0,fNode);
+						forEachBlockSummary.add("FOR");
+						forEachBlockSummary.add(forEachConditionStatements);
+
+						if (loopBlock instanceof BlockStmt) {
+							System.out.println("Going along with block..." + loopBlock);
+							forBlockStatements = getStatementsFromBlock((BlockStmt) loopBlock);
+						} else if (loopBlock instanceof ExpressionStmt) {
+							System.out.println("Going along with Exp..." + loopBlock);
+							List<Object> statementsListFromExpr = java2NLConverter
+									.getStatementInNaturalLanguage(loopBlock);
+							forBlockStatements = new ArrayList<>();
+							for (Object object : statementsListFromExpr) {
+								forBlockStatements.add(new FlowChartNode(object.toString()));
+							}
+						} else {
+							forBlockStatements = new ArrayList<>();
+							// forBlockStatements.add(forEachBlockSummary);
+						}
+
+						forEachBlockSummary.add(forBlockStatements);
+
+						statementsFromLambdaExpr.add(forEachBlockSummary);
+					} else {
+						if (previousNode instanceof MethodCallExpr) {
+							List<Object> stmtsFromMethodCall = java2NLConverter
+									.getStatementsFromMethodCall((MethodCallExpr) previousNode);
+							for (Object object : stmtsFromMethodCall) {
+								System.out.println(previousNode+"real============"+object.toString());
+								if(object.toString().length()>0)
+								statementsFromLambdaExpr.add(new FlowChartNode(object.toString()));
+							}
+						}
+					}
+				} else {
+
+				}
+				previousNode = childNode;
+			}
+		} else if (nodeWithLambdaExpr.toString().contains("filter")) {
+			System.out.println("got the entry...." + nodeWithLambdaExpr);
+			if (nodeWithLambdaExpr instanceof AssignExpr || nodeWithLambdaExpr instanceof VariableDeclarationExpr) {
+				System.out.println("yes thid one is: " + nodeWithLambdaExpr.getChildNodes());
+				if (nodeWithLambdaExpr instanceof VariableDeclarationExpr)
+					nodeWithLambdaExpr = nodeWithLambdaExpr.getChildNodes().get(0).getChildNodes().get(2);
+				else
+					nodeWithLambdaExpr = nodeWithLambdaExpr.getChildNodes().get(1);
+
+				System.out.println("yes this one is AssignExpr and value is: " + nodeWithLambdaExpr);
+				if (nodeWithLambdaExpr instanceof CastExpr) {
+					nodeWithLambdaExpr = nodeWithLambdaExpr.getChildNodes().get(1);
+					System.out.println("---------->" + nodeWithLambdaExpr);
+				}
+
+				if (nodeWithLambdaExpr instanceof MethodCallExpr) {
+					System.out.println("---+++++--->" + nodeWithLambdaExpr.getChildNodes());
+					// 12th nov data........
+					if (nodeWithLambdaExpr.getChildNodes().get(0).toString().contains("filter")) {
+						nodeWithLambdaExpr = nodeWithLambdaExpr.getChildNodes().get(0);
+					while(nodeWithLambdaExpr.getChildNodes().size()==2 || !nodeWithLambdaExpr.getChildNodes().get(1).toString().equals("filter")) {
+						System.out.println(nodeWithLambdaExpr.getChildNodes());
+						nodeWithLambdaExpr=nodeWithLambdaExpr.getChildNodes().get(0);
+						System.out.println("while loop: "+nodeWithLambdaExpr.getChildNodes().get(1));	
+					}
+					
+					}
+
+				}
+				Node simpleNode = null;
+				Node loopBlock = null;
+				List filterBlockStatements = null;
+				System.out.println("+++++++++++++++++++++++++---------------->"+nodeWithLambdaExpr);
+				for (Node childNode : nodeWithLambdaExpr.getChildNodes()) {
+					System.out.println("+++++++++++++++++++++++>>>" + childNode);
+					if (previousNode != null) {
+						if (previousNode.toString().contains("filter") && childNode instanceof LambdaExpr) {
+							if (childNode.getChildNodes().size() == 2) {
+								simpleNode = childNode.getChildNodes().get(0);
+								loopBlock = childNode.getChildNodes().get(1);
+							} else {
+								simpleNode = childNode.getChildNodes().get(0);
+								loopBlock = childNode.getChildNodes().get(childNode.getChildNodes().size() - 1);
+								System.out.println("simpleNode:: " + simpleNode);
+							}
+
+							List filterBlockStatements01=new ArrayList<Object>();
+							filterBlockStatements01.add(new FlowChartNode("FILTER-START"));
+							if (loopBlock instanceof BlockStmt) {
+								System.out.println("Going along with block..." + loopBlock);
+								
+								filterBlockStatements = getStatementsFromBlock((BlockStmt) loopBlock);
+								filterBlockStatements01.addAll(filterBlockStatements);
+							} else if (loopBlock instanceof ExpressionStmt) {
+								System.out.println("Going along with Exp..." + loopBlock);
+								List<Object> statementsListFromExpr = java2NLConverter
+										.getStatementInNaturalLanguage(loopBlock);
+								filterBlockStatements = new ArrayList<>();
+								for (Object object : statementsListFromExpr) {
+									filterBlockStatements01.add(new FlowChartNode(object.toString()));
+								}
+							} else {
+								filterBlockStatements = new ArrayList<>();
+								// forBlockStatements.add(forEachBlockSummary);
+							}
+
+							filterBlockStatements01.add(new FlowChartNode("FILTER-END"));
+							statementsFromLambdaExpr.addAll(filterBlockStatements01);
+							
+						}
+						
+					}
+
+					previousNode = childNode;
+				}
+			}
+		}
+	
+
+	return statementsFromLambdaExpr;
+
+	}
+
+	private boolean containsIgnorableMethodCalls(String codeStatement) {
+		List<String> ignorableMethodCalls = Arrays
+				.asList(new String[] { "print", "debug", "printStackTrack", "System.currentTimeMills" });
+
+		for (String ingorableCall : ignorableMethodCalls) {
+			if (codeStatement.contains(ingorableCall)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void setCurrentJavaFile(String currentJavaFile) {
+		this.currentJavaFile = currentJavaFile;
+	}
+
+	public void setCurrentClassName(String currentClassName) {
+		this.currentClassName = currentClassName;
+	}
+
+	public void setCurrentMethod(String currentMethod) {
+		this.currentMethod = currentMethod;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public void setProjectFolder(String projectFolder) {
+		this.projectFolder = projectFolder;
+	}
+
+	public void setSrcFolder(String srcFolder) {
+		this.srcFolder = srcFolder;
+	}
+
+	public List<Object> getStatementsForFlowchart() {
+		return statementsForFlowchart;
+	}
+
+	public void setFlowDiagramFolder(String flowDiagramFolder) {
+		this.flowDiagramFolder = flowDiagramFolder;
+	}
+}

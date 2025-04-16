@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- dependencies -->
+        <title>IfElseStatements.ifElseCondition</title>
+        <script src='../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: message-box;
+			}
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'blue';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: backGroundColor,
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor
+                    },
+                    circle: { 
+                        fill: backGroundColor
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: backGroundColor,
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+        <h2><a style='text-decoration:none' target='_blank' href='index.html'>IfElseStatements</a>.ifElseCondition</h2>
+        <h3 style="font-weight:normal"></h3>
+        <label class='switch'>
+            <input type='checkbox'>
+            <div class='slider round' onClick='switchView();'>
+                <span class='on'><nobr>Natural Language</nobr></span>
+                <span class='off'>Java</span>
+            </div>
+        </label>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 800,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Initialize variable number of type int as 10');
+            nodesArr.push('If number is equal to 10');
+            nodesArr.push('Print ("number value is 10")');
+            nodesArr.push('Print ("number value is not 10")');
+            nodesArr.push('Print ("Done")');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Initialize variable number of type int as 10');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('If number is equal to 10', 2);
+            var rect2 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect2.resize(maxNodeWidth, resizeWidth);
+            rect2.attr('text/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Print ("number value is 10")');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.translate(-1.1 * maxNodeWidth,9000);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Print ("number value is not 10")');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.translate(1.1 * maxNodeWidth,9000);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.attr('label/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Print ("Done")');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop');
+            var rect7 = ellipse.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('text/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.set('ifBlockStartLink', true);
+            link3.label(0, {attrs: {text: {text: 'Yes'}}});
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect2);
+            link4.target(rect4);
+            link4.set('elseBlockStartLink', true);
+            link4.label(0, {attrs: {text: {text: 'No'}}});
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect3);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+            link5.set('ifBlockEndLink', true);
+            link5.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link6 = link.clone();
+            link6.source(rect4);
+            link6.target(rect5);
+            link6.addTo(nlStatementsGraph);
+            link6.set('elseBlockEndLink', true);
+            link6.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect2.set('endIfConditionId', rect5.id);
+            rect5.set('ifConditionId', rect2.id);
+
+            var link7 = link.clone();
+            link7.source(rect5);
+            link7.target(rect6);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect6);
+            link8.target(rect7);
+            link8.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect7.set('stopNode', 'true');
+            rect7.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect7);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 1600,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('int number = 10;');
+            nodesArr.push('If number == 10');
+            nodesArr.push('System.out.println("number value is 10");');
+            nodesArr.push('System.out.println("number value is not 10");');
+            nodesArr.push('System.out.println("Done");');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect8 = ellipse.clone();
+            rect8.addTo(javaStatementsGraph);
+            rect8.attr('text/text', 'Start');
+
+            rootNode = rect8;
+
+            flowChartNode = getBrokenText('int number = 10;');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('If number == 10', 2);
+            var rect10 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect10.resize(maxNodeWidth, resizeWidth);
+            rect10.attr('text/text', flowChartNode);
+            rect10.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('System.out.println("number value is 10");');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.translate(-1.1 * maxNodeWidth,9400);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('System.out.println("number value is not 10");');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.translate(1.1 * maxNodeWidth,9400);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('System.out.println("Done");');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop');
+            var rect15 = ellipse.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.attr('text/text', flowChartNode);
+            rect15.addTo(javaStatementsGraph);
+
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(javaStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(javaStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect10);
+            link11.target(rect11);
+            link11.set('ifBlockStartLink', true);
+            link11.label(0, {attrs: {text: {text: 'Yes'}}});
+            link11.addTo(javaStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect10);
+            link12.target(rect12);
+            link12.set('elseBlockStartLink', true);
+            link12.label(0, {attrs: {text: {text: 'No'}}});
+            link12.addTo(javaStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect11);
+            link13.target(rect13);
+            link13.addTo(javaStatementsGraph);
+            link13.set('ifBlockEndLink', true);
+            link13.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link14 = link.clone();
+            link14.source(rect12);
+            link14.target(rect13);
+            link14.addTo(javaStatementsGraph);
+            link14.set('elseBlockEndLink', true);
+            link14.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect10.set('endIfConditionId', rect13.id);
+            rect13.set('ifConditionId', rect10.id);
+
+            var link15 = link.clone();
+            link15.source(rect13);
+            link15.target(rect14);
+            link15.addTo(javaStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect14);
+            link16.target(rect15);
+            link16.addTo(javaStatementsGraph);
+
+            rect8.set('startNode', 'true');
+            rect15.set('stopNode', 'true');
+            rect15.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect8, rect15);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

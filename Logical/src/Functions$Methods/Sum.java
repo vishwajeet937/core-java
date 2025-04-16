@@ -1,0 +1,20 @@
+package Functions$Methods;
+import java.util.Scanner;
+public class Sum 
+{
+    public static int sum1(int a,int b)
+    {
+    	int sum=(a-b);
+    	System.out.println("Sum:"+sum);
+    	return sum;
+    }
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		int a=scan.nextInt();
+		int b=scan.nextInt();
+		Sum.sum1(12,23);
+	}
+
+}

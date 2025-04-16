@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>JDBCJobDefinitionDAO.addNewJobType</title>
+        <script src='../../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : com.triniti.scheduler.dao.jdbc</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : JDBCJobDefinitionDAO</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : addNewJobType</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 1200,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-40: If  Call getJOB_TYPE on variable SG_JOB_TYPE is not equal to null AND Call getJOB_CLASS on variable SG_JOB_TYPE is not equal to null');
+            nodesArr.push('Line No-41: Call SequenceGenerator.generateId with params ["T_JOBS_DEF_S"] and assign the result to variable jobTypeId');
+            nodesArr.push('Line No-42: Call setJOB_TYPE_ID() on variable details');
+            nodesArr.push('Line No-43: Call setNewJobTypeParamIds()');
+            nodesArr.push('Line No-44: Call processJobTypeInfo()');
+            nodesArr.push('Line No-45: Call getInstance() on variable JobCreationFactory and assign the result to variable jobCreationFactory');
+            nodesArr.push('Line No-46: Call initializeMap() on variable jobCreationFactory');
+            nodesArr.push('Line No-48: Create an instance of DAOException and assign it to variable exception');
+            nodesArr.push('Line No-49: Print (exception)');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-40: If  Call getJOB_TYPE on variable SG_JOB_TYPE is not equal to null AND Call getJOB_CLASS on variable SG_JOB_TYPE is not equal to null');
+            var rect1 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect1.resize(maxNodeWidth, resizeWidth);
+            rect1.attr('text/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-41: Call SequenceGenerator.generateId with params ["T_JOBS_DEF_S"] and assign the result to variable jobTypeId    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.translate(-1.1 * maxNodeWidth,559400);
+            rect2.attr('label/text', flowChartNode);
+            rect2.set('externalLink', 'scheduler/com/triniti/scheduler/utils/SequenceGenerator/generateId.html');
+            rect2.attr('body/stroke', 'blue');
+            rect2.attr('body/fill', 'blue');
+            rect2.attr('label/cursor', 'pointer');
+            rect2.attr('body/cursor', 'pointer');
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: Call setJOB_TYPE_ID() on variable details    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.translate(-1.1 * maxNodeWidth,559400);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-43: Call setNewJobTypeParamIds()    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.translate(-1.1 * maxNodeWidth,559400);
+            rect4.attr('label/text', flowChartNode);
+            rect4.set('externalLink', 'scheduler/com/triniti/scheduler/dao/jdbc/JDBCJobDefinitionDAO/setNewJobTypeParamIds.html');
+            rect4.attr('body/stroke', 'blue');
+            rect4.attr('body/fill', 'blue');
+            rect4.attr('label/cursor', 'pointer');
+            rect4.attr('body/cursor', 'pointer');
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-44: Call processJobTypeInfo()    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.translate(-1.1 * maxNodeWidth,559400);
+            rect5.attr('label/text', flowChartNode);
+            rect5.set('externalLink', 'scheduler/com/triniti/scheduler/dao/jdbc/JDBCJobDefinitionDAO/processJobTypeInfo.html');
+            rect5.attr('body/stroke', 'blue');
+            rect5.attr('body/fill', 'blue');
+            rect5.attr('label/cursor', 'pointer');
+            rect5.attr('body/cursor', 'pointer');
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: Call getInstance() on variable JobCreationFactory and assign the result to variable jobCreationFactory    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.translate(-1.1 * maxNodeWidth,559400);
+            rect6.attr('label/text', flowChartNode);
+            rect6.set('externalLink', 'scheduler/com/triniti/scheduler/JobCreationFactory/getInstance.html');
+            rect6.attr('body/stroke', 'blue');
+            rect6.attr('body/fill', 'blue');
+            rect6.attr('label/cursor', 'pointer');
+            rect6.attr('body/cursor', 'pointer');
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-46: Call initializeMap() on variable jobCreationFactory    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.translate(-1.1 * maxNodeWidth,559400);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-48: Create an instance of DAOException and assign it to variable exception    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.translate(1.1 * maxNodeWidth,559400);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-49: Print (exception)    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.translate(1.1 * maxNodeWidth,559400);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+            rect10.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect11 = ellipse.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.attr('text/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.set('ifBlockStartLink', true);
+            link2.label(0, {attrs: {text: {text: 'Yes'}}});
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect1);
+            link8.target(rect8);
+            link8.set('elseBlockStartLink', true);
+            link8.label(0, {attrs: {text: {text: 'No'}}});
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect7);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+            link10.set('ifBlockEndLink', true);
+            link10.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link11 = link.clone();
+            link11.source(rect9);
+            link11.target(rect10);
+            link11.addTo(nlStatementsGraph);
+            link11.set('elseBlockEndLink', true);
+            link11.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect1.set('endIfConditionId', rect10.id);
+            rect10.set('ifConditionId', rect1.id);
+
+            var link12 = link.clone();
+            link12.source(rect10);
+            link12.target(rect11);
+            link12.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect11.set('stopNode', 'true');
+            rect11.attr('circle/fill', 'red');
+            rect11.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect11);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 2500,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-40: If  details.getJOB_TYPE() != null && details.getJOB_CLASS() != null');
+            nodesArr.push('Line No-41: String jobTypeId = SequenceGenerator.generateId("T_JOBS_DEF_S").toString();');
+            nodesArr.push('Line No-42: details.setJOB_TYPE_ID(jobTypeId);');
+            nodesArr.push('Line No-43: setNewJobTypeParamIds(details.getSg_job_type_params(), jobTypeId);');
+            nodesArr.push('Line No-44: processJobTypeInfo(details);');
+            nodesArr.push('Line No-45: JobCreationFactory jobCreationFactory = JobCreationFactory.getInstance();');
+            nodesArr.push('Line No-46: jobCreationFactory.initializeMap();');
+            nodesArr.push('Line No-48: DAOException exception = new DAOException("GIVE THE MANDATORY PARAMETES TO JOBDEFINATION");');
+            nodesArr.push('Line No-49: LOGGER.error(exception, exception);');
+            nodesArr.push('Line No-50: throw exception;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect12 = ellipse.clone();
+            rect12.addTo(javaStatementsGraph);
+            rect12.attr('text/text', 'Start');
+            rect12.attr('circle/fill', 'green');
+
+            rootNode = rect12;
+
+            flowChartNode = getBrokenText('Line No-40: If  details.getJOB_TYPE() != null && details.getJOB_CLASS() != null');
+            var rect13 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect13.resize(maxNodeWidth, resizeWidth);
+            rect13.attr('text/text', flowChartNode);
+            rect13.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-41: String jobTypeId = SequenceGenerator.generateId("T_JOBS_DEF_S").toString();    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.translate(-1.1 * maxNodeWidth,559600);
+            rect14.attr('label/text', flowChartNode);
+            rect14.set('externalLink', 'scheduler/com/triniti/scheduler/utils/SequenceGenerator/generateId.html');
+            rect14.attr('body/stroke', 'blue');
+            rect14.attr('body/fill', 'blue');
+            rect14.attr('label/cursor', 'pointer');
+            rect14.attr('body/cursor', 'pointer');
+            rect14.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: details.setJOB_TYPE_ID(jobTypeId);    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.translate(-1.1 * maxNodeWidth,559600);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-43: setNewJobTypeParamIds(details.getSg_job_type_params(), jobTypeId);    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.translate(-1.1 * maxNodeWidth,559600);
+            rect16.attr('label/text', flowChartNode);
+            rect16.set('externalLink', 'scheduler/com/triniti/scheduler/dao/jdbc/JDBCJobDefinitionDAO/setNewJobTypeParamIds.html');
+            rect16.attr('body/stroke', 'blue');
+            rect16.attr('body/fill', 'blue');
+            rect16.attr('label/cursor', 'pointer');
+            rect16.attr('body/cursor', 'pointer');
+            rect16.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-44: processJobTypeInfo(details);    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.translate(-1.1 * maxNodeWidth,559600);
+            rect17.attr('label/text', flowChartNode);
+            rect17.set('externalLink', 'scheduler/com/triniti/scheduler/dao/jdbc/JDBCJobDefinitionDAO/processJobTypeInfo.html');
+            rect17.attr('body/stroke', 'blue');
+            rect17.attr('body/fill', 'blue');
+            rect17.attr('label/cursor', 'pointer');
+            rect17.attr('body/cursor', 'pointer');
+            rect17.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: JobCreationFactory jobCreationFactory = JobCreationFactory.getInstance();    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.translate(-1.1 * maxNodeWidth,559600);
+            rect18.attr('label/text', flowChartNode);
+            rect18.set('externalLink', 'scheduler/com/triniti/scheduler/JobCreationFactory/getInstance.html');
+            rect18.attr('body/stroke', 'blue');
+            rect18.attr('body/fill', 'blue');
+            rect18.attr('label/cursor', 'pointer');
+            rect18.attr('body/cursor', 'pointer');
+            rect18.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-46: jobCreationFactory.initializeMap();    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.translate(-1.1 * maxNodeWidth,559600);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-48: DAOException exception = new DAOException("GIVE THE MANDATORY PARAMETES TO JOBDEFINATION");    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.translate(1.1 * maxNodeWidth,559600);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-49: LOGGER.error(exception, exception);    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.translate(1.1 * maxNodeWidth,559600);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-50: throw exception;    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.translate(1.1 * maxNodeWidth,559600);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(javaStatementsGraph);
+            rect23.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect24 = ellipse.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.attr('text/text', flowChartNode);
+            rect24.addTo(javaStatementsGraph);
+
+
+            var link13 = link.clone();
+            link13.source(rect12);
+            link13.target(rect13);
+            link13.addTo(javaStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.set('ifBlockStartLink', true);
+            link14.label(0, {attrs: {text: {text: 'Yes'}}});
+            link14.addTo(javaStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect14);
+            link15.target(rect15);
+            link15.addTo(javaStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect15);
+            link16.target(rect16);
+            link16.addTo(javaStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect16);
+            link17.target(rect17);
+            link17.addTo(javaStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect17);
+            link18.target(rect18);
+            link18.addTo(javaStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect18);
+            link19.target(rect19);
+            link19.addTo(javaStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect13);
+            link20.target(rect20);
+            link20.set('elseBlockStartLink', true);
+            link20.label(0, {attrs: {text: {text: 'No'}}});
+            link20.addTo(javaStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect20);
+            link21.target(rect21);
+            link21.addTo(javaStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect21);
+            link22.target(rect22);
+            link22.addTo(javaStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect19);
+            link23.target(rect23);
+            link23.addTo(javaStatementsGraph);
+            link23.set('ifBlockEndLink', true);
+            link23.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link24 = link.clone();
+            link24.source(rect22);
+            link24.target(rect23);
+            link24.addTo(javaStatementsGraph);
+            link24.set('elseBlockEndLink', true);
+            link24.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect13.set('endIfConditionId', rect23.id);
+            rect23.set('ifConditionId', rect13.id);
+
+            var link25 = link.clone();
+            link25.source(rect23);
+            link25.target(rect24);
+            link25.addTo(javaStatementsGraph);
+
+            rect12.set('startNode', 'true');
+            rect24.set('stopNode', 'true');
+            rect24.attr('circle/fill', 'red');
+            rect24.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect12, rect24);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

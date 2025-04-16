@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>SchedulerAPIHandler.importJobs</title>
+        <script src='../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : com.triniti.scheduler.handlers</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : SchedulerAPIHandler</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : importJobs</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 500,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-1663: Call addJob and assign the result to variable returnMap');
+            nodesArr.push('Line No-1664: Call setErrorOccured() on variable importObjectsBean');
+            nodesArr.push('Line No-1665: Call setStatusBuffer() on variable importObjectsBean');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-1663: Call addJob and assign the result to variable returnMap    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/SchedulerAPIHandler/addJob.html');
+            rect1.attr('body/stroke', 'blue');
+            rect1.attr('body/fill', 'blue');
+            rect1.attr('label/cursor', 'pointer');
+            rect1.attr('body/cursor', 'pointer');
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-1664: Call setErrorOccured() on variable importObjectsBean    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/ImportObjectsBean/setErrorOccured.html');
+            rect2.attr('body/stroke', 'blue');
+            rect2.attr('body/fill', 'blue');
+            rect2.attr('label/cursor', 'pointer');
+            rect2.attr('body/cursor', 'pointer');
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-1665: Call setStatusBuffer() on variable importObjectsBean    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/ImportObjectsBean/setStatusBuffer.html');
+            rect3.attr('body/stroke', 'blue');
+            rect3.attr('body/fill', 'blue');
+            rect3.attr('label/cursor', 'pointer');
+            rect3.attr('body/cursor', 'pointer');
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect4 = ellipse.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('text/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect4.set('stopNode', 'true');
+            rect4.attr('circle/fill', 'red');
+            rect4.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect4);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 1100,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-1662: T_JOBS tJobs = (T_JOBS) importedObject;');
+            nodesArr.push('Line No-1663: Map<String, Object> returnMap = addJob(tJobs, importObjectsBean.isChangeIds());');
+            nodesArr.push('Line No-1664: importObjectsBean.setErrorOccured(Boolean.parseBoolean("" + returnMap.get("erroroccured")));');
+            nodesArr.push('Line No-1665: importObjectsBean.setStatusBuffer(new StringBuffer("" + returnMap.get("message")));');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect5 = ellipse.clone();
+            rect5.addTo(javaStatementsGraph);
+            rect5.attr('text/text', 'Start');
+            rect5.attr('circle/fill', 'green');
+
+            rootNode = rect5;
+
+            flowChartNode = getBrokenText('Line No-1662: T_JOBS tJobs = (T_JOBS) importedObject;    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-1663: Map<String, Object> returnMap = addJob(tJobs, importObjectsBean.isChangeIds());    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('label/text', flowChartNode);
+            rect7.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/SchedulerAPIHandler/addJob.html');
+            rect7.attr('body/stroke', 'blue');
+            rect7.attr('body/fill', 'blue');
+            rect7.attr('label/cursor', 'pointer');
+            rect7.attr('body/cursor', 'pointer');
+            rect7.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-1664: importObjectsBean.setErrorOccured(Boolean.parseBoolean("" + returnMap.get("erroroccured")));    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/ImportObjectsBean/setErrorOccured.html');
+            rect8.attr('body/stroke', 'blue');
+            rect8.attr('body/fill', 'blue');
+            rect8.attr('label/cursor', 'pointer');
+            rect8.attr('body/cursor', 'pointer');
+            rect8.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-1665: importObjectsBean.setStatusBuffer(new StringBuffer("" + returnMap.get("message")));    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.set('externalLink', 'scheduler/com/triniti/scheduler/handlers/ImportObjectsBean/setStatusBuffer.html');
+            rect9.attr('body/stroke', 'blue');
+            rect9.attr('body/fill', 'blue');
+            rect9.attr('label/cursor', 'pointer');
+            rect9.attr('body/cursor', 'pointer');
+            rect9.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect10 = ellipse.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('text/text', flowChartNode);
+            rect10.addTo(javaStatementsGraph);
+
+
+            var link5 = link.clone();
+            link5.source(rect5);
+            link5.target(rect6);
+            link5.addTo(javaStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect6);
+            link6.target(rect7);
+            link6.addTo(javaStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect7);
+            link7.target(rect8);
+            link7.addTo(javaStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect8);
+            link8.target(rect9);
+            link8.addTo(javaStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect9);
+            link9.target(rect10);
+            link9.addTo(javaStatementsGraph);
+
+            rect5.set('startNode', 'true');
+            rect10.set('stopNode', 'true');
+            rect10.attr('circle/fill', 'red');
+            rect10.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect5, rect10);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

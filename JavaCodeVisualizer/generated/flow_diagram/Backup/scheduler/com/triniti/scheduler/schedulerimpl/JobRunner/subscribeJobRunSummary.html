@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>JobRunner.subscribeJobRunSummary</title>
+        <script src='../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: message-box;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 35px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 20px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+   <script type='text/javascript'>
+   var textColor = '#000000';
+   var backGroundColor = '#FFFFFF';
+    var rhombus = new joint.shapes.basic.Rhombus({
+       size: {
+       width: 120, height: 60,
+       height: 60
+             },
+      attrs: {
+          path: {
+          d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+          fill: '#FFFFFF',
+          stroke: '#800020',
+          strokeWidth: 4,
+          cursor: 'context-menu'
+                 },
+       text: {
+       text: 'Rhombus',
+       fill: textColor,
+       cursor: 'context-menu'
+              }
+            }
+      });
+      rhombus.position(400, 30);
+      rhombus.set('nodeType', 'Rhombus');
+
+      var ellipse = new joint.shapes.basic.Circle({
+      size: { 
+         width: 100, height: 40 
+            },
+      attrs: { 
+            text: { 
+            text: 'Ellipse', fill: textColor,
+            cursor: 'context-menu'
+                  },
+          circle: { 
+               fill:'blue', 
+               strokeWidth:4,
+               cursor:'context-menu',
+                  }
+              }
+          });
+      ellipse.position(400, 30);
+
+    var rect = new joint.shapes.standard.Rectangle();
+    rect.attr({
+          body: {
+            fill: '#FFFFFF',
+            rx: 10,
+            ry: 10,
+            strokeWidth: 4,
+            stroke:'#9400D3',
+            cursor: 'context-menu',
+                },
+          label: {
+             text: 'Rectangle',
+             cursor:'context-menu'
+                 }
+            });
+     rect.position(400, 30);
+     rect.resize(100, 40);
+     rect.set('nodeType', 'Rectangle');
+
+    var link = new joint.shapes.standard.Link({
+    attrs: {
+      line: { 
+      strokeWidth: 1.5
+             }
+           }
+                                              });
+    link.connector('rounded', { radius: 15 });
+    </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+ <div class='flow-head'>
+   <div class='flow-1'>
+   <img height='50' width='150;' alt='Triniti' src='../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package-Name : com.triniti.scheduler.schedulerimpl</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class-Name : JobRunner</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method-Name : subscribeJobRunSummary</h4>
+   <p style='text-decoration:none' target='_blank'>   </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: blue;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Method calling</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Initialization & Assignment</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 3700,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-457: Call debug() on variable LOGGER');
+            nodesArr.push('Line No-458: Initialize variable sgJobRun of type SG_JOB_RUN as null');
+            nodesArr.push('Line No-459:  jobRun is equal to null');
+            nodesArr.push('Line No-460: Create an instance of SG_JOB_RUN and assign the result to variable sgJobRun');
+            nodesArr.push('Line No-461: Call setUSER_TIMEZONE() on variable sgJobRun');
+            nodesArr.push('Line No-462:  eventBasedSchedule');
+            nodesArr.push('Line No-463: Call setINVOKE_TYPE() on variable sgJobRun');
+            nodesArr.push('Line No-464: Call setINVOKED_BY() on variable sgJobRun');
+            nodesArr.push('Line No-466: Call setINVOKE_TYPE() on variable sgJobRun');
+            nodesArr.push('Line No-467: Call setINVOKED_BY() on variable sgJobRun');
+            nodesArr.push('Line No-469: Call setJOB_ID() on variable sgJobRun');
+            nodesArr.push('Line No-470: Call setSCHEDULE_ID() on variable sgJobRun');
+            nodesArr.push('Line No-471: Call setSTART_DATE() on variable sgJobRun');
+            nodesArr.push('Line No-472: Call setUSER_JOBRUN_STARTDATE() on variable sgJobRun');
+            nodesArr.push('Line No-474: Assign jobRun to sgJobRun');
+            nodesArr.push('Line No-476: Call setSTATUS() on variable sgJobRun');
+            nodesArr.push('Line No-477: Call setMESSAGE() on variable sgJobRun');
+            nodesArr.push('Line No-478:  ""true"" == jobStatus.get("JobEnded")');
+            nodesArr.push('Line No-479: Call setEND_DATE() on variable sgJobRun');
+            nodesArr.push('Line No-480: Call setUSER_JOBRUN_ENDDATE() on variable sgJobRun');
+            nodesArr.push('Line No-482: Get value from Map jobStatus for key "StackTrace" and assign the result to variable stackTrace');
+            nodesArr.push('Line No-483:  stackTrace is not equal to null');
+            nodesArr.push('Line No-484: Call setERROR_STACK_TRACE() on variable sgJobRun');
+            nodesArr.push('Line No-487:  jobRun is not equal to null');
+            nodesArr.push('Line No-488: Call updateJobRun() on variable jobRunDAO');
+            nodesArr.push('Line No-489:  ""true"" == jobStatus.get("JobEnded")');
+            nodesArr.push('Line No-490: Call addJobRun() on variable jobRunDAO');
+            nodesArr.push('Line No-492: Call addJobRun() on variable jobRunDAO');
+            nodesArr.push('Line No-495: Return sgJobRun');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-457: Call debug() on variable LOGGER    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-458: Initialize variable sgJobRun of type SG_JOB_RUN as null    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-459:  jobRun is equal to null');
+            var rect3 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect3.resize(maxNodeWidth, resizeWidth);
+            rect3.attr('label/cursor', 'context-menu');
+            rect3.attr('body/cursor', 'context-menu');
+            rect3.attr('text/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-460: Create an instance of SG_JOB_RUN and assign the result to variable sgJobRun    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.translate(-1.1 * maxNodeWidth,231200);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-461: Call setUSER_TIMEZONE() on variable sgJobRun    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.translate(-1.1 * maxNodeWidth,231200);
+            rect5.attr('label/text', flowChartNode);
+            rect5.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_TIMEZONE.html');
+            rect5.attr('body/stroke', 'blue');
+            rect5.attr('label/cursor', 'pointer');
+            rect5.attr('body/cursor', 'pointer');
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-462:  eventBasedSchedule');
+            var rect6 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect6.resize(maxNodeWidth, resizeWidth);
+            rect6.attr('label/cursor', 'context-menu');
+            rect6.attr('body/cursor', 'context-menu');
+            rect6.translate(-1.1 * maxNodeWidth,231300);
+            rect6.attr('text/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-463: Call setINVOKE_TYPE() on variable sgJobRun    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.translate(-2.2 * maxNodeWidth,231300);
+            rect7.attr('label/text', flowChartNode);
+            rect7.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKE_TYPE.html');
+            rect7.attr('body/stroke', 'blue');
+            rect7.attr('label/cursor', 'pointer');
+            rect7.attr('body/cursor', 'pointer');
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-464: Call setINVOKED_BY() on variable sgJobRun    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.translate(-2.2 * maxNodeWidth,231300);
+            rect8.attr('label/text', flowChartNode);
+            rect8.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKED_BY.html');
+            rect8.attr('body/stroke', 'blue');
+            rect8.attr('label/cursor', 'pointer');
+            rect8.attr('body/cursor', 'pointer');
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-466: Call setINVOKE_TYPE() on variable sgJobRun    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.translate(0.0 * maxNodeWidth,231300);
+            rect9.attr('label/text', flowChartNode);
+            rect9.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKE_TYPE.html');
+            rect9.attr('body/stroke', 'blue');
+            rect9.attr('label/cursor', 'pointer');
+            rect9.attr('body/cursor', 'pointer');
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-467: Call setINVOKED_BY() on variable sgJobRun    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.translate(0.0 * maxNodeWidth,231300);
+            rect10.attr('label/text', flowChartNode);
+            rect10.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKED_BY.html');
+            rect10.attr('body/stroke', 'blue');
+            rect10.attr('label/cursor', 'pointer');
+            rect10.attr('body/cursor', 'pointer');
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.translate(-1.1 * maxNodeWidth,231300);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+            rect11.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-469: Call setJOB_ID() on variable sgJobRun    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.translate(-1.1 * maxNodeWidth,231300);
+            rect12.attr('label/text', flowChartNode);
+            rect12.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setJOB_ID.html');
+            rect12.attr('body/stroke', 'blue');
+            rect12.attr('label/cursor', 'pointer');
+            rect12.attr('body/cursor', 'pointer');
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-470: Call setSCHEDULE_ID() on variable sgJobRun    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.translate(-1.1 * maxNodeWidth,231300);
+            rect13.attr('label/text', flowChartNode);
+            rect13.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSCHEDULE_ID.html');
+            rect13.attr('body/stroke', 'blue');
+            rect13.attr('label/cursor', 'pointer');
+            rect13.attr('body/cursor', 'pointer');
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-471: Call setSTART_DATE() on variable sgJobRun    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.translate(-1.1 * maxNodeWidth,231300);
+            rect14.attr('label/text', flowChartNode);
+            rect14.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSTART_DATE.html');
+            rect14.attr('body/stroke', 'blue');
+            rect14.attr('label/cursor', 'pointer');
+            rect14.attr('body/cursor', 'pointer');
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-472: Call setUSER_JOBRUN_STARTDATE() on variable sgJobRun    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.translate(-1.1 * maxNodeWidth,231300);
+            rect15.attr('label/text', flowChartNode);
+            rect15.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_JOBRUN_STARTDATE.html');
+            rect15.attr('body/stroke', 'blue');
+            rect15.attr('label/cursor', 'pointer');
+            rect15.attr('body/cursor', 'pointer');
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-474: Assign jobRun to sgJobRun    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.translate(1.1 * maxNodeWidth,231300);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+            rect17.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-476: Call setSTATUS() on variable sgJobRun    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.attr('label/text', flowChartNode);
+            rect18.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSTATUS.html');
+            rect18.attr('body/stroke', 'blue');
+            rect18.attr('label/cursor', 'pointer');
+            rect18.attr('body/cursor', 'pointer');
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-477: Call setMESSAGE() on variable sgJobRun    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.attr('label/text', flowChartNode);
+            rect19.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setMESSAGE.html');
+            rect19.attr('body/stroke', 'blue');
+            rect19.attr('label/cursor', 'pointer');
+            rect19.attr('body/cursor', 'pointer');
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-478:  ""true"" == jobStatus.get("JobEnded")');
+            var rect20 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect20.resize(maxNodeWidth, resizeWidth);
+            rect20.attr('label/cursor', 'context-menu');
+            rect20.attr('body/cursor', 'context-menu');
+            rect20.attr('text/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-479: Call setEND_DATE() on variable sgJobRun    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.translate(-1.1 * maxNodeWidth,231600);
+            rect21.attr('label/text', flowChartNode);
+            rect21.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setEND_DATE.html');
+            rect21.attr('body/stroke', 'blue');
+            rect21.attr('label/cursor', 'pointer');
+            rect21.attr('body/cursor', 'pointer');
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-480: Call setUSER_JOBRUN_ENDDATE() on variable sgJobRun    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.translate(-1.1 * maxNodeWidth,231600);
+            rect22.attr('label/text', flowChartNode);
+            rect22.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_JOBRUN_ENDDATE.html');
+            rect22.attr('body/stroke', 'blue');
+            rect22.attr('label/cursor', 'pointer');
+            rect22.attr('body/cursor', 'pointer');
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+            rect23.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-482: Get value from Map jobStatus for key "StackTrace" and assign the result to variable stackTrace    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.attr('label/text', flowChartNode);
+            rect24.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-483:  stackTrace is not equal to null');
+            var rect25 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect25.resize(maxNodeWidth, resizeWidth);
+            rect25.attr('label/cursor', 'context-menu');
+            rect25.attr('body/cursor', 'context-menu');
+            rect25.attr('text/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-484: Call setERROR_STACK_TRACE() on variable sgJobRun    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.translate(-1.1 * maxNodeWidth,231800);
+            rect26.attr('label/text', flowChartNode);
+            rect26.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setERROR_STACK_TRACE.html');
+            rect26.attr('body/stroke', 'blue');
+            rect26.attr('label/cursor', 'pointer');
+            rect26.attr('body/cursor', 'pointer');
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect27 = rect.clone();
+            rect27.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect27.attr('label/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+            rect27.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-487:  jobRun is not equal to null');
+            var rect28 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect28.resize(maxNodeWidth, resizeWidth);
+            rect28.attr('label/cursor', 'context-menu');
+            rect28.attr('body/cursor', 'context-menu');
+            rect28.attr('text/text', flowChartNode);
+            rect28.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-488: Call updateJobRun() on variable jobRunDAO    ');
+            var rect29 = rect.clone();
+            rect29.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect29.translate(-1.1 * maxNodeWidth,231900);
+            rect29.attr('label/text', flowChartNode);
+            rect29.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-489:  ""true"" == jobStatus.get("JobEnded")');
+            var rect30 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect30.resize(maxNodeWidth, resizeWidth);
+            rect30.attr('label/cursor', 'context-menu');
+            rect30.attr('body/cursor', 'context-menu');
+            rect30.translate(1.1 * maxNodeWidth,232000);
+            rect30.attr('text/text', flowChartNode);
+            rect30.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-490: Call addJobRun() on variable jobRunDAO    ');
+            var rect31 = rect.clone();
+            rect31.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect31.translate(0.0 * maxNodeWidth,232000);
+            rect31.attr('label/text', flowChartNode);
+            rect31.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-492: Call addJobRun() on variable jobRunDAO    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.translate(2.2 * maxNodeWidth,232000);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect33 = rect.clone();
+            rect33.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect33.translate(1.1 * maxNodeWidth,232000);
+            rect33.attr('label/text', flowChartNode);
+            rect33.addTo(nlStatementsGraph);
+            rect33.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect34 = rect.clone();
+            rect34.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect34.attr('label/text', flowChartNode);
+            rect34.addTo(nlStatementsGraph);
+            rect34.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-495: Return sgJobRun    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.attr('label/text', flowChartNode);
+            rect35.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect36 = ellipse.clone();
+            rect36.attr('circle/cursor', 'context-menu');
+            rect36.attr('text/cursor', 'context-menu');
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.attr('text/text', flowChartNode);
+            rect36.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.set('ifBlockStartLink', true);
+            link4.label(0, {attrs: {text: {text: 'Yes'}}});
+        link4.attr('line/stroke', 'green');
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.set('ifBlockStartLink', true);
+            link7.label(0, {attrs: {text: {text: 'Yes'}}});
+        link7.attr('line/stroke', 'green');
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect6);
+            link9.target(rect9);
+            link9.set('elseBlockStartLink', true);
+            link9.label(0, {attrs: {text: {text: 'No'}}});
+        link9.attr('line/stroke', 'red');
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect8);
+            link11.target(rect11);
+            link11.addTo(nlStatementsGraph);
+            link11.set('ifBlockEndLink', true);
+            link11.label(0, {attrs: {text: {text: 'Yes'}}});
+        link11.attr('line/stroke', 'green');
+
+            var link12 = link.clone();
+            link12.source(rect10);
+            link12.target(rect11);
+            link12.addTo(nlStatementsGraph);
+            link12.set('elseBlockEndLink', true);
+            link12.label(0, {attrs: {text: {text: 'No'}}});
+        link12.attr('line/stroke', 'red');
+
+            rect6.set('endIfConditionId', rect11.id);
+            rect11.set('ifConditionId', rect6.id);
+
+            var link13 = link.clone();
+            link13.source(rect11);
+            link13.target(rect12);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect12);
+            link14.target(rect13);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect13);
+            link15.target(rect14);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect14);
+            link16.target(rect15);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect3);
+            link17.target(rect16);
+            link17.set('elseBlockStartLink', true);
+            link17.label(0, {attrs: {text: {text: 'No'}}});
+        link17.attr('line/stroke', 'red');
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect15);
+            link18.target(rect17);
+            link18.addTo(nlStatementsGraph);
+            link18.set('ifBlockEndLink', true);
+            link18.label(0, {attrs: {text: {text: 'Yes'}}});
+        link18.attr('line/stroke', 'green');
+
+            var link19 = link.clone();
+            link19.source(rect16);
+            link19.target(rect17);
+            link19.addTo(nlStatementsGraph);
+            link19.set('elseBlockEndLink', true);
+            link19.label(0, {attrs: {text: {text: 'No'}}});
+        link19.attr('line/stroke', 'red');
+
+            rect3.set('endIfConditionId', rect17.id);
+            rect17.set('ifConditionId', rect3.id);
+
+            var link20 = link.clone();
+            link20.source(rect17);
+            link20.target(rect18);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect18);
+            link21.target(rect19);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect19);
+            link22.target(rect20);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect20);
+            link23.target(rect21);
+            link23.set('ifBlockStartLink', true);
+            link23.label(0, {attrs: {text: {text: 'Yes'}}});
+        link23.attr('line/stroke', 'green');
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect21);
+            link24.target(rect22);
+            link24.addTo(nlStatementsGraph);
+
+            var link25 = link.clone();
+            link25.source(rect22);
+            link25.target(rect23);
+            link25.addTo(nlStatementsGraph);
+            link25.set('ifBlockEndLink', true);
+            link25.label(0, {attrs: {text: {text: 'Yes'}}});
+        link25.attr('line/stroke', 'green');
+
+            var link26 = link.clone();
+            link26.source(rect20);
+            link26.target(rect23);
+            link26.addTo(nlStatementsGraph);
+            link26.label(0, {attrs: {text: {text: 'No'}}});
+            link26.set('elseBlockStartAndEndLink', true);
+        link26.attr('line/stroke', 'red');
+
+            rect20.set('endIfConditionId', rect23.id);
+            rect23.set('ifConditionId', rect20.id);
+
+            var link27 = link.clone();
+            link27.source(rect23);
+            link27.target(rect24);
+            link27.addTo(nlStatementsGraph);
+
+            var link28 = link.clone();
+            link28.source(rect24);
+            link28.target(rect25);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect25);
+            link29.target(rect26);
+            link29.set('ifBlockStartLink', true);
+            link29.label(0, {attrs: {text: {text: 'Yes'}}});
+        link29.attr('line/stroke', 'green');
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect26);
+            link30.target(rect27);
+            link30.addTo(nlStatementsGraph);
+            link30.set('ifBlockEndLink', true);
+            link30.label(0, {attrs: {text: {text: 'Yes'}}});
+        link30.attr('line/stroke', 'green');
+
+            var link31 = link.clone();
+            link31.source(rect25);
+            link31.target(rect27);
+            link31.addTo(nlStatementsGraph);
+            link31.label(0, {attrs: {text: {text: 'No'}}});
+            link31.set('elseBlockStartAndEndLink', true);
+        link31.attr('line/stroke', 'red');
+
+            rect25.set('endIfConditionId', rect27.id);
+            rect27.set('ifConditionId', rect25.id);
+
+            var link32 = link.clone();
+            link32.source(rect27);
+            link32.target(rect28);
+            link32.addTo(nlStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect28);
+            link33.target(rect29);
+            link33.set('ifBlockStartLink', true);
+            link33.label(0, {attrs: {text: {text: 'Yes'}}});
+        link33.attr('line/stroke', 'green');
+            link33.addTo(nlStatementsGraph);
+
+            var link34 = link.clone();
+            link34.source(rect28);
+            link34.target(rect30);
+            link34.set('elseBlockStartLink', true);
+            link34.label(0, {attrs: {text: {text: 'No'}}});
+        link34.attr('line/stroke', 'red');
+            link34.addTo(nlStatementsGraph);
+
+            var link35 = link.clone();
+            link35.source(rect30);
+            link35.target(rect31);
+            link35.set('ifBlockStartLink', true);
+            link35.label(0, {attrs: {text: {text: 'Yes'}}});
+        link35.attr('line/stroke', 'green');
+            link35.addTo(nlStatementsGraph);
+
+            var link36 = link.clone();
+            link36.source(rect30);
+            link36.target(rect32);
+            link36.set('elseBlockStartLink', true);
+            link36.label(0, {attrs: {text: {text: 'No'}}});
+        link36.attr('line/stroke', 'red');
+            link36.addTo(nlStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect31);
+            link37.target(rect33);
+            link37.addTo(nlStatementsGraph);
+            link37.set('ifBlockEndLink', true);
+            link37.label(0, {attrs: {text: {text: 'Yes'}}});
+        link37.attr('line/stroke', 'green');
+
+            var link38 = link.clone();
+            link38.source(rect32);
+            link38.target(rect33);
+            link38.addTo(nlStatementsGraph);
+            link38.set('elseBlockEndLink', true);
+            link38.label(0, {attrs: {text: {text: 'No'}}});
+        link38.attr('line/stroke', 'red');
+
+            rect30.set('endIfConditionId', rect33.id);
+            rect33.set('ifConditionId', rect30.id);
+
+            var link39 = link.clone();
+            link39.source(rect29);
+            link39.target(rect34);
+            link39.addTo(nlStatementsGraph);
+            link39.set('ifBlockEndLink', true);
+            link39.label(0, {attrs: {text: {text: 'Yes'}}});
+        link39.attr('line/stroke', 'green');
+
+            var link40 = link.clone();
+            link40.source(rect33);
+            link40.target(rect34);
+            link40.addTo(nlStatementsGraph);
+            link40.set('elseBlockEndLink', true);
+            link40.label(0, {attrs: {text: {text: 'No'}}});
+        link40.attr('line/stroke', 'red');
+
+            rect28.set('endIfConditionId', rect34.id);
+            rect34.set('ifConditionId', rect28.id);
+
+            var link41 = link.clone();
+            link41.source(rect34);
+            link41.target(rect35);
+            link41.addTo(nlStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect35);
+            link42.target(rect36);
+            link42.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect36.set('stopNode', 'true');
+            rect36.attr('circle/fill', 'red');
+            rect36.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect36);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 7400,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-457: LOGGER.debug("subscribeJobRunSummary :" + jobRun);');
+            nodesArr.push('Line No-458: SG_JOB_RUN sgJobRun = null;');
+            nodesArr.push('Line No-459:  jobRun == null');
+            nodesArr.push('Line No-460: sgJobRun = new SG_JOB_RUN();');
+            nodesArr.push('Line No-461: sgJobRun.setUSER_TIMEZONE(userTimeZone);');
+            nodesArr.push('Line No-462:  eventBasedSchedule');
+            nodesArr.push('Line No-463: sgJobRun.setINVOKE_TYPE("Event");');
+            nodesArr.push('Line No-464: sgJobRun.setINVOKED_BY(userName);');
+            nodesArr.push('Line No-466: sgJobRun.setINVOKE_TYPE("Schedule");');
+            nodesArr.push('Line No-467: sgJobRun.setINVOKED_BY("Scheduler");');
+            nodesArr.push('Line No-469: sgJobRun.setJOB_ID(sgJOb.getJOB_ID());');
+            nodesArr.push('Line No-470: sgJobRun.setSCHEDULE_ID(schedule.getScheduleID());');
+            nodesArr.push('Line No-471: sgJobRun.setSTART_DATE(new Timestamp(new Date().getTime()));');
+            nodesArr.push('Line No-472: sgJobRun.setUSER_JOBRUN_STARTDATE(getCurrentTimestamp(userTimeZone));');
+            nodesArr.push('Line No-474: sgJobRun = jobRun;');
+            nodesArr.push('Line No-476: sgJobRun.setSTATUS(jobStatus.get("JobStatus"));');
+            nodesArr.push('Line No-477: sgJobRun.setMESSAGE(jobStatus.get("Message"));');
+            nodesArr.push('Line No-478:  "true".equals(jobStatus.get("JobEnded"))');
+            nodesArr.push('Line No-479: sgJobRun.setEND_DATE(new Timestamp(new Date().getTime()));');
+            nodesArr.push('Line No-480: sgJobRun.setUSER_JOBRUN_ENDDATE(getCurrentTimestamp(userTimeZone));');
+            nodesArr.push('Line No-482: String stackTrace = jobStatus.get("StackTrace");');
+            nodesArr.push('Line No-483:  stackTrace != null');
+            nodesArr.push('Line No-484: sgJobRun.setERROR_STACK_TRACE(stackTrace);');
+            nodesArr.push('Line No-487:  jobRun != null');
+            nodesArr.push('Line No-488: jobRunDAO.updateJobRun(sgJobRun, schedule.getScheduleName(), sgJOb.getJOB_NAME(), sgJOb.getON_FAILURE_NOTIFY());');
+            nodesArr.push('Line No-489:  "true".equals(jobStatus.get("JobEnded"))');
+            nodesArr.push('Line No-490: jobRunDAO.addJobRun(sgJobRun, schedule.getScheduleName(), sgJOb.getJOB_NAME(), sgJOb.getON_FAILURE_NOTIFY());');
+            nodesArr.push('Line No-492: jobRunDAO.addJobRun(sgJobRun);');
+            nodesArr.push('Line No-495: return sgJobRun;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect37 = ellipse.clone();
+            rect37.addTo(javaStatementsGraph);
+            rect37.attr('text/text', 'Start');
+            rect37.attr('circle/fill', 'green');
+
+            rootNode = rect37;
+
+            flowChartNode = getBrokenText('Line No-457: LOGGER.debug("subscribeJobRunSummary :" + jobRun);    ');
+            var rect38 = rect.clone();
+            rect38.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect38.attr('label/text', flowChartNode);
+            rect38.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-458: SG_JOB_RUN sgJobRun = null;    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-459:  jobRun == null');
+            var rect40 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect40.resize(maxNodeWidth, resizeWidth);
+            rect40.attr('label/cursor', 'context-menu');
+            rect40.attr('body/cursor', 'context-menu');
+            rect40.attr('text/text', flowChartNode);
+            rect40.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-460: sgJobRun = new SG_JOB_RUN();    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.translate(-1.1 * maxNodeWidth,232500);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-461: sgJobRun.setUSER_TIMEZONE(userTimeZone);    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.translate(-1.1 * maxNodeWidth,232500);
+            rect42.attr('label/text', flowChartNode);
+            rect42.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_TIMEZONE.html');
+            rect42.attr('body/stroke', 'blue');
+            rect42.attr('label/cursor', 'pointer');
+            rect42.attr('body/cursor', 'pointer');
+            rect42.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-462:  eventBasedSchedule');
+            var rect43 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect43.resize(maxNodeWidth, resizeWidth);
+            rect43.attr('label/cursor', 'context-menu');
+            rect43.attr('body/cursor', 'context-menu');
+            rect43.translate(-1.1 * maxNodeWidth,232600);
+            rect43.attr('text/text', flowChartNode);
+            rect43.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-463: sgJobRun.setINVOKE_TYPE("Event");    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.translate(-2.2 * maxNodeWidth,232600);
+            rect44.attr('label/text', flowChartNode);
+            rect44.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKE_TYPE.html');
+            rect44.attr('body/stroke', 'blue');
+            rect44.attr('label/cursor', 'pointer');
+            rect44.attr('body/cursor', 'pointer');
+            rect44.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-464: sgJobRun.setINVOKED_BY(userName);    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.translate(-2.2 * maxNodeWidth,232600);
+            rect45.attr('label/text', flowChartNode);
+            rect45.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKED_BY.html');
+            rect45.attr('body/stroke', 'blue');
+            rect45.attr('label/cursor', 'pointer');
+            rect45.attr('body/cursor', 'pointer');
+            rect45.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-466: sgJobRun.setINVOKE_TYPE("Schedule");    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.translate(0.0 * maxNodeWidth,232600);
+            rect46.attr('label/text', flowChartNode);
+            rect46.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKE_TYPE.html');
+            rect46.attr('body/stroke', 'blue');
+            rect46.attr('label/cursor', 'pointer');
+            rect46.attr('body/cursor', 'pointer');
+            rect46.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-467: sgJobRun.setINVOKED_BY("Scheduler");    ');
+            var rect47 = rect.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.translate(0.0 * maxNodeWidth,232600);
+            rect47.attr('label/text', flowChartNode);
+            rect47.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setINVOKED_BY.html');
+            rect47.attr('body/stroke', 'blue');
+            rect47.attr('label/cursor', 'pointer');
+            rect47.attr('body/cursor', 'pointer');
+            rect47.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect48 = rect.clone();
+            rect48.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect48.translate(-1.1 * maxNodeWidth,232600);
+            rect48.attr('label/text', flowChartNode);
+            rect48.addTo(javaStatementsGraph);
+            rect48.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-469: sgJobRun.setJOB_ID(sgJOb.getJOB_ID());    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.translate(-1.1 * maxNodeWidth,232600);
+            rect49.attr('label/text', flowChartNode);
+            rect49.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setJOB_ID.html');
+            rect49.attr('body/stroke', 'blue');
+            rect49.attr('label/cursor', 'pointer');
+            rect49.attr('body/cursor', 'pointer');
+            rect49.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-470: sgJobRun.setSCHEDULE_ID(schedule.getScheduleID());    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.translate(-1.1 * maxNodeWidth,232600);
+            rect50.attr('label/text', flowChartNode);
+            rect50.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSCHEDULE_ID.html');
+            rect50.attr('body/stroke', 'blue');
+            rect50.attr('label/cursor', 'pointer');
+            rect50.attr('body/cursor', 'pointer');
+            rect50.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-471: sgJobRun.setSTART_DATE(new Timestamp(new Date().getTime()));    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.translate(-1.1 * maxNodeWidth,232600);
+            rect51.attr('label/text', flowChartNode);
+            rect51.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSTART_DATE.html');
+            rect51.attr('body/stroke', 'blue');
+            rect51.attr('label/cursor', 'pointer');
+            rect51.attr('body/cursor', 'pointer');
+            rect51.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-472: sgJobRun.setUSER_JOBRUN_STARTDATE(getCurrentTimestamp(userTimeZone));    ');
+            var rect52 = rect.clone();
+            rect52.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect52.translate(-1.1 * maxNodeWidth,232600);
+            rect52.attr('label/text', flowChartNode);
+            rect52.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_JOBRUN_STARTDATE.html');
+            rect52.attr('body/stroke', 'blue');
+            rect52.attr('label/cursor', 'pointer');
+            rect52.attr('body/cursor', 'pointer');
+            rect52.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-474: sgJobRun = jobRun;    ');
+            var rect53 = rect.clone();
+            rect53.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect53.translate(1.1 * maxNodeWidth,232600);
+            rect53.attr('label/text', flowChartNode);
+            rect53.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect54 = rect.clone();
+            rect54.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect54.attr('label/text', flowChartNode);
+            rect54.addTo(javaStatementsGraph);
+            rect54.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-476: sgJobRun.setSTATUS(jobStatus.get("JobStatus"));    ');
+            var rect55 = rect.clone();
+            rect55.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect55.attr('label/text', flowChartNode);
+            rect55.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setSTATUS.html');
+            rect55.attr('body/stroke', 'blue');
+            rect55.attr('label/cursor', 'pointer');
+            rect55.attr('body/cursor', 'pointer');
+            rect55.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-477: sgJobRun.setMESSAGE(jobStatus.get("Message"));    ');
+            var rect56 = rect.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.attr('label/text', flowChartNode);
+            rect56.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setMESSAGE.html');
+            rect56.attr('body/stroke', 'blue');
+            rect56.attr('label/cursor', 'pointer');
+            rect56.attr('body/cursor', 'pointer');
+            rect56.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-478:  "true".equals(jobStatus.get("JobEnded"))');
+            var rect57 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect57.resize(maxNodeWidth, resizeWidth);
+            rect57.attr('label/cursor', 'context-menu');
+            rect57.attr('body/cursor', 'context-menu');
+            rect57.attr('text/text', flowChartNode);
+            rect57.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-479: sgJobRun.setEND_DATE(new Timestamp(new Date().getTime()));    ');
+            var rect58 = rect.clone();
+            rect58.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect58.translate(-1.1 * maxNodeWidth,232900);
+            rect58.attr('label/text', flowChartNode);
+            rect58.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setEND_DATE.html');
+            rect58.attr('body/stroke', 'blue');
+            rect58.attr('label/cursor', 'pointer');
+            rect58.attr('body/cursor', 'pointer');
+            rect58.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-480: sgJobRun.setUSER_JOBRUN_ENDDATE(getCurrentTimestamp(userTimeZone));    ');
+            var rect59 = rect.clone();
+            rect59.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect59.translate(-1.1 * maxNodeWidth,232900);
+            rect59.attr('label/text', flowChartNode);
+            rect59.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setUSER_JOBRUN_ENDDATE.html');
+            rect59.attr('body/stroke', 'blue');
+            rect59.attr('label/cursor', 'pointer');
+            rect59.attr('body/cursor', 'pointer');
+            rect59.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect60 = rect.clone();
+            rect60.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect60.attr('label/text', flowChartNode);
+            rect60.addTo(javaStatementsGraph);
+            rect60.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-482: String stackTrace = jobStatus.get("StackTrace");    ');
+            var rect61 = rect.clone();
+            rect61.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect61.attr('label/text', flowChartNode);
+            rect61.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-483:  stackTrace != null');
+            var rect62 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect62.resize(maxNodeWidth, resizeWidth);
+            rect62.attr('label/cursor', 'context-menu');
+            rect62.attr('body/cursor', 'context-menu');
+            rect62.attr('text/text', flowChartNode);
+            rect62.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-484: sgJobRun.setERROR_STACK_TRACE(stackTrace);    ');
+            var rect63 = rect.clone();
+            rect63.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect63.translate(-1.1 * maxNodeWidth,233100);
+            rect63.attr('label/text', flowChartNode);
+            rect63.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_RUN/setERROR_STACK_TRACE.html');
+            rect63.attr('body/stroke', 'blue');
+            rect63.attr('label/cursor', 'pointer');
+            rect63.attr('body/cursor', 'pointer');
+            rect63.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect64 = rect.clone();
+            rect64.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect64.attr('label/text', flowChartNode);
+            rect64.addTo(javaStatementsGraph);
+            rect64.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-487:  jobRun != null');
+            var rect65 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect65.resize(maxNodeWidth, resizeWidth);
+            rect65.attr('label/cursor', 'context-menu');
+            rect65.attr('body/cursor', 'context-menu');
+            rect65.attr('text/text', flowChartNode);
+            rect65.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-488: jobRunDAO.updateJobRun(sgJobRun, schedule.getScheduleName(), sgJOb.getJOB_NAME(), sgJOb.getON_FAILURE_NOTIFY());    ');
+            var rect66 = rect.clone();
+            rect66.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect66.translate(-1.1 * maxNodeWidth,233200);
+            rect66.attr('label/text', flowChartNode);
+            rect66.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-489:  "true".equals(jobStatus.get("JobEnded"))');
+            var rect67 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect67.resize(maxNodeWidth, resizeWidth);
+            rect67.attr('label/cursor', 'context-menu');
+            rect67.attr('body/cursor', 'context-menu');
+            rect67.translate(1.1 * maxNodeWidth,233300);
+            rect67.attr('text/text', flowChartNode);
+            rect67.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-490: jobRunDAO.addJobRun(sgJobRun, schedule.getScheduleName(), sgJOb.getJOB_NAME(), sgJOb.getON_FAILURE_NOTIFY());    ');
+            var rect68 = rect.clone();
+            rect68.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect68.translate(0.0 * maxNodeWidth,233300);
+            rect68.attr('label/text', flowChartNode);
+            rect68.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-492: jobRunDAO.addJobRun(sgJobRun);    ');
+            var rect69 = rect.clone();
+            rect69.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect69.translate(2.2 * maxNodeWidth,233300);
+            rect69.attr('label/text', flowChartNode);
+            rect69.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect70 = rect.clone();
+            rect70.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect70.translate(1.1 * maxNodeWidth,233300);
+            rect70.attr('label/text', flowChartNode);
+            rect70.addTo(javaStatementsGraph);
+            rect70.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect71 = rect.clone();
+            rect71.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect71.attr('label/text', flowChartNode);
+            rect71.addTo(javaStatementsGraph);
+            rect71.attr('body/stroke', '#800020');
+
+            flowChartNode = getBrokenText('Line No-495: return sgJobRun;    ');
+            var rect72 = rect.clone();
+            rect72.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect72.attr('label/text', flowChartNode);
+            rect72.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect73 = ellipse.clone();
+            rect73.attr('circle/cursor', 'context-menu');
+            rect73.attr('text/cursor', 'context-menu');
+            rect73.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect73.attr('text/text', flowChartNode);
+            rect73.addTo(javaStatementsGraph);
+
+
+            var link43 = link.clone();
+            link43.source(rect37);
+            link43.target(rect38);
+            link43.addTo(javaStatementsGraph);
+
+            var link44 = link.clone();
+            link44.source(rect38);
+            link44.target(rect39);
+            link44.addTo(javaStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect39);
+            link45.target(rect40);
+            link45.addTo(javaStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect40);
+            link46.target(rect41);
+            link46.set('ifBlockStartLink', true);
+            link46.label(0, {attrs: {text: {text: 'Yes'}}});
+        link46.attr('line/stroke', 'green');
+            link46.addTo(javaStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect41);
+            link47.target(rect42);
+            link47.addTo(javaStatementsGraph);
+
+            var link48 = link.clone();
+            link48.source(rect42);
+            link48.target(rect43);
+            link48.addTo(javaStatementsGraph);
+
+            var link49 = link.clone();
+            link49.source(rect43);
+            link49.target(rect44);
+            link49.set('ifBlockStartLink', true);
+            link49.label(0, {attrs: {text: {text: 'Yes'}}});
+        link49.attr('line/stroke', 'green');
+            link49.addTo(javaStatementsGraph);
+
+            var link50 = link.clone();
+            link50.source(rect44);
+            link50.target(rect45);
+            link50.addTo(javaStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect43);
+            link51.target(rect46);
+            link51.set('elseBlockStartLink', true);
+            link51.label(0, {attrs: {text: {text: 'No'}}});
+        link51.attr('line/stroke', 'red');
+            link51.addTo(javaStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect46);
+            link52.target(rect47);
+            link52.addTo(javaStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect45);
+            link53.target(rect48);
+            link53.addTo(javaStatementsGraph);
+            link53.set('ifBlockEndLink', true);
+            link53.label(0, {attrs: {text: {text: 'Yes'}}});
+        link53.attr('line/stroke', 'green');
+
+            var link54 = link.clone();
+            link54.source(rect47);
+            link54.target(rect48);
+            link54.addTo(javaStatementsGraph);
+            link54.set('elseBlockEndLink', true);
+            link54.label(0, {attrs: {text: {text: 'No'}}});
+        link54.attr('line/stroke', 'red');
+
+            rect43.set('endIfConditionId', rect48.id);
+            rect48.set('ifConditionId', rect43.id);
+
+            var link55 = link.clone();
+            link55.source(rect48);
+            link55.target(rect49);
+            link55.addTo(javaStatementsGraph);
+
+            var link56 = link.clone();
+            link56.source(rect49);
+            link56.target(rect50);
+            link56.addTo(javaStatementsGraph);
+
+            var link57 = link.clone();
+            link57.source(rect50);
+            link57.target(rect51);
+            link57.addTo(javaStatementsGraph);
+
+            var link58 = link.clone();
+            link58.source(rect51);
+            link58.target(rect52);
+            link58.addTo(javaStatementsGraph);
+
+            var link59 = link.clone();
+            link59.source(rect40);
+            link59.target(rect53);
+            link59.set('elseBlockStartLink', true);
+            link59.label(0, {attrs: {text: {text: 'No'}}});
+        link59.attr('line/stroke', 'red');
+            link59.addTo(javaStatementsGraph);
+
+            var link60 = link.clone();
+            link60.source(rect52);
+            link60.target(rect54);
+            link60.addTo(javaStatementsGraph);
+            link60.set('ifBlockEndLink', true);
+            link60.label(0, {attrs: {text: {text: 'Yes'}}});
+        link60.attr('line/stroke', 'green');
+
+            var link61 = link.clone();
+            link61.source(rect53);
+            link61.target(rect54);
+            link61.addTo(javaStatementsGraph);
+            link61.set('elseBlockEndLink', true);
+            link61.label(0, {attrs: {text: {text: 'No'}}});
+        link61.attr('line/stroke', 'red');
+
+            rect40.set('endIfConditionId', rect54.id);
+            rect54.set('ifConditionId', rect40.id);
+
+            var link62 = link.clone();
+            link62.source(rect54);
+            link62.target(rect55);
+            link62.addTo(javaStatementsGraph);
+
+            var link63 = link.clone();
+            link63.source(rect55);
+            link63.target(rect56);
+            link63.addTo(javaStatementsGraph);
+
+            var link64 = link.clone();
+            link64.source(rect56);
+            link64.target(rect57);
+            link64.addTo(javaStatementsGraph);
+
+            var link65 = link.clone();
+            link65.source(rect57);
+            link65.target(rect58);
+            link65.set('ifBlockStartLink', true);
+            link65.label(0, {attrs: {text: {text: 'Yes'}}});
+        link65.attr('line/stroke', 'green');
+            link65.addTo(javaStatementsGraph);
+
+            var link66 = link.clone();
+            link66.source(rect58);
+            link66.target(rect59);
+            link66.addTo(javaStatementsGraph);
+
+            var link67 = link.clone();
+            link67.source(rect59);
+            link67.target(rect60);
+            link67.addTo(javaStatementsGraph);
+            link67.set('ifBlockEndLink', true);
+            link67.label(0, {attrs: {text: {text: 'Yes'}}});
+        link67.attr('line/stroke', 'green');
+
+            var link68 = link.clone();
+            link68.source(rect57);
+            link68.target(rect60);
+            link68.addTo(javaStatementsGraph);
+            link68.label(0, {attrs: {text: {text: 'No'}}});
+            link68.set('elseBlockStartAndEndLink', true);
+        link68.attr('line/stroke', 'red');
+
+            rect57.set('endIfConditionId', rect60.id);
+            rect60.set('ifConditionId', rect57.id);
+
+            var link69 = link.clone();
+            link69.source(rect60);
+            link69.target(rect61);
+            link69.addTo(javaStatementsGraph);
+
+            var link70 = link.clone();
+            link70.source(rect61);
+            link70.target(rect62);
+            link70.addTo(javaStatementsGraph);
+
+            var link71 = link.clone();
+            link71.source(rect62);
+            link71.target(rect63);
+            link71.set('ifBlockStartLink', true);
+            link71.label(0, {attrs: {text: {text: 'Yes'}}});
+        link71.attr('line/stroke', 'green');
+            link71.addTo(javaStatementsGraph);
+
+            var link72 = link.clone();
+            link72.source(rect63);
+            link72.target(rect64);
+            link72.addTo(javaStatementsGraph);
+            link72.set('ifBlockEndLink', true);
+            link72.label(0, {attrs: {text: {text: 'Yes'}}});
+        link72.attr('line/stroke', 'green');
+
+            var link73 = link.clone();
+            link73.source(rect62);
+            link73.target(rect64);
+            link73.addTo(javaStatementsGraph);
+            link73.label(0, {attrs: {text: {text: 'No'}}});
+            link73.set('elseBlockStartAndEndLink', true);
+        link73.attr('line/stroke', 'red');
+
+            rect62.set('endIfConditionId', rect64.id);
+            rect64.set('ifConditionId', rect62.id);
+
+            var link74 = link.clone();
+            link74.source(rect64);
+            link74.target(rect65);
+            link74.addTo(javaStatementsGraph);
+
+            var link75 = link.clone();
+            link75.source(rect65);
+            link75.target(rect66);
+            link75.set('ifBlockStartLink', true);
+            link75.label(0, {attrs: {text: {text: 'Yes'}}});
+        link75.attr('line/stroke', 'green');
+            link75.addTo(javaStatementsGraph);
+
+            var link76 = link.clone();
+            link76.source(rect65);
+            link76.target(rect67);
+            link76.set('elseBlockStartLink', true);
+            link76.label(0, {attrs: {text: {text: 'No'}}});
+        link76.attr('line/stroke', 'red');
+            link76.addTo(javaStatementsGraph);
+
+            var link77 = link.clone();
+            link77.source(rect67);
+            link77.target(rect68);
+            link77.set('ifBlockStartLink', true);
+            link77.label(0, {attrs: {text: {text: 'Yes'}}});
+        link77.attr('line/stroke', 'green');
+            link77.addTo(javaStatementsGraph);
+
+            var link78 = link.clone();
+            link78.source(rect67);
+            link78.target(rect69);
+            link78.set('elseBlockStartLink', true);
+            link78.label(0, {attrs: {text: {text: 'No'}}});
+        link78.attr('line/stroke', 'red');
+            link78.addTo(javaStatementsGraph);
+
+            var link79 = link.clone();
+            link79.source(rect68);
+            link79.target(rect70);
+            link79.addTo(javaStatementsGraph);
+            link79.set('ifBlockEndLink', true);
+            link79.label(0, {attrs: {text: {text: 'Yes'}}});
+        link79.attr('line/stroke', 'green');
+
+            var link80 = link.clone();
+            link80.source(rect69);
+            link80.target(rect70);
+            link80.addTo(javaStatementsGraph);
+            link80.set('elseBlockEndLink', true);
+            link80.label(0, {attrs: {text: {text: 'No'}}});
+        link80.attr('line/stroke', 'red');
+
+            rect67.set('endIfConditionId', rect70.id);
+            rect70.set('ifConditionId', rect67.id);
+
+            var link81 = link.clone();
+            link81.source(rect66);
+            link81.target(rect71);
+            link81.addTo(javaStatementsGraph);
+            link81.set('ifBlockEndLink', true);
+            link81.label(0, {attrs: {text: {text: 'Yes'}}});
+        link81.attr('line/stroke', 'green');
+
+            var link82 = link.clone();
+            link82.source(rect70);
+            link82.target(rect71);
+            link82.addTo(javaStatementsGraph);
+            link82.set('elseBlockEndLink', true);
+            link82.label(0, {attrs: {text: {text: 'No'}}});
+        link82.attr('line/stroke', 'red');
+
+            rect65.set('endIfConditionId', rect71.id);
+            rect71.set('ifConditionId', rect65.id);
+
+            var link83 = link.clone();
+            link83.source(rect71);
+            link83.target(rect72);
+            link83.addTo(javaStatementsGraph);
+
+            var link84 = link.clone();
+            link84.source(rect72);
+            link84.target(rect73);
+            link84.addTo(javaStatementsGraph);
+
+            rect37.set('startNode', 'true');
+            rect73.set('stopNode', 'true');
+            rect73.attr('circle/fill', 'red');
+            rect73.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect37, rect73);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

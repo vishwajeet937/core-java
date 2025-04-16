@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>TLotUtils.T_Get_Current_Operation</title>
+        <script src='../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : loteDapter.tlotutils</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : TLotUtils</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : T_Get_Current_Operation</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 5500,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-3339: Create an instance of HashMap and assign it to variable t_Get_Current_Operation_OutputMap');
+            nodesArr.push('Line No-3340: Initialize variable T_Sql_String of type String as null');
+            nodesArr.push('Line No-3341: Declare variable T_Cursor of type Integer');
+            nodesArr.push('Line No-3342: Initialize variable T_Current_Operation of type String as null');
+            nodesArr.push('Line No-3343: Declare variable T_Status_Code of type Integer');
+            nodesArr.push('Line No-3344: Declare variable T_Operation_Sequence_Id of type Integer');
+            nodesArr.push('Line No-3345: Initialize variable T_Standard_Operation_Id of type Integer as null');
+            nodesArr.push('Line No-3346: Initialize variable T_Outside_Resource of type Integer as null');
+            nodesArr.push('Line No-3347: Declare variable T_Lot_Rec of type T_Lotrec_Type');
+            nodesArr.push('Line No-3348: Declare variable T_Select_Clause of type String');
+            nodesArr.push('Line No-3349: Initialize variable T_Current_Operation_Seq of type String as null');
+            nodesArr.push('Line No-3350: Initialize variable T_Current_Routing of type String as null');
+            nodesArr.push('Line No-3351: Call debug() on variable logger');
+            nodesArr.push('Line No-3352: Call debug() on variable logger');
+            nodesArr.push('Line No-3353: Call debug() on variable logger');
+            nodesArr.push('Line No-3354: Call debug() on variable logger');
+            nodesArr.push('Line No-3355: Call debug() on variable logger');
+            nodesArr.push('Line No-3357: Call debug() on variable logger');
+            nodesArr.push('Line No-3364: Assign 210 to T_Stmt_Num');
+            nodesArr.push('Line No-3365: Assign I_Lot_Rec to T_Lot_Rec');
+            nodesArr.push('Line No-3772: Assign 250 to T_Stmt_Num');
+            nodesArr.push('Line No-3774: Concatenate "Select  cost_code_type", "        from bom_resources br, bom_std_op_resources bsr", "       where bsr.standard_operation_id = ?", "         and br.resource_id = bsr.resource_id", "         and cost_code_type = 4"');
+            nodesArr.push('Line No-3779: Call prepareStatement on variable static and assign the result to variable preparedStatement');
+            nodesArr.push('Line No-3780: Set Object value T_Standard_Operation_Id to preparedStatement at index 1');
+            nodesArr.push('Line No-3781: Execute query on Statement preparedStatement and assign the result to variable resultSet');
+            nodesArr.push('Line No-3782: Call last() on variable resultSet');
+            nodesArr.push('Line No-3783: Get Row value from resultSet at index getRow and assign the result to variable rowCount');
+            nodesArr.push('Line No-3784: Call beforeFirst() on variable resultSet');
+            nodesArr.push('Line No-3786: If  rowCount is greater than 1');
+            nodesArr.push('Line No-3790: If  rows are available in Result Set is equal to false');
+            nodesArr.push('Line No-3796: Get Int value from resultSet at index getInt and assign the result to variable T_Outside_Resource');
+            nodesArr.push('Line No-3817: If  resultSet is not equal to null');
+            nodesArr.push('Line No-3819: Close Result Set with reference resultSet');
+            nodesArr.push('Line No-3821: If  preparedStatement is not equal to null');
+            nodesArr.push('Line No-3823: Close Statement with reference preparedStatement');
+            nodesArr.push('Line No-3831: If  T_Outside_Resource is not equal to null AND T_Outside_Resource is equal to 4');
+            nodesArr.push('Line No-3833: Assign "Y" to O_Outside_Resource');
+            nodesArr.push('Line No-3837: Assign "N" to O_Outside_Resource');
+            nodesArr.push('Line No-3844: Assign T_Current_Operation to O_Operation');
+            nodesArr.push('Line No-3845: Assign T_Current_Routing to O_Routing');
+            nodesArr.push('Line No-3846: Assign T_Current_Operation_Seq to O_Operation_Sequence');
+            nodesArr.push('Line No-3847: Assign Success_Code to I_Status_Code');
+            nodesArr.push('Line No-3849: Put value O_Outside_Resource in Map t_Get_Current_Operation_OutputMap for key "O_Outside_Resource"');
+            nodesArr.push('Line No-3850: Put value O_Operation in Map t_Get_Current_Operation_OutputMap for key "O_Operation"');
+            nodesArr.push('Line No-3851: Put value O_Routing in Map t_Get_Current_Operation_OutputMap for key "O_Routing"');
+            nodesArr.push('Line No-3852: Put value O_Operation_Sequence in Map t_Get_Current_Operation_OutputMap for key "O_Operation_Sequence"');
+            nodesArr.push('Line No-3853: Put value I_Status_Code in Map t_Get_Current_Operation_OutputMap for key "I_Status_Code"');
+            nodesArr.push('Line No-3855: Return t_Get_Current_Operation_OutputMap');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-3339: Create an instance of HashMap and assign it to variable t_Get_Current_Operation_OutputMap    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3340: Initialize variable T_Sql_String of type String as null    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3341: Declare variable T_Cursor of type Integer    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3342: Initialize variable T_Current_Operation of type String as null    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3343: Declare variable T_Status_Code of type Integer    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.attr('label/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3344: Declare variable T_Operation_Sequence_Id of type Integer    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3345: Initialize variable T_Standard_Operation_Id of type Integer as null    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3346: Initialize variable T_Outside_Resource of type Integer as null    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3347: Declare variable T_Lot_Rec of type T_Lotrec_Type    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3348: Declare variable T_Select_Clause of type String    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3349: Initialize variable T_Current_Operation_Seq of type String as null    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3350: Initialize variable T_Current_Routing of type String as null    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3351: Call debug() on variable logger    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3352: Call debug() on variable logger    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3353: Call debug() on variable logger    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3354: Call debug() on variable logger    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3355: Call debug() on variable logger    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3357: Call debug() on variable logger    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.attr('label/text', flowChartNode);
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3364: Assign 210 to T_Stmt_Num    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3365: Assign I_Lot_Rec to T_Lot_Rec    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3772: Assign 250 to T_Stmt_Num    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3774: Concatenate "Select  cost_code_type", "        from bom_resources br, bom_std_op_resources bsr", "       where bsr.standard_operation_id = ?", "         and br.resource_id = bsr.resource_id", "         and cost_code_type = 4"    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3779: Call prepareStatement on variable static and assign the result to variable preparedStatement    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3780: Set Object value T_Standard_Operation_Id to preparedStatement at index 1    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.attr('label/text', flowChartNode);
+            rect24.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3781: Execute query on Statement preparedStatement and assign the result to variable resultSet    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3782: Call last() on variable resultSet    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3783: Get Row value from resultSet at index getRow and assign the result to variable rowCount    ');
+            var rect27 = rect.clone();
+            rect27.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect27.attr('label/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3784: Call beforeFirst() on variable resultSet    ');
+            var rect28 = rect.clone();
+            rect28.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect28.attr('label/text', flowChartNode);
+            rect28.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3786: If  rowCount is greater than 1');
+            var rect29 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect29.resize(maxNodeWidth, resizeWidth);
+            rect29.attr('text/text', flowChartNode);
+            rect29.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3790: If  rows are available in Result Set is equal to false');
+            var rect30 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect30.resize(maxNodeWidth, resizeWidth);
+            rect30.translate(1.1 * maxNodeWidth,800600);
+            rect30.attr('text/text', flowChartNode);
+            rect30.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3796: Get Int value from resultSet at index getInt and assign the result to variable T_Outside_Resource    ');
+            var rect31 = rect.clone();
+            rect31.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect31.translate(2.2 * maxNodeWidth,800600);
+            rect31.attr('label/text', flowChartNode);
+            rect31.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.translate(1.1 * maxNodeWidth,800600);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(nlStatementsGraph);
+            rect32.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect33 = rect.clone();
+            rect33.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect33.attr('label/text', flowChartNode);
+            rect33.addTo(nlStatementsGraph);
+            rect33.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3817: If  resultSet is not equal to null');
+            var rect34 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect34.resize(maxNodeWidth, resizeWidth);
+            rect34.attr('text/text', flowChartNode);
+            rect34.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3819: Close Result Set with reference resultSet    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.translate(-1.1 * maxNodeWidth,800700);
+            rect35.attr('label/text', flowChartNode);
+            rect35.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect36 = rect.clone();
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.attr('label/text', flowChartNode);
+            rect36.addTo(nlStatementsGraph);
+            rect36.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3821: If  preparedStatement is not equal to null');
+            var rect37 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect37.resize(maxNodeWidth, resizeWidth);
+            rect37.attr('text/text', flowChartNode);
+            rect37.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3823: Close Statement with reference preparedStatement    ');
+            var rect38 = rect.clone();
+            rect38.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect38.translate(-1.1 * maxNodeWidth,800800);
+            rect38.attr('label/text', flowChartNode);
+            rect38.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(nlStatementsGraph);
+            rect39.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3831: If  T_Outside_Resource is not equal to null AND T_Outside_Resource is equal to 4');
+            var rect40 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect40.resize(maxNodeWidth, resizeWidth);
+            rect40.attr('text/text', flowChartNode);
+            rect40.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3833: Assign "Y" to O_Outside_Resource    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.translate(-1.1 * maxNodeWidth,800900);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3837: Assign "N" to O_Outside_Resource    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.translate(1.1 * maxNodeWidth,800900);
+            rect42.attr('label/text', flowChartNode);
+            rect42.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect43 = rect.clone();
+            rect43.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect43.attr('label/text', flowChartNode);
+            rect43.addTo(nlStatementsGraph);
+            rect43.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3844: Assign T_Current_Operation to O_Operation    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.attr('label/text', flowChartNode);
+            rect44.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3845: Assign T_Current_Routing to O_Routing    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.attr('label/text', flowChartNode);
+            rect45.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3846: Assign T_Current_Operation_Seq to O_Operation_Sequence    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.attr('label/text', flowChartNode);
+            rect46.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3847: Assign Success_Code to I_Status_Code    ');
+            var rect47 = rect.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.attr('label/text', flowChartNode);
+            rect47.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3849: Put value O_Outside_Resource in Map t_Get_Current_Operation_OutputMap for key "O_Outside_Resource"    ');
+            var rect48 = rect.clone();
+            rect48.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect48.attr('label/text', flowChartNode);
+            rect48.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3850: Put value O_Operation in Map t_Get_Current_Operation_OutputMap for key "O_Operation"    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.attr('label/text', flowChartNode);
+            rect49.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3851: Put value O_Routing in Map t_Get_Current_Operation_OutputMap for key "O_Routing"    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.attr('label/text', flowChartNode);
+            rect50.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3852: Put value O_Operation_Sequence in Map t_Get_Current_Operation_OutputMap for key "O_Operation_Sequence"    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.attr('label/text', flowChartNode);
+            rect51.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3853: Put value I_Status_Code in Map t_Get_Current_Operation_OutputMap for key "I_Status_Code"    ');
+            var rect52 = rect.clone();
+            rect52.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect52.attr('label/text', flowChartNode);
+            rect52.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3855: Return t_Get_Current_Operation_OutputMap    ');
+            var rect53 = rect.clone();
+            rect53.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect53.attr('label/text', flowChartNode);
+            rect53.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect54 = ellipse.clone();
+            rect54.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect54.attr('text/text', flowChartNode);
+            rect54.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect10);
+            link11.target(rect11);
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect11);
+            link12.target(rect12);
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect12);
+            link13.target(rect13);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect14);
+            link15.target(rect15);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect15);
+            link16.target(rect16);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect16);
+            link17.target(rect17);
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect17);
+            link18.target(rect18);
+            link18.addTo(nlStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect18);
+            link19.target(rect19);
+            link19.addTo(nlStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect19);
+            link20.target(rect20);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect20);
+            link21.target(rect21);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect21);
+            link22.target(rect22);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect22);
+            link23.target(rect23);
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect23);
+            link24.target(rect24);
+            link24.addTo(nlStatementsGraph);
+
+            var link25 = link.clone();
+            link25.source(rect24);
+            link25.target(rect25);
+            link25.addTo(nlStatementsGraph);
+
+            var link26 = link.clone();
+            link26.source(rect25);
+            link26.target(rect26);
+            link26.addTo(nlStatementsGraph);
+
+            var link27 = link.clone();
+            link27.source(rect26);
+            link27.target(rect27);
+            link27.addTo(nlStatementsGraph);
+
+            var link28 = link.clone();
+            link28.source(rect27);
+            link28.target(rect28);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect28);
+            link29.target(rect29);
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect29);
+            link30.target(rect30);
+            link30.set('elseBlockStartLink', true);
+            link30.label(0, {attrs: {text: {text: 'No'}}});
+            link30.addTo(nlStatementsGraph);
+
+            var link31 = link.clone();
+            link31.source(rect30);
+            link31.target(rect31);
+            link31.set('elseBlockStartLink', true);
+            link31.label(0, {attrs: {text: {text: 'No'}}});
+            link31.addTo(nlStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect30);
+            link32.target(rect32);
+            link32.addTo(nlStatementsGraph);
+            link32.set('ifBlockEndLink', true);
+            link32.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link33 = link.clone();
+            link33.source(rect31);
+            link33.target(rect32);
+            link33.addTo(nlStatementsGraph);
+            link33.set('elseBlockEndLink', true);
+            link33.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect30.set('endIfConditionId', rect32.id);
+            rect32.set('ifConditionId', rect30.id);
+
+            var link34 = link.clone();
+            link34.source(rect29);
+            link34.target(rect33);
+            link34.addTo(nlStatementsGraph);
+            link34.set('ifBlockEndLink', true);
+            link34.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link35 = link.clone();
+            link35.source(rect32);
+            link35.target(rect33);
+            link35.addTo(nlStatementsGraph);
+            link35.set('elseBlockEndLink', true);
+            link35.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect29.set('endIfConditionId', rect33.id);
+            rect33.set('ifConditionId', rect29.id);
+
+            var link36 = link.clone();
+            link36.source(rect33);
+            link36.target(rect34);
+            link36.addTo(nlStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect34);
+            link37.target(rect35);
+            link37.set('ifBlockStartLink', true);
+            link37.label(0, {attrs: {text: {text: 'Yes'}}});
+            link37.addTo(nlStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect35);
+            link38.target(rect36);
+            link38.addTo(nlStatementsGraph);
+            link38.set('ifBlockEndLink', true);
+            link38.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link39 = link.clone();
+            link39.source(rect34);
+            link39.target(rect36);
+            link39.addTo(nlStatementsGraph);
+            link39.label(0, {attrs: {text: {text: 'No'}}});
+            link39.set('elseBlockStartAndEndLink', true);
+
+            rect34.set('endIfConditionId', rect36.id);
+            rect36.set('ifConditionId', rect34.id);
+
+            var link40 = link.clone();
+            link40.source(rect36);
+            link40.target(rect37);
+            link40.addTo(nlStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect37);
+            link41.target(rect38);
+            link41.set('ifBlockStartLink', true);
+            link41.label(0, {attrs: {text: {text: 'Yes'}}});
+            link41.addTo(nlStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect38);
+            link42.target(rect39);
+            link42.addTo(nlStatementsGraph);
+            link42.set('ifBlockEndLink', true);
+            link42.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link43 = link.clone();
+            link43.source(rect37);
+            link43.target(rect39);
+            link43.addTo(nlStatementsGraph);
+            link43.label(0, {attrs: {text: {text: 'No'}}});
+            link43.set('elseBlockStartAndEndLink', true);
+
+            rect37.set('endIfConditionId', rect39.id);
+            rect39.set('ifConditionId', rect37.id);
+
+            var link44 = link.clone();
+            link44.source(rect39);
+            link44.target(rect40);
+            link44.addTo(nlStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect40);
+            link45.target(rect41);
+            link45.set('ifBlockStartLink', true);
+            link45.label(0, {attrs: {text: {text: 'Yes'}}});
+            link45.addTo(nlStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect40);
+            link46.target(rect42);
+            link46.set('elseBlockStartLink', true);
+            link46.label(0, {attrs: {text: {text: 'No'}}});
+            link46.addTo(nlStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect41);
+            link47.target(rect43);
+            link47.addTo(nlStatementsGraph);
+            link47.set('ifBlockEndLink', true);
+            link47.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link48 = link.clone();
+            link48.source(rect42);
+            link48.target(rect43);
+            link48.addTo(nlStatementsGraph);
+            link48.set('elseBlockEndLink', true);
+            link48.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect40.set('endIfConditionId', rect43.id);
+            rect43.set('ifConditionId', rect40.id);
+
+            var link49 = link.clone();
+            link49.source(rect43);
+            link49.target(rect44);
+            link49.addTo(nlStatementsGraph);
+
+            var link50 = link.clone();
+            link50.source(rect44);
+            link50.target(rect45);
+            link50.addTo(nlStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect45);
+            link51.target(rect46);
+            link51.addTo(nlStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect46);
+            link52.target(rect47);
+            link52.addTo(nlStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect47);
+            link53.target(rect48);
+            link53.addTo(nlStatementsGraph);
+
+            var link54 = link.clone();
+            link54.source(rect48);
+            link54.target(rect49);
+            link54.addTo(nlStatementsGraph);
+
+            var link55 = link.clone();
+            link55.source(rect49);
+            link55.target(rect50);
+            link55.addTo(nlStatementsGraph);
+
+            var link56 = link.clone();
+            link56.source(rect50);
+            link56.target(rect51);
+            link56.addTo(nlStatementsGraph);
+
+            var link57 = link.clone();
+            link57.source(rect51);
+            link57.target(rect52);
+            link57.addTo(nlStatementsGraph);
+
+            var link58 = link.clone();
+            link58.source(rect52);
+            link58.target(rect53);
+            link58.addTo(nlStatementsGraph);
+
+            var link59 = link.clone();
+            link59.source(rect53);
+            link59.target(rect54);
+            link59.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect54.set('stopNode', 'true');
+            rect54.attr('circle/fill', 'red');
+            rect54.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect54);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 11300,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-3339: HashMap t_Get_Current_Operation_OutputMap = new HashMap();');
+            nodesArr.push('Line No-3340: String T_Sql_String = null;');
+            nodesArr.push('Line No-3341: Integer T_Cursor;');
+            nodesArr.push('Line No-3342: String T_Current_Operation = null;');
+            nodesArr.push('Line No-3343: Integer T_Status_Code;');
+            nodesArr.push('Line No-3344: Integer T_Operation_Sequence_Id;');
+            nodesArr.push('Line No-3345: Integer T_Standard_Operation_Id = null;');
+            nodesArr.push('Line No-3346: Integer T_Outside_Resource = null;');
+            nodesArr.push('Line No-3347: T_Lotrec_Type T_Lot_Rec;');
+            nodesArr.push('Line No-3348: String T_Select_Clause;');
+            nodesArr.push('Line No-3349: String T_Current_Operation_Seq = null;');
+            nodesArr.push('Line No-3350: String T_Current_Routing = null;');
+            nodesArr.push('Line No-3351: logger.debug("get curr operation-" + I_Wip_Entity_Id);');
+            nodesArr.push('Line No-3352: logger.debug("get curr operation-" + I_Operation_Seq_Num);');
+            nodesArr.push('Line No-3353: logger.debug("get curr operation-" + I_Operation_Field);');
+            nodesArr.push('Line No-3354: logger.debug("get curr operation-i_routing_field" + I_Routing_Field);');
+            nodesArr.push('Line No-3355: logger.debug("get curr operation-i_create_standard_operations" + I_Create_Standard_Operations);');
+            nodesArr.push('Line No-3357: logger.debug("get curr operation-i_standard_operations_flag" + I_Standard_Operations_Flag);');
+            nodesArr.push('Line No-3364: T_Stmt_Num = 210;');
+            nodesArr.push('Line No-3365: T_Lot_Rec = I_Lot_Rec;');
+            nodesArr.push('Line No-3366: End_Found_Operation: {    if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || // i_std_op_flag = 3 ADDED    (I_Standard_Operations_Flag == 3)) // BY VISHNU,26 JAN 2008,    // FOR PI,    // TO HANDLE THE CASE WHERE STD OP FLAG IS SET TO 3 IN TFACTORIES    {        T_Select_Clause = " select bos." + I_Operation_Field + ", bos.standard_operation_id ";        if (I_Routing_Field != null) {            T_Select_Clause = T_Select_Clause + " ,bos." + I_Routing_Field;        }        if (I_Step_Seq_Field != null) {            T_Select_Clause = T_Select_Clause + " ,bos." + I_Step_Seq_Field;        }        T_Sql_String = " from wip_operations wo, " + "      bom_operation_sequences bos, " + " wip_discrete_jobs wdj " + " where wdj.wip_entity_id = ? " + " and   wo.wip_entity_id = wdj.wip_entity_id " + " and bos.routing_sequence_id = wdj.common_routing_sequence_id  " + " and bos.standard_operation_id = wo.standard_operation_id " + " and bos.operation_sequence_id = wo.operation_sequence_id " + " and trunc(?) between trunc(bos.effectivity_date) and nvl(bos.disable_date, (? + 1)) " + // Deepak 22 Mar,03        " and wo.operation_seq_num      = ? ";        T_Sql_String = T_Select_Clause + T_Sql_String;        // Commented by MohanVamsi/Mahendra on 30 Mar10 to remove        // dependency in WIP_OPERATIONS attributes.        /*				 * This will fail for below cases a) When Lots are created in front				 * end and wanted to move the through Lot eDapter b) When Lot is				 * moved in front end and remaining moves through Lot eDapter.				 */        /*				 * IF I_ROUTING_FIELD IS NOT NULL THEN T_SQL_STRING := T_SQL_STRING				 * ||  and bos. || I_ROUTING_FIELD ||  = wo. || I_ROUTING_FIELD;				 * END IF; IF I_STEP_SEQ_FIELD IS NOT NULL THEN T_SQL_STRING :=				 * T_SQL_STRING ||  and bos. || I_STEP_SEQ_FIELD ||  = wo. ||				 * I_STEP_SEQ_FIELD; END IF;				 */        // Commented by MohanVamsi/Mahendra    } else if ((I_Create_Standard_Operations == 2) && (I_Standard_Operations_Flag == 1)) {        // handle it once OSFM can accomodate non-standard operations        // Commented by Hari-K/MohanVamsi 18-Nov-2011        /*				 * t_Sql_String :=  select  || i_Operation_Field ||  from				 * wip_operations wo ||  where wo.wip_entity_id = :i_wip_entity_id				 *  ||  and wo.operation_seq_num =:i_operation_seq_num ;				 */        T_Sql_String = " Select bos." + I_Operation_Field + ", Bos.Operation_Sequence_Id " + ",bos." + I_Routing_Field + " from Wip_Operations Wo," + "  Bom_Operation_Sequences  Bos" + "  Where Wo.Department_Id          = Bos.Department_Id" + "   and wo.wip_entity_id          =  ?" + "  and wo.operation_seq_num      =  ?" + " and bos.operation_sequence_id = wo.operation_sequence_id";        // insert into debug values (t_lots_s.nextval, t_sql_string);    }    try {        Sql = "INSERT INTO T_Debug VALUES (987321, SYSDATE, ?)";        preparedStatement = connection.prepareStatement(Sql);        preparedStatement.setObject(1, T_Sql_String);        preparedStatement.executeUpdate();        preparedStatement.close();        logger.debug("////-i_wip_entity_id -i_operation_seq_num :" + I_Wip_Entity_Id + - + I_Operation_Seq_Num);        T_Stmt_Num = 220;        T_Count = 0;        // T_Cursor = Dbms_Sql.Open_Cursor;        T_Stmt_Num = 907;        // Dbms_Sql.Parse(T_Cursor, T_Sql_String, Dbms_Sql.Native);        T_Stmt_Num = 909;        // Dbms_Sql.Bind_Variable(T_Cursor, "i_wip_entity_id",        // I_Wip_Entity_Id);        int counter = 1;        preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);        preparedStatement.setObject(counter++, I_Wip_Entity_Id);        // Added By Mahendra 25-Oct-2011, below If Condition to        // h&&le only based on T_Factories Flags        // else other cases when Std-operations are not used then        // txns will error with Dynamic Sql        // Cannot be formed        if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || (I_Standard_Operations_Flag == 3)) {            /*					 * Dbms_Sql.Bind_Variable(T_Cursor, "x_txn_date",					 * T_Lot_Rec.Transaction_Date);					 */            preparedStatement.setDate(counter++, T_Lot_Rec.getTransaction_Date());            preparedStatement.setDate(counter++, T_Lot_Rec.getTransaction_Date());        }        // Added By Mahendra 25-Oct-2011, If Condition ends here        // Dbms_Sql.Bind_Variable(T_Cursor,        // "i_operation_seq_num",        // I_Operation_Seq_Num);        preparedStatement.setObject(counter++, I_Operation_Seq_Num);        // Dbms_Sql.Define_Column(T_Cursor, 1, T_Current_Operation,        // 255);        // preparedStatement.setObject(counter ++ ,        // T_Current_Operation); -- commented by mhshaik as they are        // not setting into any variable        // Added By Mahendra 25-Oct-2011, below If Condition to        // h&&le only based on T_Factories Flags        // else other cases when Std-operations are not used then        // txns will error with Dynamic Sql        // Cannot be formed        // If i_Create_St&&ard_Operations == 1 Or        // i_St&&ard_Operations_Flag == 2 Or        // i_Standard_Operations_Flag = 3 Then        // Dbms_Sql.Define_Column(T_Cursor, 2,        // T_Standard_Operation_Id);        // preparedStatement.setObject(counter ++ ,        // T_Standard_Operation_Id); -- commented by mhshaik like        // above        if (I_Routing_Field != null) {            // Dbms_Sql.Define_Column(T_Cursor, 3,            // T_Current_Routing, 255);            // preparedStatement.setObject(counter ++ , T_Current_Routing);        }        if ((I_Step_Seq_Field != null) && (I_Routing_Field != null)) {            // Dbms_Sql.Define_Column(T_Cursor, 4,            // T_Current_Operation_Seq, 255);            // preparedStatement.setObject(counter ++ ,            // T_Current_Operation_Seq); --commented by mhshaik like            // above        } else if (I_Step_Seq_Field != null) {            // Dbms_Sql.Define_Column(T_Cursor, 3,            // T_Current_Operation_Seq, 255);            // preparedStatement.setObject(counter ++ ,            // T_Current_Operation_Seq); --commented by mhshaik like            // above        }        // End If;        // Added By Mahendra 25-Oct-2011, If Condition ends here        T_Stmt_Num = 230;        // X_Status_Code = Dbms_Sql.Execute(T_Cursor);        logger.debug("The T_Sql_String value is: " + T_Sql_String);        resultSet = preparedStatement.executeQuery();        // preparedStatement.close();        resultSet.last();        X_Status_Code = resultSet.getRow();        resultSet.beforeFirst();        logger.debug("Get Curr Op after dyn sql x status code " + X_Status_Code);        // if( Dbms_Sql.Fetch_Rows(T_Cursor) == 0)        if (!resultSet.next()) {            // Dbms_Sql.Close_Cursor(T_Cursor);            if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || (I_Standard_Operations_Flag == 3)) {                try {                    T_Sql_String = " select bso." + I_Operation_Field + ", bso.standard_operation_id " + " from  wip_operations wo, " + " bom_standard_operations bso   " + " where wo.wip_entity_id =  ?      " + " and wo.operation_seq_num =  ?       " + " and bso.standard_operation_id = wo.standard_operation_id  ";                    T_Count = 0;                    // T_Cursor = Dbms_Sql.Open_Cursor;                    // Dbms_Sql.Parse(T_Cursor, T_Sql_String,                    // Dbms_Sql.Native);                    // Dbms_Sql.Bind_Variable(T_Cursor,                    // "i_wip_entity_id",                    // I_Wip_Entity_Id);                    preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);                    preparedStatement.setObject(counter++, I_Wip_Entity_Id);                    // Dbms_Sql.Bind_Variable(T_Cursor,                    // "i_operation_seq_num",                    // I_Operation_Seq_Num);                    preparedStatement.setObject(counter++, I_Operation_Seq_Num);                    // Dbms_Sql.Define_Column(T_Cursor, 1,                    // T_Current_Operation, 255);                    // Dbms_Sql.Define_Column(T_Cursor, 2,                    // T_Standard_Operation_Id);                    resultSet = preparedStatement.executeQuery();                    resultSet.last();                    X_Status_Code = resultSet.getRow();                    resultSet.beforeFirst();                    resultSet.next();                    T_Current_Operation = resultSet.getString(1);                    T_Standard_Operation_Id = resultSet.getInt(2);                    // X_Status_Code = Dbms_Sql.Execute(T_Cursor);                    // if( Dbms_Sql.Fetch_Rows(T_Cursor) == 0)                    if (!resultSet.next()) {                        I_Status_Code = Failure_Code;                        I_Error_Code = 960;                        I_Error_Message = "Current operation not found for wip_entity_id-" + I_Wip_Entity_Id;                        // Dbms_Sql.Close_Cursor(T_Cursor);                        T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                        t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                        t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                        t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                        return t_Get_Current_Operation_OutputMap;                    }                    // T_Count = Dbms_Sql.Last_Row_Count;                    T_Count = resultSet.getRow();                    if (T_Count == 1) {                        // Dbms_Sql.Column_Value(T_Cursor, 1,                        // T_Current_Operation);                        // Dbms_Sql.Column_Value(T_Cursor, 2,                        // T_Standard_Operation_Id);                        resultSet.next();                        T_Current_Operation = resultSet.getString(1);                        T_Standard_Operation_Id = resultSet.getInt(2);                    }                    // while( Dbms_Sql.Fetch_Rows(T_Cursor) > 0)                    while (resultSet.next()) {                        // T_Count = Dbms_Sql.Last_Row_Count;                        T_Count = resultSet.getRow();                        if (T_Count > 1) {                            I_Status_Code = Failure_Code;                            I_Error_Code = 990;                            I_Error_Message = "Multiple rows in wip_operations for wip entity id-" + I_Wip_Entity_Id + "- and operation_seq_num-" + I_Operation_Seq_Num;                            // Dbms_Sql.Close_Cursor(T_Cursor);                            T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                            t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                            t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                            t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                            return t_Get_Current_Operation_OutputMap;                        }                    }                    /*							 * if (Dbms_Sql.Is_Open(T_Cursor)) {							 * logger.debug							 * (" 1.Closing GetOps Cursor -10/18");							 * Dbms_Sql.Close_Cursor(T_Cursor); //Hari 10/18							 * }							 */                } catch (SQLException e) {                    /*							 * if Dbms_Sql.Is_Open(T_Cursor) {							 * Dbms_Sql.Close_Cursor(T_Cursor); }							 */                    I_Status_Code = Failure_Code;                    I_Error_Code = 1010;                    I_Error_Message = "Error executing dyn sql in  while fetching current_operation- at stmt_num-" + T_Stmt_Num + "-" + e.getMessage();                    T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, I_Status_Code, I_Error_Code, I_Error_Message, "SET");                    t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                    return t_Get_Current_Operation_OutputMap;                } catch (Exception e) {                    logger.error(e, e);                }                /*						 * finally{ try { if(resultSet != null)						 * resultSet.close(); if(preparedStatement != null)						 * preparedStatement.close(); } catch(Exception e) {						 * logger						 * .error("Exception occurred while closing the resources: "						 * +e.getMessage()); } }						 */            } else {                // to be built when non std ops is supported                // Dbms_Sql.Close_Cursor(T_Cursor);                return t_Get_Current_Operation_OutputMap;            }            // create ops =1            // GOTO End_Found_Operation;            break End_Found_Operation;        }        try {            T_Stmt_Num = 240;            // T_Count = Dbms_Sql.Last_Row_Count;            T_Count = resultSet.getRow();            if (T_Count == 1) {                // Dbms_Sql.Column_Value(T_Cursor, 1,                // T_Current_Operation);                // resultSet.next();                T_Current_Operation = resultSet.getString(1);                logger.debug("Get Curr Op curr op -" + T_Current_Operation);                // Added By Mahendra 25-Oct-2011, below If Condition to                // h&&le only based on T_Factories Flags                // else other cases when Std-operations are not used                // then txns will error with Dynamic Sql                // Cannot be formed                // If i_Create_St&&ard_Operations == 1 Or                // i_St&&ard_Operations_Flag == 2 Or                // i_Standard_Operations_Flag = 3 Then                // Dbms_Sql.Column_Value(T_Cursor, 2,                // T_Standard_Operation_Id);                // resultSet.next();                T_Standard_Operation_Id = resultSet.getInt(2);                logger.debug("The T_Standard_Operation_Id is: " + T_Standard_Operation_Id);                if (I_Routing_Field != null) {                    // Dbms_Sql.Column_Value(T_Cursor, 3,                    // T_Current_Routing);                    // resultSet.next();                    T_Current_Routing = resultSet.getString(3);                }                if ((I_Step_Seq_Field != null) && (I_Routing_Field != null)) {                    // Dbms_Sql.Column_Value(T_Cursor, 4,                    // T_Current_Operation_Seq);                    // resultSet.next();                    T_Current_Operation_Seq = resultSet.getString(4);                } else if (I_Step_Seq_Field != null) {                    // Dbms_Sql.Column_Value(T_Cursor, 3,                    // T_Current_Operation_Seq);                    // resultSet.next();                    T_Current_Operation_Seq = resultSet.getString(5);                }                // End If;                // Added By Mahendra 25-Oct-2011, If Condition ends here            }            // while (Dbms_Sql.Fetch_Rows(T_Cursor) > 0)            while (resultSet.next()) {                // T_Count = Dbms_Sql.Last_Row_Count;                T_Count = resultSet.getRow();                if (T_Count > 1) {                    I_Status_Code = Failure_Code;                    I_Error_Code = 790;                    I_Error_Message = "Multiple rows in wip_operations for wip entity id-" + I_Wip_Entity_Id + "- and operation_seq_num-" + I_Operation_Seq_Num;                    // Dbms_Sql.Close_Cursor(T_Cursor);                    T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                    t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                    return t_Get_Current_Operation_OutputMap;                }            }            logger.debug("2.Closing GetOps Cursor -10/18");            // Dbms_Sql.Close_Cursor(T_Cursor); //Hari 10/18        } catch (SQLException e) {            /*					 * if (Dbms_Sql.Is_Open(T_Cursor)) {					 * Dbms_Sql.Close_Cursor(T_Cursor); }					 */            I_Status_Code = Failure_Code;            I_Error_Code = e.getErrorCode();            I_Error_Message = "Error executing dyn sql in t_get_current_operation- at stmt_num-" + T_Stmt_Num + "-" + e.getSQLState();            T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, I_Status_Code, I_Error_Code, I_Error_Message, "SET");            t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);            t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);            t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);            return t_Get_Current_Operation_OutputMap;        }        // dyn sql        // <<end_Found_Operation>>    } catch (SQLException e) {        logger.error(e, e);    }}');
+            nodesArr.push('Line No-3772: T_Stmt_Num = 250;');
+            nodesArr.push('Line No-3774: Sql = "Select  cost_code_type" + "        from bom_resources br, bom_std_op_resources bsr" + "       where bsr.standard_operation_id = ?" + "         and br.resource_id = bsr.resource_id" + "         and cost_code_type = 4";');
+            nodesArr.push('Line No-3779: preparedStatement = connection.prepareStatement(Sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);');
+            nodesArr.push('Line No-3780: preparedStatement.setObject(1, T_Standard_Operation_Id);');
+            nodesArr.push('Line No-3781: resultSet = preparedStatement.executeQuery();');
+            nodesArr.push('Line No-3782: resultSet.last();');
+            nodesArr.push('Line No-3783: int rowCount = resultSet.getRow();');
+            nodesArr.push('Line No-3784: resultSet.beforeFirst();');
+            nodesArr.push('Line No-3786: If  rowCount > 1');
+            nodesArr.push('Line No-3788: throw new Too_Many_Rows("Too_Many_Rows Found");');
+            nodesArr.push('Line No-3790: If  resultSet.next() == false');
+            nodesArr.push('Line No-3792: throw new No_Data_Found("No Data Found");');
+            nodesArr.push('Line No-3796: T_Outside_Resource = resultSet.getInt(1);');
+            nodesArr.push('Line No-3817: If  resultSet != null');
+            nodesArr.push('Line No-3819: resultSet.close();');
+            nodesArr.push('Line No-3821: If  preparedStatement != null');
+            nodesArr.push('Line No-3823: preparedStatement.close();');
+            nodesArr.push('Line No-3831: If  T_Outside_Resource != null && T_Outside_Resource == 4');
+            nodesArr.push('Line No-3833: O_Outside_Resource = "Y";');
+            nodesArr.push('Line No-3837: O_Outside_Resource = "N";');
+            nodesArr.push('Line No-3844: O_Operation = T_Current_Operation;');
+            nodesArr.push('Line No-3845: O_Routing = T_Current_Routing;');
+            nodesArr.push('Line No-3846: O_Operation_Sequence = T_Current_Operation_Seq;');
+            nodesArr.push('Line No-3847: I_Status_Code = Success_Code;');
+            nodesArr.push('Line No-3849: t_Get_Current_Operation_OutputMap.put("O_Outside_Resource", O_Outside_Resource);');
+            nodesArr.push('Line No-3850: t_Get_Current_Operation_OutputMap.put("O_Operation", O_Operation);');
+            nodesArr.push('Line No-3851: t_Get_Current_Operation_OutputMap.put("O_Routing", O_Routing);');
+            nodesArr.push('Line No-3852: t_Get_Current_Operation_OutputMap.put("O_Operation_Sequence", O_Operation_Sequence);');
+            nodesArr.push('Line No-3853: t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);');
+            nodesArr.push('Line No-3855: return t_Get_Current_Operation_OutputMap;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect55 = ellipse.clone();
+            rect55.addTo(javaStatementsGraph);
+            rect55.attr('text/text', 'Start');
+            rect55.attr('circle/fill', 'green');
+
+            rootNode = rect55;
+
+            flowChartNode = getBrokenText('Line No-3339: HashMap t_Get_Current_Operation_OutputMap = new HashMap();    ');
+            var rect56 = rect.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.attr('label/text', flowChartNode);
+            rect56.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3340: String T_Sql_String = null;    ');
+            var rect57 = rect.clone();
+            rect57.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect57.attr('label/text', flowChartNode);
+            rect57.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3341: Integer T_Cursor;    ');
+            var rect58 = rect.clone();
+            rect58.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect58.attr('label/text', flowChartNode);
+            rect58.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3342: String T_Current_Operation = null;    ');
+            var rect59 = rect.clone();
+            rect59.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect59.attr('label/text', flowChartNode);
+            rect59.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3343: Integer T_Status_Code;    ');
+            var rect60 = rect.clone();
+            rect60.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect60.attr('label/text', flowChartNode);
+            rect60.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3344: Integer T_Operation_Sequence_Id;    ');
+            var rect61 = rect.clone();
+            rect61.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect61.attr('label/text', flowChartNode);
+            rect61.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3345: Integer T_Standard_Operation_Id = null;    ');
+            var rect62 = rect.clone();
+            rect62.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect62.attr('label/text', flowChartNode);
+            rect62.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3346: Integer T_Outside_Resource = null;    ');
+            var rect63 = rect.clone();
+            rect63.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect63.attr('label/text', flowChartNode);
+            rect63.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3347: T_Lotrec_Type T_Lot_Rec;    ');
+            var rect64 = rect.clone();
+            rect64.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect64.attr('label/text', flowChartNode);
+            rect64.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3348: String T_Select_Clause;    ');
+            var rect65 = rect.clone();
+            rect65.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect65.attr('label/text', flowChartNode);
+            rect65.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3349: String T_Current_Operation_Seq = null;    ');
+            var rect66 = rect.clone();
+            rect66.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect66.attr('label/text', flowChartNode);
+            rect66.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3350: String T_Current_Routing = null;    ');
+            var rect67 = rect.clone();
+            rect67.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect67.attr('label/text', flowChartNode);
+            rect67.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3351: logger.debug("get curr operation-" + I_Wip_Entity_Id);    ');
+            var rect68 = rect.clone();
+            rect68.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect68.attr('label/text', flowChartNode);
+            rect68.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3352: logger.debug("get curr operation-" + I_Operation_Seq_Num);    ');
+            var rect69 = rect.clone();
+            rect69.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect69.attr('label/text', flowChartNode);
+            rect69.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3353: logger.debug("get curr operation-" + I_Operation_Field);    ');
+            var rect70 = rect.clone();
+            rect70.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect70.attr('label/text', flowChartNode);
+            rect70.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3354: logger.debug("get curr operation-i_routing_field" + I_Routing_Field);    ');
+            var rect71 = rect.clone();
+            rect71.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect71.attr('label/text', flowChartNode);
+            rect71.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3355: logger.debug("get curr operation-i_create_standard_operations" + I_Create_Standard_Operations);    ');
+            var rect72 = rect.clone();
+            rect72.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect72.attr('label/text', flowChartNode);
+            rect72.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3357: logger.debug("get curr operation-i_standard_operations_flag" + I_Standard_Operations_Flag);    ');
+            var rect73 = rect.clone();
+            rect73.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect73.attr('label/text', flowChartNode);
+            rect73.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3364: T_Stmt_Num = 210;    ');
+            var rect74 = rect.clone();
+            rect74.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect74.attr('label/text', flowChartNode);
+            rect74.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3365: T_Lot_Rec = I_Lot_Rec;    ');
+            var rect75 = rect.clone();
+            rect75.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect75.attr('label/text', flowChartNode);
+            rect75.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3366: End_Found_Operation: {    if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || // i_std_op_flag = 3 ADDED    (I_Standard_Operations_Flag == 3)) // BY VISHNU,26 JAN 2008,    // FOR PI,    // TO HANDLE THE CASE WHERE STD OP FLAG IS SET TO 3 IN TFACTORIES    {        T_Select_Clause = " select bos." + I_Operation_Field + ", bos.standard_operation_id ";        if (I_Routing_Field != null) {            T_Select_Clause = T_Select_Clause + " ,bos." + I_Routing_Field;        }        if (I_Step_Seq_Field != null) {            T_Select_Clause = T_Select_Clause + " ,bos." + I_Step_Seq_Field;        }        T_Sql_String = " from wip_operations wo, " + "      bom_operation_sequences bos, " + " wip_discrete_jobs wdj " + " where wdj.wip_entity_id = ? " + " and   wo.wip_entity_id = wdj.wip_entity_id " + " and bos.routing_sequence_id = wdj.common_routing_sequence_id  " + " and bos.standard_operation_id = wo.standard_operation_id " + " and bos.operation_sequence_id = wo.operation_sequence_id " + " and trunc(?) between trunc(bos.effectivity_date) and nvl(bos.disable_date, (? + 1)) " + // Deepak 22 Mar,03        " and wo.operation_seq_num      = ? ";        T_Sql_String = T_Select_Clause + T_Sql_String;        // Commented by MohanVamsi/Mahendra on 30 Mar10 to remove        // dependency in WIP_OPERATIONS attributes.        /*				 * This will fail for below cases a) When Lots are created in front				 * end and wanted to move the through Lot eDapter b) When Lot is				 * moved in front end and remaining moves through Lot eDapter.				 */        /*				 * IF I_ROUTING_FIELD IS NOT NULL THEN T_SQL_STRING := T_SQL_STRING				 * ||  and bos. || I_ROUTING_FIELD ||  = wo. || I_ROUTING_FIELD;				 * END IF; IF I_STEP_SEQ_FIELD IS NOT NULL THEN T_SQL_STRING :=				 * T_SQL_STRING ||  and bos. || I_STEP_SEQ_FIELD ||  = wo. ||				 * I_STEP_SEQ_FIELD; END IF;				 */        // Commented by MohanVamsi/Mahendra    } else if ((I_Create_Standard_Operations == 2) && (I_Standard_Operations_Flag == 1)) {        // handle it once OSFM can accomodate non-standard operations        // Commented by Hari-K/MohanVamsi 18-Nov-2011        /*				 * t_Sql_String :=  select  || i_Operation_Field ||  from				 * wip_operations wo ||  where wo.wip_entity_id = :i_wip_entity_id				 *  ||  and wo.operation_seq_num =:i_operation_seq_num ;				 */        T_Sql_String = " Select bos." + I_Operation_Field + ", Bos.Operation_Sequence_Id " + ",bos." + I_Routing_Field + " from Wip_Operations Wo," + "  Bom_Operation_Sequences  Bos" + "  Where Wo.Department_Id          = Bos.Department_Id" + "   and wo.wip_entity_id          =  ?" + "  and wo.operation_seq_num      =  ?" + " and bos.operation_sequence_id = wo.operation_sequence_id";        // insert into debug values (t_lots_s.nextval, t_sql_string);    }    try {        Sql = "INSERT INTO T_Debug VALUES (987321, SYSDATE, ?)";        preparedStatement = connection.prepareStatement(Sql);        preparedStatement.setObject(1, T_Sql_String);        preparedStatement.executeUpdate();        preparedStatement.close();        logger.debug("////-i_wip_entity_id -i_operation_seq_num :" + I_Wip_Entity_Id + - + I_Operation_Seq_Num);        T_Stmt_Num = 220;        T_Count = 0;        // T_Cursor = Dbms_Sql.Open_Cursor;        T_Stmt_Num = 907;        // Dbms_Sql.Parse(T_Cursor, T_Sql_String, Dbms_Sql.Native);        T_Stmt_Num = 909;        // Dbms_Sql.Bind_Variable(T_Cursor, "i_wip_entity_id",        // I_Wip_Entity_Id);        int counter = 1;        preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);        preparedStatement.setObject(counter++, I_Wip_Entity_Id);        // Added By Mahendra 25-Oct-2011, below If Condition to        // h&&le only based on T_Factories Flags        // else other cases when Std-operations are not used then        // txns will error with Dynamic Sql        // Cannot be formed        if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || (I_Standard_Operations_Flag == 3)) {            /*					 * Dbms_Sql.Bind_Variable(T_Cursor, "x_txn_date",					 * T_Lot_Rec.Transaction_Date);					 */            preparedStatement.setDate(counter++, T_Lot_Rec.getTransaction_Date());            preparedStatement.setDate(counter++, T_Lot_Rec.getTransaction_Date());        }        // Added By Mahendra 25-Oct-2011, If Condition ends here        // Dbms_Sql.Bind_Variable(T_Cursor,        // "i_operation_seq_num",        // I_Operation_Seq_Num);        preparedStatement.setObject(counter++, I_Operation_Seq_Num);        // Dbms_Sql.Define_Column(T_Cursor, 1, T_Current_Operation,        // 255);        // preparedStatement.setObject(counter ++ ,        // T_Current_Operation); -- commented by mhshaik as they are        // not setting into any variable        // Added By Mahendra 25-Oct-2011, below If Condition to        // h&&le only based on T_Factories Flags        // else other cases when Std-operations are not used then        // txns will error with Dynamic Sql        // Cannot be formed        // If i_Create_St&&ard_Operations == 1 Or        // i_St&&ard_Operations_Flag == 2 Or        // i_Standard_Operations_Flag = 3 Then        // Dbms_Sql.Define_Column(T_Cursor, 2,        // T_Standard_Operation_Id);        // preparedStatement.setObject(counter ++ ,        // T_Standard_Operation_Id); -- commented by mhshaik like        // above        if (I_Routing_Field != null) {            // Dbms_Sql.Define_Column(T_Cursor, 3,            // T_Current_Routing, 255);            // preparedStatement.setObject(counter ++ , T_Current_Routing);        }        if ((I_Step_Seq_Field != null) && (I_Routing_Field != null)) {            // Dbms_Sql.Define_Column(T_Cursor, 4,            // T_Current_Operation_Seq, 255);            // preparedStatement.setObject(counter ++ ,            // T_Current_Operation_Seq); --commented by mhshaik like            // above        } else if (I_Step_Seq_Field != null) {            // Dbms_Sql.Define_Column(T_Cursor, 3,            // T_Current_Operation_Seq, 255);            // preparedStatement.setObject(counter ++ ,            // T_Current_Operation_Seq); --commented by mhshaik like            // above        }        // End If;        // Added By Mahendra 25-Oct-2011, If Condition ends here        T_Stmt_Num = 230;        // X_Status_Code = Dbms_Sql.Execute(T_Cursor);        logger.debug("The T_Sql_String value is: " + T_Sql_String);        resultSet = preparedStatement.executeQuery();        // preparedStatement.close();        resultSet.last();        X_Status_Code = resultSet.getRow();        resultSet.beforeFirst();        logger.debug("Get Curr Op after dyn sql x status code " + X_Status_Code);        // if( Dbms_Sql.Fetch_Rows(T_Cursor) == 0)        if (!resultSet.next()) {            // Dbms_Sql.Close_Cursor(T_Cursor);            if ((I_Create_Standard_Operations == 1) || (I_Standard_Operations_Flag == 2) || (I_Standard_Operations_Flag == 3)) {                try {                    T_Sql_String = " select bso." + I_Operation_Field + ", bso.standard_operation_id " + " from  wip_operations wo, " + " bom_standard_operations bso   " + " where wo.wip_entity_id =  ?      " + " and wo.operation_seq_num =  ?       " + " and bso.standard_operation_id = wo.standard_operation_id  ";                    T_Count = 0;                    // T_Cursor = Dbms_Sql.Open_Cursor;                    // Dbms_Sql.Parse(T_Cursor, T_Sql_String,                    // Dbms_Sql.Native);                    // Dbms_Sql.Bind_Variable(T_Cursor,                    // "i_wip_entity_id",                    // I_Wip_Entity_Id);                    preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);                    preparedStatement.setObject(counter++, I_Wip_Entity_Id);                    // Dbms_Sql.Bind_Variable(T_Cursor,                    // "i_operation_seq_num",                    // I_Operation_Seq_Num);                    preparedStatement.setObject(counter++, I_Operation_Seq_Num);                    // Dbms_Sql.Define_Column(T_Cursor, 1,                    // T_Current_Operation, 255);                    // Dbms_Sql.Define_Column(T_Cursor, 2,                    // T_Standard_Operation_Id);                    resultSet = preparedStatement.executeQuery();                    resultSet.last();                    X_Status_Code = resultSet.getRow();                    resultSet.beforeFirst();                    resultSet.next();                    T_Current_Operation = resultSet.getString(1);                    T_Standard_Operation_Id = resultSet.getInt(2);                    // X_Status_Code = Dbms_Sql.Execute(T_Cursor);                    // if( Dbms_Sql.Fetch_Rows(T_Cursor) == 0)                    if (!resultSet.next()) {                        I_Status_Code = Failure_Code;                        I_Error_Code = 960;                        I_Error_Message = "Current operation not found for wip_entity_id-" + I_Wip_Entity_Id;                        // Dbms_Sql.Close_Cursor(T_Cursor);                        T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                        t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                        t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                        t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                        return t_Get_Current_Operation_OutputMap;                    }                    // T_Count = Dbms_Sql.Last_Row_Count;                    T_Count = resultSet.getRow();                    if (T_Count == 1) {                        // Dbms_Sql.Column_Value(T_Cursor, 1,                        // T_Current_Operation);                        // Dbms_Sql.Column_Value(T_Cursor, 2,                        // T_Standard_Operation_Id);                        resultSet.next();                        T_Current_Operation = resultSet.getString(1);                        T_Standard_Operation_Id = resultSet.getInt(2);                    }                    // while( Dbms_Sql.Fetch_Rows(T_Cursor) > 0)                    while (resultSet.next()) {                        // T_Count = Dbms_Sql.Last_Row_Count;                        T_Count = resultSet.getRow();                        if (T_Count > 1) {                            I_Status_Code = Failure_Code;                            I_Error_Code = 990;                            I_Error_Message = "Multiple rows in wip_operations for wip entity id-" + I_Wip_Entity_Id + "- and operation_seq_num-" + I_Operation_Seq_Num;                            // Dbms_Sql.Close_Cursor(T_Cursor);                            T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                            t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                            t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                            t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                            return t_Get_Current_Operation_OutputMap;                        }                    }                    /*							 * if (Dbms_Sql.Is_Open(T_Cursor)) {							 * logger.debug							 * (" 1.Closing GetOps Cursor -10/18");							 * Dbms_Sql.Close_Cursor(T_Cursor); //Hari 10/18							 * }							 */                } catch (SQLException e) {                    /*							 * if Dbms_Sql.Is_Open(T_Cursor) {							 * Dbms_Sql.Close_Cursor(T_Cursor); }							 */                    I_Status_Code = Failure_Code;                    I_Error_Code = 1010;                    I_Error_Message = "Error executing dyn sql in  while fetching current_operation- at stmt_num-" + T_Stmt_Num + "-" + e.getMessage();                    T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, I_Status_Code, I_Error_Code, I_Error_Message, "SET");                    t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                    return t_Get_Current_Operation_OutputMap;                } catch (Exception e) {                    logger.error(e, e);                }                /*						 * finally{ try { if(resultSet != null)						 * resultSet.close(); if(preparedStatement != null)						 * preparedStatement.close(); } catch(Exception e) {						 * logger						 * .error("Exception occurred while closing the resources: "						 * +e.getMessage()); } }						 */            } else {                // to be built when non std ops is supported                // Dbms_Sql.Close_Cursor(T_Cursor);                return t_Get_Current_Operation_OutputMap;            }            // create ops =1            // GOTO End_Found_Operation;            break End_Found_Operation;        }        try {            T_Stmt_Num = 240;            // T_Count = Dbms_Sql.Last_Row_Count;            T_Count = resultSet.getRow();            if (T_Count == 1) {                // Dbms_Sql.Column_Value(T_Cursor, 1,                // T_Current_Operation);                // resultSet.next();                T_Current_Operation = resultSet.getString(1);                logger.debug("Get Curr Op curr op -" + T_Current_Operation);                // Added By Mahendra 25-Oct-2011, below If Condition to                // h&&le only based on T_Factories Flags                // else other cases when Std-operations are not used                // then txns will error with Dynamic Sql                // Cannot be formed                // If i_Create_St&&ard_Operations == 1 Or                // i_St&&ard_Operations_Flag == 2 Or                // i_Standard_Operations_Flag = 3 Then                // Dbms_Sql.Column_Value(T_Cursor, 2,                // T_Standard_Operation_Id);                // resultSet.next();                T_Standard_Operation_Id = resultSet.getInt(2);                logger.debug("The T_Standard_Operation_Id is: " + T_Standard_Operation_Id);                if (I_Routing_Field != null) {                    // Dbms_Sql.Column_Value(T_Cursor, 3,                    // T_Current_Routing);                    // resultSet.next();                    T_Current_Routing = resultSet.getString(3);                }                if ((I_Step_Seq_Field != null) && (I_Routing_Field != null)) {                    // Dbms_Sql.Column_Value(T_Cursor, 4,                    // T_Current_Operation_Seq);                    // resultSet.next();                    T_Current_Operation_Seq = resultSet.getString(4);                } else if (I_Step_Seq_Field != null) {                    // Dbms_Sql.Column_Value(T_Cursor, 3,                    // T_Current_Operation_Seq);                    // resultSet.next();                    T_Current_Operation_Seq = resultSet.getString(5);                }                // End If;                // Added By Mahendra 25-Oct-2011, If Condition ends here            }            // while (Dbms_Sql.Fetch_Rows(T_Cursor) > 0)            while (resultSet.next()) {                // T_Count = Dbms_Sql.Last_Row_Count;                T_Count = resultSet.getRow();                if (T_Count > 1) {                    I_Status_Code = Failure_Code;                    I_Error_Code = 790;                    I_Error_Message = "Multiple rows in wip_operations for wip entity id-" + I_Wip_Entity_Id + "- and operation_seq_num-" + I_Operation_Seq_Num;                    // Dbms_Sql.Close_Cursor(T_Cursor);                    T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, Failure_Code, I_Error_Code, I_Error_Message, "SET");                    t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);                    t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);                    return t_Get_Current_Operation_OutputMap;                }            }            logger.debug("2.Closing GetOps Cursor -10/18");            // Dbms_Sql.Close_Cursor(T_Cursor); //Hari 10/18        } catch (SQLException e) {            /*					 * if (Dbms_Sql.Is_Open(T_Cursor)) {					 * Dbms_Sql.Close_Cursor(T_Cursor); }					 */            I_Status_Code = Failure_Code;            I_Error_Code = e.getErrorCode();            I_Error_Message = "Error executing dyn sql in t_get_current_operation- at stmt_num-" + T_Stmt_Num + "-" + e.getSQLState();            T_Update_Txn_Status(I_Transaction_Id, I_Line_Number, I_Status_Code, I_Error_Code, I_Error_Message, "SET");            t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);            t_Get_Current_Operation_OutputMap.put("I_Error_Code", I_Error_Code);            t_Get_Current_Operation_OutputMap.put("I_Error_Message", I_Error_Message);            return t_Get_Current_Operation_OutputMap;        }        // dyn sql        // <<end_Found_Operation>>    } catch (SQLException e) {        logger.error(e, e);    }}    ');
+            var rect76 = rect.clone();
+            rect76.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect76.attr('label/text', flowChartNode);
+            rect76.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3772: T_Stmt_Num = 250;    ');
+            var rect77 = rect.clone();
+            rect77.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect77.attr('label/text', flowChartNode);
+            rect77.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3774: Sql = "Select  cost_code_type" + "        from bom_resources br, bom_std_op_resources bsr" + "       where bsr.standard_operation_id = ?" + "         and br.resource_id = bsr.resource_id" + "         and cost_code_type = 4";    ');
+            var rect78 = rect.clone();
+            rect78.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect78.attr('label/text', flowChartNode);
+            rect78.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3779: preparedStatement = connection.prepareStatement(Sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);    ');
+            var rect79 = rect.clone();
+            rect79.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect79.attr('label/text', flowChartNode);
+            rect79.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3780: preparedStatement.setObject(1, T_Standard_Operation_Id);    ');
+            var rect80 = rect.clone();
+            rect80.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect80.attr('label/text', flowChartNode);
+            rect80.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3781: resultSet = preparedStatement.executeQuery();    ');
+            var rect81 = rect.clone();
+            rect81.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect81.attr('label/text', flowChartNode);
+            rect81.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3782: resultSet.last();    ');
+            var rect82 = rect.clone();
+            rect82.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect82.attr('label/text', flowChartNode);
+            rect82.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3783: int rowCount = resultSet.getRow();    ');
+            var rect83 = rect.clone();
+            rect83.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect83.attr('label/text', flowChartNode);
+            rect83.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3784: resultSet.beforeFirst();    ');
+            var rect84 = rect.clone();
+            rect84.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect84.attr('label/text', flowChartNode);
+            rect84.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3786: If  rowCount > 1');
+            var rect85 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect85.resize(maxNodeWidth, resizeWidth);
+            rect85.attr('text/text', flowChartNode);
+            rect85.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3788: throw new Too_Many_Rows("Too_Many_Rows Found");    ');
+            var rect86 = rect.clone();
+            rect86.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect86.translate(-1.1 * maxNodeWidth,805000);
+            rect86.attr('label/text', flowChartNode);
+            rect86.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3790: If  resultSet.next() == false');
+            var rect87 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect87.resize(maxNodeWidth, resizeWidth);
+            rect87.translate(1.1 * maxNodeWidth,805100);
+            rect87.attr('text/text', flowChartNode);
+            rect87.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3792: throw new No_Data_Found("No Data Found");    ');
+            var rect88 = rect.clone();
+            rect88.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect88.translate(0.0 * maxNodeWidth,805100);
+            rect88.attr('label/text', flowChartNode);
+            rect88.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3796: T_Outside_Resource = resultSet.getInt(1);    ');
+            var rect89 = rect.clone();
+            rect89.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect89.translate(2.2 * maxNodeWidth,805100);
+            rect89.attr('label/text', flowChartNode);
+            rect89.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect90 = rect.clone();
+            rect90.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect90.translate(1.1 * maxNodeWidth,805100);
+            rect90.attr('label/text', flowChartNode);
+            rect90.addTo(javaStatementsGraph);
+            rect90.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect91 = rect.clone();
+            rect91.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect91.attr('label/text', flowChartNode);
+            rect91.addTo(javaStatementsGraph);
+            rect91.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3817: If  resultSet != null');
+            var rect92 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect92.resize(maxNodeWidth, resizeWidth);
+            rect92.attr('text/text', flowChartNode);
+            rect92.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3819: resultSet.close();    ');
+            var rect93 = rect.clone();
+            rect93.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect93.translate(-1.1 * maxNodeWidth,805200);
+            rect93.attr('label/text', flowChartNode);
+            rect93.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect94 = rect.clone();
+            rect94.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect94.attr('label/text', flowChartNode);
+            rect94.addTo(javaStatementsGraph);
+            rect94.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3821: If  preparedStatement != null');
+            var rect95 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect95.resize(maxNodeWidth, resizeWidth);
+            rect95.attr('text/text', flowChartNode);
+            rect95.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3823: preparedStatement.close();    ');
+            var rect96 = rect.clone();
+            rect96.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect96.translate(-1.1 * maxNodeWidth,805300);
+            rect96.attr('label/text', flowChartNode);
+            rect96.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect97 = rect.clone();
+            rect97.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect97.attr('label/text', flowChartNode);
+            rect97.addTo(javaStatementsGraph);
+            rect97.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3831: If  T_Outside_Resource != null && T_Outside_Resource == 4');
+            var rect98 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect98.resize(maxNodeWidth, resizeWidth);
+            rect98.attr('text/text', flowChartNode);
+            rect98.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3833: O_Outside_Resource = "Y";    ');
+            var rect99 = rect.clone();
+            rect99.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect99.translate(-1.1 * maxNodeWidth,805400);
+            rect99.attr('label/text', flowChartNode);
+            rect99.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3837: O_Outside_Resource = "N";    ');
+            var rect100 = rect.clone();
+            rect100.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect100.translate(1.1 * maxNodeWidth,805400);
+            rect100.attr('label/text', flowChartNode);
+            rect100.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect101 = rect.clone();
+            rect101.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect101.attr('label/text', flowChartNode);
+            rect101.addTo(javaStatementsGraph);
+            rect101.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-3844: O_Operation = T_Current_Operation;    ');
+            var rect102 = rect.clone();
+            rect102.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect102.attr('label/text', flowChartNode);
+            rect102.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3845: O_Routing = T_Current_Routing;    ');
+            var rect103 = rect.clone();
+            rect103.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect103.attr('label/text', flowChartNode);
+            rect103.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3846: O_Operation_Sequence = T_Current_Operation_Seq;    ');
+            var rect104 = rect.clone();
+            rect104.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect104.attr('label/text', flowChartNode);
+            rect104.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3847: I_Status_Code = Success_Code;    ');
+            var rect105 = rect.clone();
+            rect105.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect105.attr('label/text', flowChartNode);
+            rect105.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3849: t_Get_Current_Operation_OutputMap.put("O_Outside_Resource", O_Outside_Resource);    ');
+            var rect106 = rect.clone();
+            rect106.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect106.attr('label/text', flowChartNode);
+            rect106.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3850: t_Get_Current_Operation_OutputMap.put("O_Operation", O_Operation);    ');
+            var rect107 = rect.clone();
+            rect107.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect107.attr('label/text', flowChartNode);
+            rect107.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3851: t_Get_Current_Operation_OutputMap.put("O_Routing", O_Routing);    ');
+            var rect108 = rect.clone();
+            rect108.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect108.attr('label/text', flowChartNode);
+            rect108.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3852: t_Get_Current_Operation_OutputMap.put("O_Operation_Sequence", O_Operation_Sequence);    ');
+            var rect109 = rect.clone();
+            rect109.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect109.attr('label/text', flowChartNode);
+            rect109.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3853: t_Get_Current_Operation_OutputMap.put("I_Status_Code", I_Status_Code);    ');
+            var rect110 = rect.clone();
+            rect110.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect110.attr('label/text', flowChartNode);
+            rect110.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-3855: return t_Get_Current_Operation_OutputMap;    ');
+            var rect111 = rect.clone();
+            rect111.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect111.attr('label/text', flowChartNode);
+            rect111.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect112 = ellipse.clone();
+            rect112.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect112.attr('text/text', flowChartNode);
+            rect112.addTo(javaStatementsGraph);
+
+
+            var link60 = link.clone();
+            link60.source(rect55);
+            link60.target(rect56);
+            link60.addTo(javaStatementsGraph);
+
+            var link61 = link.clone();
+            link61.source(rect56);
+            link61.target(rect57);
+            link61.addTo(javaStatementsGraph);
+
+            var link62 = link.clone();
+            link62.source(rect57);
+            link62.target(rect58);
+            link62.addTo(javaStatementsGraph);
+
+            var link63 = link.clone();
+            link63.source(rect58);
+            link63.target(rect59);
+            link63.addTo(javaStatementsGraph);
+
+            var link64 = link.clone();
+            link64.source(rect59);
+            link64.target(rect60);
+            link64.addTo(javaStatementsGraph);
+
+            var link65 = link.clone();
+            link65.source(rect60);
+            link65.target(rect61);
+            link65.addTo(javaStatementsGraph);
+
+            var link66 = link.clone();
+            link66.source(rect61);
+            link66.target(rect62);
+            link66.addTo(javaStatementsGraph);
+
+            var link67 = link.clone();
+            link67.source(rect62);
+            link67.target(rect63);
+            link67.addTo(javaStatementsGraph);
+
+            var link68 = link.clone();
+            link68.source(rect63);
+            link68.target(rect64);
+            link68.addTo(javaStatementsGraph);
+
+            var link69 = link.clone();
+            link69.source(rect64);
+            link69.target(rect65);
+            link69.addTo(javaStatementsGraph);
+
+            var link70 = link.clone();
+            link70.source(rect65);
+            link70.target(rect66);
+            link70.addTo(javaStatementsGraph);
+
+            var link71 = link.clone();
+            link71.source(rect66);
+            link71.target(rect67);
+            link71.addTo(javaStatementsGraph);
+
+            var link72 = link.clone();
+            link72.source(rect67);
+            link72.target(rect68);
+            link72.addTo(javaStatementsGraph);
+
+            var link73 = link.clone();
+            link73.source(rect68);
+            link73.target(rect69);
+            link73.addTo(javaStatementsGraph);
+
+            var link74 = link.clone();
+            link74.source(rect69);
+            link74.target(rect70);
+            link74.addTo(javaStatementsGraph);
+
+            var link75 = link.clone();
+            link75.source(rect70);
+            link75.target(rect71);
+            link75.addTo(javaStatementsGraph);
+
+            var link76 = link.clone();
+            link76.source(rect71);
+            link76.target(rect72);
+            link76.addTo(javaStatementsGraph);
+
+            var link77 = link.clone();
+            link77.source(rect72);
+            link77.target(rect73);
+            link77.addTo(javaStatementsGraph);
+
+            var link78 = link.clone();
+            link78.source(rect73);
+            link78.target(rect74);
+            link78.addTo(javaStatementsGraph);
+
+            var link79 = link.clone();
+            link79.source(rect74);
+            link79.target(rect75);
+            link79.addTo(javaStatementsGraph);
+
+            var link80 = link.clone();
+            link80.source(rect75);
+            link80.target(rect76);
+            link80.addTo(javaStatementsGraph);
+
+            var link81 = link.clone();
+            link81.source(rect76);
+            link81.target(rect77);
+            link81.addTo(javaStatementsGraph);
+
+            var link82 = link.clone();
+            link82.source(rect77);
+            link82.target(rect78);
+            link82.addTo(javaStatementsGraph);
+
+            var link83 = link.clone();
+            link83.source(rect78);
+            link83.target(rect79);
+            link83.addTo(javaStatementsGraph);
+
+            var link84 = link.clone();
+            link84.source(rect79);
+            link84.target(rect80);
+            link84.addTo(javaStatementsGraph);
+
+            var link85 = link.clone();
+            link85.source(rect80);
+            link85.target(rect81);
+            link85.addTo(javaStatementsGraph);
+
+            var link86 = link.clone();
+            link86.source(rect81);
+            link86.target(rect82);
+            link86.addTo(javaStatementsGraph);
+
+            var link87 = link.clone();
+            link87.source(rect82);
+            link87.target(rect83);
+            link87.addTo(javaStatementsGraph);
+
+            var link88 = link.clone();
+            link88.source(rect83);
+            link88.target(rect84);
+            link88.addTo(javaStatementsGraph);
+
+            var link89 = link.clone();
+            link89.source(rect84);
+            link89.target(rect85);
+            link89.addTo(javaStatementsGraph);
+
+            var link90 = link.clone();
+            link90.source(rect85);
+            link90.target(rect86);
+            link90.set('ifBlockStartLink', true);
+            link90.label(0, {attrs: {text: {text: 'Yes'}}});
+            link90.addTo(javaStatementsGraph);
+
+            var link91 = link.clone();
+            link91.source(rect85);
+            link91.target(rect87);
+            link91.set('elseBlockStartLink', true);
+            link91.label(0, {attrs: {text: {text: 'No'}}});
+            link91.addTo(javaStatementsGraph);
+
+            var link92 = link.clone();
+            link92.source(rect87);
+            link92.target(rect88);
+            link92.set('ifBlockStartLink', true);
+            link92.label(0, {attrs: {text: {text: 'Yes'}}});
+            link92.addTo(javaStatementsGraph);
+
+            var link93 = link.clone();
+            link93.source(rect87);
+            link93.target(rect89);
+            link93.set('elseBlockStartLink', true);
+            link93.label(0, {attrs: {text: {text: 'No'}}});
+            link93.addTo(javaStatementsGraph);
+
+            var link94 = link.clone();
+            link94.source(rect88);
+            link94.target(rect90);
+            link94.addTo(javaStatementsGraph);
+            link94.set('ifBlockEndLink', true);
+            link94.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link95 = link.clone();
+            link95.source(rect89);
+            link95.target(rect90);
+            link95.addTo(javaStatementsGraph);
+            link95.set('elseBlockEndLink', true);
+            link95.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect87.set('endIfConditionId', rect90.id);
+            rect90.set('ifConditionId', rect87.id);
+
+            var link96 = link.clone();
+            link96.source(rect86);
+            link96.target(rect91);
+            link96.addTo(javaStatementsGraph);
+            link96.set('ifBlockEndLink', true);
+            link96.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link97 = link.clone();
+            link97.source(rect90);
+            link97.target(rect91);
+            link97.addTo(javaStatementsGraph);
+            link97.set('elseBlockEndLink', true);
+            link97.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect85.set('endIfConditionId', rect91.id);
+            rect91.set('ifConditionId', rect85.id);
+
+            var link98 = link.clone();
+            link98.source(rect91);
+            link98.target(rect92);
+            link98.addTo(javaStatementsGraph);
+
+            var link99 = link.clone();
+            link99.source(rect92);
+            link99.target(rect93);
+            link99.set('ifBlockStartLink', true);
+            link99.label(0, {attrs: {text: {text: 'Yes'}}});
+            link99.addTo(javaStatementsGraph);
+
+            var link100 = link.clone();
+            link100.source(rect93);
+            link100.target(rect94);
+            link100.addTo(javaStatementsGraph);
+            link100.set('ifBlockEndLink', true);
+            link100.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link101 = link.clone();
+            link101.source(rect92);
+            link101.target(rect94);
+            link101.addTo(javaStatementsGraph);
+            link101.label(0, {attrs: {text: {text: 'No'}}});
+            link101.set('elseBlockStartAndEndLink', true);
+
+            rect92.set('endIfConditionId', rect94.id);
+            rect94.set('ifConditionId', rect92.id);
+
+            var link102 = link.clone();
+            link102.source(rect94);
+            link102.target(rect95);
+            link102.addTo(javaStatementsGraph);
+
+            var link103 = link.clone();
+            link103.source(rect95);
+            link103.target(rect96);
+            link103.set('ifBlockStartLink', true);
+            link103.label(0, {attrs: {text: {text: 'Yes'}}});
+            link103.addTo(javaStatementsGraph);
+
+            var link104 = link.clone();
+            link104.source(rect96);
+            link104.target(rect97);
+            link104.addTo(javaStatementsGraph);
+            link104.set('ifBlockEndLink', true);
+            link104.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link105 = link.clone();
+            link105.source(rect95);
+            link105.target(rect97);
+            link105.addTo(javaStatementsGraph);
+            link105.label(0, {attrs: {text: {text: 'No'}}});
+            link105.set('elseBlockStartAndEndLink', true);
+
+            rect95.set('endIfConditionId', rect97.id);
+            rect97.set('ifConditionId', rect95.id);
+
+            var link106 = link.clone();
+            link106.source(rect97);
+            link106.target(rect98);
+            link106.addTo(javaStatementsGraph);
+
+            var link107 = link.clone();
+            link107.source(rect98);
+            link107.target(rect99);
+            link107.set('ifBlockStartLink', true);
+            link107.label(0, {attrs: {text: {text: 'Yes'}}});
+            link107.addTo(javaStatementsGraph);
+
+            var link108 = link.clone();
+            link108.source(rect98);
+            link108.target(rect100);
+            link108.set('elseBlockStartLink', true);
+            link108.label(0, {attrs: {text: {text: 'No'}}});
+            link108.addTo(javaStatementsGraph);
+
+            var link109 = link.clone();
+            link109.source(rect99);
+            link109.target(rect101);
+            link109.addTo(javaStatementsGraph);
+            link109.set('ifBlockEndLink', true);
+            link109.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link110 = link.clone();
+            link110.source(rect100);
+            link110.target(rect101);
+            link110.addTo(javaStatementsGraph);
+            link110.set('elseBlockEndLink', true);
+            link110.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect98.set('endIfConditionId', rect101.id);
+            rect101.set('ifConditionId', rect98.id);
+
+            var link111 = link.clone();
+            link111.source(rect101);
+            link111.target(rect102);
+            link111.addTo(javaStatementsGraph);
+
+            var link112 = link.clone();
+            link112.source(rect102);
+            link112.target(rect103);
+            link112.addTo(javaStatementsGraph);
+
+            var link113 = link.clone();
+            link113.source(rect103);
+            link113.target(rect104);
+            link113.addTo(javaStatementsGraph);
+
+            var link114 = link.clone();
+            link114.source(rect104);
+            link114.target(rect105);
+            link114.addTo(javaStatementsGraph);
+
+            var link115 = link.clone();
+            link115.source(rect105);
+            link115.target(rect106);
+            link115.addTo(javaStatementsGraph);
+
+            var link116 = link.clone();
+            link116.source(rect106);
+            link116.target(rect107);
+            link116.addTo(javaStatementsGraph);
+
+            var link117 = link.clone();
+            link117.source(rect107);
+            link117.target(rect108);
+            link117.addTo(javaStatementsGraph);
+
+            var link118 = link.clone();
+            link118.source(rect108);
+            link118.target(rect109);
+            link118.addTo(javaStatementsGraph);
+
+            var link119 = link.clone();
+            link119.source(rect109);
+            link119.target(rect110);
+            link119.addTo(javaStatementsGraph);
+
+            var link120 = link.clone();
+            link120.source(rect110);
+            link120.target(rect111);
+            link120.addTo(javaStatementsGraph);
+
+            var link121 = link.clone();
+            link121.source(rect111);
+            link121.target(rect112);
+            link121.addTo(javaStatementsGraph);
+
+            rect55.set('startNode', 'true');
+            rect112.set('stopNode', 'true');
+            rect112.attr('circle/fill', 'red');
+            rect112.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect55, rect112);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

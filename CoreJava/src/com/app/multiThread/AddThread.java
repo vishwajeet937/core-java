@@ -1,0 +1,41 @@
+package com.app.multiThread;
+
+ class AddThread extends Thread
+{
+	@Override
+	public void run()
+	{
+		int sum=0;
+		for(int i=0;i<8;i++)
+		{
+			sum=sum+i;
+			//or
+			//sum+=i;
+			System.out.println("Addition :"+sum);
+		}
+	}
+}
+class SubThread extends Thread
+ {
+	@Override
+	public void run()
+	{	
+		int sub=0;
+		for(int i=11;i>0;i--)
+		{
+			sub=sub-i;
+			System.out.println("Substraction :"+sub);
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		AddThread at=new AddThread();
+		at.start();
+		
+		SubThread sb=new SubThread();
+		sb.start();
+
+	}
+
+}

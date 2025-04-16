@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>JobDefinitionConverters.convertToVO</title>
+        <script src='../../../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : com.triniti.scheduler.converters</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : JobDefinitionConverters</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : convertToVO</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 2800,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-19: Create an instance of SG_JOB_TYPE and assign it to variable sgJobType');
+            nodesArr.push('Line No-20: Call setJOB_CLASS() on variable sgJobType');
+            nodesArr.push('Line No-21: Call setJOB_TYPE() on variable sgJobType');
+            nodesArr.push('Line No-22: Call setJOB_TYPE_ID() on variable sgJobType');
+            nodesArr.push('Line No-23:  Call getJobTypeOverrideFlag on variable JOB_DEFINITION is not equal to null');
+            nodesArr.push('Line No-25: Call setJobTypeOverrideFlag() on variable sgJobType');
+            nodesArr.push('Line No-29: Call setJobTypeOverrideFlag() on variable sgJobType');
+            nodesArr.push('Line No-31: Call getJOB_PARAMS() on variable jobDefinition and assign the result to variable jobTypeParams');
+            nodesArr.push('Line No-32:  jobTypeParams is not equal to null AND jobTypeParams.length is greater than 0');
+            nodesArr.push('Line No-34: Find length of array jobTypeParams and assign the result to variable jobTypeParamLength');
+            nodesArr.push('Line No-35: Create an empty array parameters of type SG_JOB_TYPE_PARAMS[] with size jobTypeParamLength');
+            nodesArr.push('Line No-36:  For( index is lesser than jobTypeParamLength)');
+            nodesArr.push('Line No-38: Create an instance of SG_JOB_TYPE_PARAMS and assign it to variable jobTypeParam');
+            nodesArr.push('Line No-40: Call setJOB_TYPE_ID() on variable jobTypeParam');
+            nodesArr.push('Line No-41: Call setPARAM_ID() on variable jobTypeParam');
+            nodesArr.push('Line No-42: Call setPARAMETER() on variable jobTypeParam');
+            nodesArr.push('Line No-43: Call setACTIVE() on variable jobTypeParam');
+            nodesArr.push('Line No-44: Call setMANDATORY() on variable jobTypeParam');
+            nodesArr.push('Line No-45: Call setPARAM_ORDER() on variable jobTypeParam');
+            nodesArr.push('Line No-48: Call setDEFAULT_PARAM_VALUE() on variable jobTypeParam');
+            nodesArr.push('Line No-51: Assign jobTypeParam to parameters[index]');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-53: Call setSg_job_type_params() on variable sgJobType');
+            nodesArr.push('Line No-55: Return sgJobType');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-19: Create an instance of SG_JOB_TYPE and assign it to variable sgJobType    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-20: Call setJOB_CLASS() on variable sgJobType    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_CLASS.html');
+            rect2.attr('body/stroke', 'blue');
+            rect2.attr('body/fill', 'blue');
+            rect2.attr('label/cursor', 'pointer');
+            rect2.attr('body/cursor', 'pointer');
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-21: Call setJOB_TYPE() on variable sgJobType    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_TYPE.html');
+            rect3.attr('body/stroke', 'blue');
+            rect3.attr('body/fill', 'blue');
+            rect3.attr('label/cursor', 'pointer');
+            rect3.attr('body/cursor', 'pointer');
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-22: Call setJOB_TYPE_ID() on variable sgJobType    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('label/text', flowChartNode);
+            rect4.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_TYPE_ID.html');
+            rect4.attr('body/stroke', 'blue');
+            rect4.attr('body/fill', 'blue');
+            rect4.attr('label/cursor', 'pointer');
+            rect4.attr('body/cursor', 'pointer');
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-23:  Call getJobTypeOverrideFlag on variable JOB_DEFINITION is not equal to null');
+            var rect5 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect5.resize(maxNodeWidth, resizeWidth);
+            rect5.attr('text/text', flowChartNode);
+            rect5.set('externalLink', 'scheduler/eDynamo/classes/scheduler/JOB_DEFINITION/getJobTypeOverrideFlag.html');
+            rect5.attr('body/stroke', 'blue');
+            rect5.attr('body/fill', 'blue');
+            rect5.attr('label/cursor', 'pointer');
+            rect5.attr('body/cursor', 'pointer');
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-25: Call setJobTypeOverrideFlag() on variable sgJobType    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.translate(-1.1 * maxNodeWidth,483300);
+            rect6.attr('label/text', flowChartNode);
+            rect6.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJobTypeOverrideFlag.html');
+            rect6.attr('body/stroke', 'blue');
+            rect6.attr('body/fill', 'blue');
+            rect6.attr('label/cursor', 'pointer');
+            rect6.attr('body/cursor', 'pointer');
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-29: Call setJobTypeOverrideFlag() on variable sgJobType    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.translate(1.1 * maxNodeWidth,483300);
+            rect7.attr('label/text', flowChartNode);
+            rect7.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJobTypeOverrideFlag.html');
+            rect7.attr('body/stroke', 'blue');
+            rect7.attr('body/fill', 'blue');
+            rect7.attr('label/cursor', 'pointer');
+            rect7.attr('body/cursor', 'pointer');
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+            rect8.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-31: Call getJOB_PARAMS() on variable jobDefinition and assign the result to variable jobTypeParams    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.set('externalLink', 'scheduler/eDynamo/classes/scheduler/JOB_DEFINITION/getJOB_PARAMS.html');
+            rect9.attr('body/stroke', 'blue');
+            rect9.attr('body/fill', 'blue');
+            rect9.attr('label/cursor', 'pointer');
+            rect9.attr('body/cursor', 'pointer');
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-32:  jobTypeParams is not equal to null AND jobTypeParams.length is greater than 0');
+            var rect10 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect10.resize(maxNodeWidth, resizeWidth);
+            rect10.attr('text/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-34: Find length of array jobTypeParams and assign the result to variable jobTypeParamLength    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.translate(-1.1 * maxNodeWidth,483500);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-35: Create an empty array parameters of type SG_JOB_TYPE_PARAMS[] with size jobTypeParamLength    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.translate(-1.1 * maxNodeWidth,483500);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-36:  For( index is lesser than jobTypeParamLength)    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.translate(-1.1 * maxNodeWidth,483600);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-38: Create an instance of SG_JOB_TYPE_PARAMS and assign it to variable jobTypeParam    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.translate(-1.1 * maxNodeWidth,483700);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-40: Call setJOB_TYPE_ID() on variable jobTypeParam    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.translate(-1.1 * maxNodeWidth,483800);
+            rect15.attr('label/text', flowChartNode);
+            rect15.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setJOB_TYPE_ID.html');
+            rect15.attr('body/stroke', 'blue');
+            rect15.attr('body/fill', 'blue');
+            rect15.attr('label/cursor', 'pointer');
+            rect15.attr('body/cursor', 'pointer');
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-41: Call setPARAM_ID() on variable jobTypeParam    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.translate(-1.1 * maxNodeWidth,483900);
+            rect16.attr('label/text', flowChartNode);
+            rect16.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAM_ID.html');
+            rect16.attr('body/stroke', 'blue');
+            rect16.attr('body/fill', 'blue');
+            rect16.attr('label/cursor', 'pointer');
+            rect16.attr('body/cursor', 'pointer');
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: Call setPARAMETER() on variable jobTypeParam    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.translate(-1.1 * maxNodeWidth,484000);
+            rect17.attr('label/text', flowChartNode);
+            rect17.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAMETER.html');
+            rect17.attr('body/stroke', 'blue');
+            rect17.attr('body/fill', 'blue');
+            rect17.attr('label/cursor', 'pointer');
+            rect17.attr('body/cursor', 'pointer');
+            rect17.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-43: Call setACTIVE() on variable jobTypeParam    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.translate(-1.1 * maxNodeWidth,484100);
+            rect18.attr('label/text', flowChartNode);
+            rect18.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setACTIVE.html');
+            rect18.attr('body/stroke', 'blue');
+            rect18.attr('body/fill', 'blue');
+            rect18.attr('label/cursor', 'pointer');
+            rect18.attr('body/cursor', 'pointer');
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-44: Call setMANDATORY() on variable jobTypeParam    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.translate(-1.1 * maxNodeWidth,484200);
+            rect19.attr('label/text', flowChartNode);
+            rect19.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setMANDATORY.html');
+            rect19.attr('body/stroke', 'blue');
+            rect19.attr('body/fill', 'blue');
+            rect19.attr('label/cursor', 'pointer');
+            rect19.attr('body/cursor', 'pointer');
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: Call setPARAM_ORDER() on variable jobTypeParam    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.translate(-1.1 * maxNodeWidth,484300);
+            rect20.attr('label/text', flowChartNode);
+            rect20.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAM_ORDER.html');
+            rect20.attr('body/stroke', 'blue');
+            rect20.attr('body/fill', 'blue');
+            rect20.attr('label/cursor', 'pointer');
+            rect20.attr('body/cursor', 'pointer');
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-48: Call setDEFAULT_PARAM_VALUE() on variable jobTypeParam    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.translate(-1.1 * maxNodeWidth,484400);
+            rect21.attr('label/text', flowChartNode);
+            rect21.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setDEFAULT_PARAM_VALUE.html');
+            rect21.attr('body/stroke', 'blue');
+            rect21.attr('body/fill', 'blue');
+            rect21.attr('label/cursor', 'pointer');
+            rect21.attr('body/cursor', 'pointer');
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-51: Assign jobTypeParam to parameters[index]    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.translate(-1.1 * maxNodeWidth,484500);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.translate(-1.1 * maxNodeWidth,484600);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+            rect23.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-53: Call setSg_job_type_params() on variable sgJobType    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.translate(-1.1 * maxNodeWidth,484600);
+            rect24.attr('label/text', flowChartNode);
+            rect24.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setSg_job_type_params.html');
+            rect24.attr('body/stroke', 'blue');
+            rect24.attr('body/fill', 'blue');
+            rect24.attr('label/cursor', 'pointer');
+            rect24.attr('body/cursor', 'pointer');
+            rect24.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+            rect25.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-55: Return sgJobType    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect27 = ellipse.clone();
+            rect27.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect27.attr('text/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.set('ifBlockStartLink', true);
+            link6.label(0, {attrs: {text: {text: 'Yes'}}});
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect5);
+            link7.target(rect7);
+            link7.set('elseBlockStartLink', true);
+            link7.label(0, {attrs: {text: {text: 'No'}}});
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect6);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+            link8.set('ifBlockEndLink', true);
+            link8.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link9 = link.clone();
+            link9.source(rect7);
+            link9.target(rect8);
+            link9.addTo(nlStatementsGraph);
+            link9.set('elseBlockEndLink', true);
+            link9.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect5.set('endIfConditionId', rect8.id);
+            rect8.set('ifConditionId', rect5.id);
+
+            var link10 = link.clone();
+            link10.source(rect8);
+            link10.target(rect9);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect9);
+            link11.target(rect10);
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect10);
+            link12.target(rect11);
+            link12.set('ifBlockStartLink', true);
+            link12.label(0, {attrs: {text: {text: 'Yes'}}});
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect11);
+            link13.target(rect12);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect12);
+            link14.target(rect13);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect13);
+            link15.target(rect14);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect14);
+            link16.target(rect15);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect15);
+            link17.target(rect16);
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect16);
+            link18.target(rect17);
+            link18.addTo(nlStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect17);
+            link19.target(rect18);
+            link19.addTo(nlStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect18);
+            link20.target(rect19);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect19);
+            link21.target(rect20);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect20);
+            link22.target(rect21);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect21);
+            link23.target(rect22);
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect22);
+            link24.target(rect23);
+            link24.addTo(nlStatementsGraph);
+
+            var link25 = link.clone();
+            link25.source(rect23);
+            link25.target(rect13);
+            rect13.attr('body/stroke', '#F400A1');
+            rect13.attr('body/fill', '#F400A1');
+            link25.set('loopConnector', true);
+            link25.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link25.addTo(nlStatementsGraph);
+
+            var link26 = link.clone();
+            link26.source(rect23);
+            link26.target(rect24);
+            link26.addTo(nlStatementsGraph);
+
+            var link27 = link.clone();
+            link27.source(rect24);
+            link27.target(rect25);
+            link27.addTo(nlStatementsGraph);
+            link27.set('ifBlockEndLink', true);
+            link27.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link28 = link.clone();
+            link28.source(rect10);
+            link28.target(rect25);
+            link28.addTo(nlStatementsGraph);
+            link28.label(0, {attrs: {text: {text: 'No'}}});
+            link28.set('elseBlockStartAndEndLink', true);
+
+            rect10.set('endIfConditionId', rect25.id);
+            rect25.set('ifConditionId', rect10.id);
+
+            var link29 = link.clone();
+            link29.source(rect25);
+            link29.target(rect26);
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect26);
+            link30.target(rect27);
+            link30.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect27.set('stopNode', 'true');
+            rect27.attr('circle/fill', 'red');
+            rect27.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect27);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 5700,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-19: SG_JOB_TYPE sgJobType = new SG_JOB_TYPE();');
+            nodesArr.push('Line No-20: sgJobType.setJOB_CLASS(jobDefinition.getJOB_CLASS());');
+            nodesArr.push('Line No-21: sgJobType.setJOB_TYPE(jobDefinition.getJOB_TYPE());');
+            nodesArr.push('Line No-22: sgJobType.setJOB_TYPE_ID(jobDefinition.getJOB_TYPE_ID());');
+            nodesArr.push('Line No-23:  jobDefinition.getJobTypeOverrideFlag() != null');
+            nodesArr.push('Line No-25: sgJobType.setJobTypeOverrideFlag(jobDefinition.getJobTypeOverrideFlag());');
+            nodesArr.push('Line No-29: sgJobType.setJobTypeOverrideFlag(true);');
+            nodesArr.push('Line No-31: JOB_PARAMS[] jobTypeParams = jobDefinition.getJOB_PARAMS();');
+            nodesArr.push('Line No-32:  jobTypeParams != null && jobTypeParams.length > 0');
+            nodesArr.push('Line No-34: int jobTypeParamLength = jobTypeParams.length;');
+            nodesArr.push('Line No-35: SG_JOB_TYPE_PARAMS[] parameters = new SG_JOB_TYPE_PARAMS[jobTypeParamLength];');
+            nodesArr.push('Line No-36:  For( index < jobTypeParamLength)');
+            nodesArr.push('Line No-38: SG_JOB_TYPE_PARAMS jobTypeParam = new SG_JOB_TYPE_PARAMS();');
+            nodesArr.push('Line No-39: JOB_PARAMS parameter = jobTypeParams[index];');
+            nodesArr.push('Line No-40: jobTypeParam.setJOB_TYPE_ID(parameter.getJOB_TYPE_ID());');
+            nodesArr.push('Line No-41: jobTypeParam.setPARAM_ID(parameter.getPARAM_ID());');
+            nodesArr.push('Line No-42: jobTypeParam.setPARAMETER(parameter.getPARAMETER());');
+            nodesArr.push('Line No-43: jobTypeParam.setACTIVE(parameter.getACTIVE());');
+            nodesArr.push('Line No-44: jobTypeParam.setMANDATORY(parameter.getMANDATORY());');
+            nodesArr.push('Line No-45: jobTypeParam.setPARAM_ORDER(parameter.getPARAM_ORDER());');
+            nodesArr.push('Line No-48: jobTypeParam.setDEFAULT_PARAM_VALUE(parameter.getDEFAULT_PARAM_VALUE());');
+            nodesArr.push('Line No-51: parameters[index] = jobTypeParam');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-53: sgJobType.setSg_job_type_params(parameters);');
+            nodesArr.push('Line No-55: return sgJobType;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect28 = ellipse.clone();
+            rect28.addTo(javaStatementsGraph);
+            rect28.attr('text/text', 'Start');
+            rect28.attr('circle/fill', 'green');
+
+            rootNode = rect28;
+
+            flowChartNode = getBrokenText('Line No-19: SG_JOB_TYPE sgJobType = new SG_JOB_TYPE();    ');
+            var rect29 = rect.clone();
+            rect29.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect29.attr('label/text', flowChartNode);
+            rect29.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-20: sgJobType.setJOB_CLASS(jobDefinition.getJOB_CLASS());    ');
+            var rect30 = rect.clone();
+            rect30.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect30.attr('label/text', flowChartNode);
+            rect30.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_CLASS.html');
+            rect30.attr('body/stroke', 'blue');
+            rect30.attr('body/fill', 'blue');
+            rect30.attr('label/cursor', 'pointer');
+            rect30.attr('body/cursor', 'pointer');
+            rect30.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-21: sgJobType.setJOB_TYPE(jobDefinition.getJOB_TYPE());    ');
+            var rect31 = rect.clone();
+            rect31.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect31.attr('label/text', flowChartNode);
+            rect31.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_TYPE.html');
+            rect31.attr('body/stroke', 'blue');
+            rect31.attr('body/fill', 'blue');
+            rect31.attr('label/cursor', 'pointer');
+            rect31.attr('body/cursor', 'pointer');
+            rect31.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-22: sgJobType.setJOB_TYPE_ID(jobDefinition.getJOB_TYPE_ID());    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.attr('label/text', flowChartNode);
+            rect32.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJOB_TYPE_ID.html');
+            rect32.attr('body/stroke', 'blue');
+            rect32.attr('body/fill', 'blue');
+            rect32.attr('label/cursor', 'pointer');
+            rect32.attr('body/cursor', 'pointer');
+            rect32.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-23:  jobDefinition.getJobTypeOverrideFlag() != null');
+            var rect33 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect33.resize(maxNodeWidth, resizeWidth);
+            rect33.attr('text/text', flowChartNode);
+            rect33.set('externalLink', 'scheduler/eDynamo/classes/scheduler/JOB_DEFINITION/getJobTypeOverrideFlag.html');
+            rect33.attr('body/stroke', 'blue');
+            rect33.attr('body/fill', 'blue');
+            rect33.attr('label/cursor', 'pointer');
+            rect33.attr('body/cursor', 'pointer');
+            rect33.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-25: sgJobType.setJobTypeOverrideFlag(jobDefinition.getJobTypeOverrideFlag());    ');
+            var rect34 = rect.clone();
+            rect34.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect34.translate(-1.1 * maxNodeWidth,485300);
+            rect34.attr('label/text', flowChartNode);
+            rect34.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJobTypeOverrideFlag.html');
+            rect34.attr('body/stroke', 'blue');
+            rect34.attr('body/fill', 'blue');
+            rect34.attr('label/cursor', 'pointer');
+            rect34.attr('body/cursor', 'pointer');
+            rect34.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-29: sgJobType.setJobTypeOverrideFlag(true);    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.translate(1.1 * maxNodeWidth,485300);
+            rect35.attr('label/text', flowChartNode);
+            rect35.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setJobTypeOverrideFlag.html');
+            rect35.attr('body/stroke', 'blue');
+            rect35.attr('body/fill', 'blue');
+            rect35.attr('label/cursor', 'pointer');
+            rect35.attr('body/cursor', 'pointer');
+            rect35.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect36 = rect.clone();
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.attr('label/text', flowChartNode);
+            rect36.addTo(javaStatementsGraph);
+            rect36.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-31: JOB_PARAMS[] jobTypeParams = jobDefinition.getJOB_PARAMS();    ');
+            var rect37 = rect.clone();
+            rect37.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect37.attr('label/text', flowChartNode);
+            rect37.set('externalLink', 'scheduler/eDynamo/classes/scheduler/JOB_DEFINITION/getJOB_PARAMS.html');
+            rect37.attr('body/stroke', 'blue');
+            rect37.attr('body/fill', 'blue');
+            rect37.attr('label/cursor', 'pointer');
+            rect37.attr('body/cursor', 'pointer');
+            rect37.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-32:  jobTypeParams != null && jobTypeParams.length > 0');
+            var rect38 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect38.resize(maxNodeWidth, resizeWidth);
+            rect38.attr('text/text', flowChartNode);
+            rect38.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-34: int jobTypeParamLength = jobTypeParams.length;    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.translate(-1.1 * maxNodeWidth,485500);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-35: SG_JOB_TYPE_PARAMS[] parameters = new SG_JOB_TYPE_PARAMS[jobTypeParamLength];    ');
+            var rect40 = rect.clone();
+            rect40.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect40.translate(-1.1 * maxNodeWidth,485500);
+            rect40.attr('label/text', flowChartNode);
+            rect40.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-36:  For( index < jobTypeParamLength)    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.translate(-1.1 * maxNodeWidth,485600);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-38: SG_JOB_TYPE_PARAMS jobTypeParam = new SG_JOB_TYPE_PARAMS();    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.translate(-1.1 * maxNodeWidth,485700);
+            rect42.attr('label/text', flowChartNode);
+            rect42.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-39: JOB_PARAMS parameter = jobTypeParams[index];    ');
+            var rect43 = rect.clone();
+            rect43.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect43.translate(-1.1 * maxNodeWidth,485800);
+            rect43.attr('label/text', flowChartNode);
+            rect43.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-40: jobTypeParam.setJOB_TYPE_ID(parameter.getJOB_TYPE_ID());    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.translate(-1.1 * maxNodeWidth,485900);
+            rect44.attr('label/text', flowChartNode);
+            rect44.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setJOB_TYPE_ID.html');
+            rect44.attr('body/stroke', 'blue');
+            rect44.attr('body/fill', 'blue');
+            rect44.attr('label/cursor', 'pointer');
+            rect44.attr('body/cursor', 'pointer');
+            rect44.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-41: jobTypeParam.setPARAM_ID(parameter.getPARAM_ID());    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.translate(-1.1 * maxNodeWidth,486000);
+            rect45.attr('label/text', flowChartNode);
+            rect45.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAM_ID.html');
+            rect45.attr('body/stroke', 'blue');
+            rect45.attr('body/fill', 'blue');
+            rect45.attr('label/cursor', 'pointer');
+            rect45.attr('body/cursor', 'pointer');
+            rect45.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-42: jobTypeParam.setPARAMETER(parameter.getPARAMETER());    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.translate(-1.1 * maxNodeWidth,486100);
+            rect46.attr('label/text', flowChartNode);
+            rect46.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAMETER.html');
+            rect46.attr('body/stroke', 'blue');
+            rect46.attr('body/fill', 'blue');
+            rect46.attr('label/cursor', 'pointer');
+            rect46.attr('body/cursor', 'pointer');
+            rect46.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-43: jobTypeParam.setACTIVE(parameter.getACTIVE());    ');
+            var rect47 = rect.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.translate(-1.1 * maxNodeWidth,486200);
+            rect47.attr('label/text', flowChartNode);
+            rect47.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setACTIVE.html');
+            rect47.attr('body/stroke', 'blue');
+            rect47.attr('body/fill', 'blue');
+            rect47.attr('label/cursor', 'pointer');
+            rect47.attr('body/cursor', 'pointer');
+            rect47.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-44: jobTypeParam.setMANDATORY(parameter.getMANDATORY());    ');
+            var rect48 = rect.clone();
+            rect48.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect48.translate(-1.1 * maxNodeWidth,486300);
+            rect48.attr('label/text', flowChartNode);
+            rect48.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setMANDATORY.html');
+            rect48.attr('body/stroke', 'blue');
+            rect48.attr('body/fill', 'blue');
+            rect48.attr('label/cursor', 'pointer');
+            rect48.attr('body/cursor', 'pointer');
+            rect48.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-45: jobTypeParam.setPARAM_ORDER(parameter.getPARAM_ORDER());    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.translate(-1.1 * maxNodeWidth,486400);
+            rect49.attr('label/text', flowChartNode);
+            rect49.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setPARAM_ORDER.html');
+            rect49.attr('body/stroke', 'blue');
+            rect49.attr('body/fill', 'blue');
+            rect49.attr('label/cursor', 'pointer');
+            rect49.attr('body/cursor', 'pointer');
+            rect49.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-48: jobTypeParam.setDEFAULT_PARAM_VALUE(parameter.getDEFAULT_PARAM_VALUE());    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.translate(-1.1 * maxNodeWidth,486500);
+            rect50.attr('label/text', flowChartNode);
+            rect50.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE_PARAMS/setDEFAULT_PARAM_VALUE.html');
+            rect50.attr('body/stroke', 'blue');
+            rect50.attr('body/fill', 'blue');
+            rect50.attr('label/cursor', 'pointer');
+            rect50.attr('body/cursor', 'pointer');
+            rect50.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-51: parameters[index] = jobTypeParam    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.translate(-1.1 * maxNodeWidth,486600);
+            rect51.attr('label/text', flowChartNode);
+            rect51.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect52 = rect.clone();
+            rect52.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect52.translate(-1.1 * maxNodeWidth,486700);
+            rect52.attr('label/text', flowChartNode);
+            rect52.addTo(javaStatementsGraph);
+            rect52.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-53: sgJobType.setSg_job_type_params(parameters);    ');
+            var rect53 = rect.clone();
+            rect53.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect53.translate(-1.1 * maxNodeWidth,486700);
+            rect53.attr('label/text', flowChartNode);
+            rect53.set('externalLink', 'scheduler/eDynamo/classes/SG_JOB_TYPE/setSg_job_type_params.html');
+            rect53.attr('body/stroke', 'blue');
+            rect53.attr('body/fill', 'blue');
+            rect53.attr('label/cursor', 'pointer');
+            rect53.attr('body/cursor', 'pointer');
+            rect53.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect54 = rect.clone();
+            rect54.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect54.attr('label/text', flowChartNode);
+            rect54.addTo(javaStatementsGraph);
+            rect54.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-55: return sgJobType;    ');
+            var rect55 = rect.clone();
+            rect55.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect55.attr('label/text', flowChartNode);
+            rect55.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect56 = ellipse.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.attr('text/text', flowChartNode);
+            rect56.addTo(javaStatementsGraph);
+
+
+            var link31 = link.clone();
+            link31.source(rect28);
+            link31.target(rect29);
+            link31.addTo(javaStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect29);
+            link32.target(rect30);
+            link32.addTo(javaStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect30);
+            link33.target(rect31);
+            link33.addTo(javaStatementsGraph);
+
+            var link34 = link.clone();
+            link34.source(rect31);
+            link34.target(rect32);
+            link34.addTo(javaStatementsGraph);
+
+            var link35 = link.clone();
+            link35.source(rect32);
+            link35.target(rect33);
+            link35.addTo(javaStatementsGraph);
+
+            var link36 = link.clone();
+            link36.source(rect33);
+            link36.target(rect34);
+            link36.set('ifBlockStartLink', true);
+            link36.label(0, {attrs: {text: {text: 'Yes'}}});
+            link36.addTo(javaStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect33);
+            link37.target(rect35);
+            link37.set('elseBlockStartLink', true);
+            link37.label(0, {attrs: {text: {text: 'No'}}});
+            link37.addTo(javaStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect34);
+            link38.target(rect36);
+            link38.addTo(javaStatementsGraph);
+            link38.set('ifBlockEndLink', true);
+            link38.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link39 = link.clone();
+            link39.source(rect35);
+            link39.target(rect36);
+            link39.addTo(javaStatementsGraph);
+            link39.set('elseBlockEndLink', true);
+            link39.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect33.set('endIfConditionId', rect36.id);
+            rect36.set('ifConditionId', rect33.id);
+
+            var link40 = link.clone();
+            link40.source(rect36);
+            link40.target(rect37);
+            link40.addTo(javaStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect37);
+            link41.target(rect38);
+            link41.addTo(javaStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect38);
+            link42.target(rect39);
+            link42.set('ifBlockStartLink', true);
+            link42.label(0, {attrs: {text: {text: 'Yes'}}});
+            link42.addTo(javaStatementsGraph);
+
+            var link43 = link.clone();
+            link43.source(rect39);
+            link43.target(rect40);
+            link43.addTo(javaStatementsGraph);
+
+            var link44 = link.clone();
+            link44.source(rect40);
+            link44.target(rect41);
+            link44.addTo(javaStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect41);
+            link45.target(rect42);
+            link45.addTo(javaStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect42);
+            link46.target(rect43);
+            link46.addTo(javaStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect43);
+            link47.target(rect44);
+            link47.addTo(javaStatementsGraph);
+
+            var link48 = link.clone();
+            link48.source(rect44);
+            link48.target(rect45);
+            link48.addTo(javaStatementsGraph);
+
+            var link49 = link.clone();
+            link49.source(rect45);
+            link49.target(rect46);
+            link49.addTo(javaStatementsGraph);
+
+            var link50 = link.clone();
+            link50.source(rect46);
+            link50.target(rect47);
+            link50.addTo(javaStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect47);
+            link51.target(rect48);
+            link51.addTo(javaStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect48);
+            link52.target(rect49);
+            link52.addTo(javaStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect49);
+            link53.target(rect50);
+            link53.addTo(javaStatementsGraph);
+
+            var link54 = link.clone();
+            link54.source(rect50);
+            link54.target(rect51);
+            link54.addTo(javaStatementsGraph);
+
+            var link55 = link.clone();
+            link55.source(rect51);
+            link55.target(rect52);
+            link55.addTo(javaStatementsGraph);
+
+            var link56 = link.clone();
+            link56.source(rect52);
+            link56.target(rect41);
+            rect41.attr('body/stroke', '#F400A1');
+            rect41.attr('body/fill', '#F400A1');
+            link56.set('loopConnector', true);
+            link56.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link56.addTo(javaStatementsGraph);
+
+            var link57 = link.clone();
+            link57.source(rect52);
+            link57.target(rect53);
+            link57.addTo(javaStatementsGraph);
+
+            var link58 = link.clone();
+            link58.source(rect53);
+            link58.target(rect54);
+            link58.addTo(javaStatementsGraph);
+            link58.set('ifBlockEndLink', true);
+            link58.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link59 = link.clone();
+            link59.source(rect38);
+            link59.target(rect54);
+            link59.addTo(javaStatementsGraph);
+            link59.label(0, {attrs: {text: {text: 'No'}}});
+            link59.set('elseBlockStartAndEndLink', true);
+
+            rect38.set('endIfConditionId', rect54.id);
+            rect54.set('ifConditionId', rect38.id);
+
+            var link60 = link.clone();
+            link60.source(rect54);
+            link60.target(rect55);
+            link60.addTo(javaStatementsGraph);
+
+            var link61 = link.clone();
+            link61.source(rect55);
+            link61.target(rect56);
+            link61.addTo(javaStatementsGraph);
+
+            rect28.set('startNode', 'true');
+            rect56.set('stopNode', 'true');
+            rect56.attr('circle/fill', 'red');
+            rect56.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect28, rect56);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

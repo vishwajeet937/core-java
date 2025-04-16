@@ -1,0 +1,3027 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>TedUtils.T_Get_Next_Bom_Level</title>
+        <script src='../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : loteDapter.tedutils</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : TedUtils</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : T_Get_Next_Bom_Level</h4>
+         <p style='text-decoration:none' target='_blank'> *******************************************************************************************
+Name : T_Get_Next_Bom_Level Purpose : History : Srinath Alamela. 05/20/00
+- Created. Remarks: 1. Modified the where clause to take care of bom
+component effectivity and referencing MES house Name in getting the next
+bom level. Changed - 12/09/08 - Srinath Alamela. Multi BOM level will not
+work for single segment items as the first segment will not match and
+item_mapping for MIF1 (Parent) will not be the same for MIF2 (Child) and
+in any case this check is redundant
+**********************************************************************************************</p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 10100,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-4972: Create an instance of HashMap and assign it to variable t_Get_Next_Bom_Level_OutputMap');
+            nodesArr.push('Line No-4973: Declare variable T_Table of type String');
+            nodesArr.push('Line No-4974: Declare variable T_Table_Field of type String');
+            nodesArr.push('Line No-4975: Assign "BOM" to variable T_Prefix');
+            nodesArr.push('Line No-4976: Declare variable T_Item_Table of type String');
+            nodesArr.push('Line No-4977: Declare variable T_Where_Condition of type String');
+            nodesArr.push('Line No-4978: Declare variable T_Item_Mapping of type String');
+            nodesArr.push('Line No-4979: Assign "No Bom levels used" to variable T_Default_Bom_Level');
+            nodesArr.push('Line No-4980: Initialize variable I_DEBUG_FLAG of type boolean as false');
+            nodesArr.push('Line No-4981: Declare variable T_Select_Clause of type String');
+            nodesArr.push('Line No-4982: Declare variable T_Where_Clause of type String');
+            nodesArr.push('Line No-4983: Declare variable T_From_Clause of type String');
+            nodesArr.push('Line No-4985: Concatenate "Select  bom_level_table,", "           bom_level_flexfield,", "           item_table,", "           where_condition,", "           item_mapping", "      from t_factories tf, mtl_parameters mp", "     where mp.organization_id = ?", "       and tf.factory_id = ?", "       and mp.organization_code = tf.organization_code"');
+            nodesArr.push('Line No-4993: Call prepareStatement on variable static and assign the result to variable preparedStatement');
+            nodesArr.push('Line No-4994: Set Object value I_Organization_Id to preparedStatement at index 1');
+            nodesArr.push('Line No-4995: Set Object value I_Factory_Id to preparedStatement at index 2');
+            nodesArr.push('Line No-4996: Execute query on Statement preparedStatement and assign the result to variable resultSet');
+            nodesArr.push('Line No-4997: If  rows are available in Result Set is equal to false');
+            nodesArr.push('Line No-5000: Get String value from resultSet at index getString and assign the result to variable T_Table');
+            nodesArr.push('Line No-5001: Get String value from resultSet at index getString and assign the result to variable T_Table_Field');
+            nodesArr.push('Line No-5002: Get String value from resultSet at index getString and assign the result to variable T_Item_Table');
+            nodesArr.push('Line No-5003: Get String value from resultSet at index getString and assign the result to variable T_Where_Condition');
+            nodesArr.push('Line No-5004: Get String value from resultSet at index getString and assign the result to variable T_Item_Mapping');
+            nodesArr.push('Line No-5008: Assign "select " to T_Select_Clause');
+            nodesArr.push('Line No-5009: Concatenate " where BOM.organization_id = ? ", " and   BOM.assembly_item_id = ? ", " and   BOM.alternate_bom_designator is null ", " and   BIC.bill_sequence_id =BOM.common_bill_sequence_id ", " and   BBOM.assembly_item_id = bic.component_item_id ", " and   BBOM.organization_id = ? ", " and   BBOM.alternate_bom_designator is null", " and   trunc(BIC.effectivity_date) <= sysdate", " and   nvl(BIC.disable_date,sysdate+10) > sysdate"');
+            nodesArr.push('Line No-5018: If  ""MTL_ITEM_FLEXFIELDS"" == T_Item_Table');
+            nodesArr.push('Line No-5019: Assign " from MTL_ITEM_FLEXFIELDS MIF1, MTL_ITEM_FLEXFIELDS MIF2, " to T_From_Clause');
+            nodesArr.push('Line No-5020: Concatenate T_Where_Clause, " and   BOM.organization_id = MIF1.organization_id", " and   MIF1.organization_id = MIF2.organization_id", " and   BOM.assembly_item_id = MIF1.inventory_item_id", " and   MIF2.inventory_item_id = BIC.component_item_id"');
+            nodesArr.push('Line No-5035: Concatenate " from ", T_Item_Table, " MCR1,", T_Item_Table, " MCR2,"');
+            nodesArr.push('Line No-5037: Concatenate T_Where_Clause, " and   BOM.organization_id = MCR1.organization_id", " and   MCR1.organization_id = MCR2.organization_id", " and   BOM.assembly_item_id = MCR1.inventory_item_id", " and   MCR2.inventory_item_id = BIC.component_item_id", " and   MCR1.", T_Where_Condition, " and   MCR2.", T_Where_Condition, " and   MCR1.", T_Item_Mapping, " = MCR2.", T_Item_Mapping');
+            nodesArr.push('Line No-5046: If  ""MTL_SYSTEM_ITEMS"" == T_Table');
+            nodesArr.push('Line No-5047: Assign "MSI" to T_Prefix');
+            nodesArr.push('Line No-5048: Concatenate T_Select_Clause, " MSI.inventory_item_id, "');
+            nodesArr.push('Line No-5049: Concatenate T_From_Clause, " ", T_Table, " MSI, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"');
+            nodesArr.push('Line No-5053: Concatenate T_Where_Clause, " and   MSI.inventory_item_id = BIC.component_item_id", " AND   MSI.organization_id   = ?"');
+            nodesArr.push('Line No-5057: If  ""BOM_OPERATIONAL_ROUTINGS"" == T_Table');
+            nodesArr.push('Line No-5058: Assign "BOR" to T_Prefix');
+            nodesArr.push('Line No-5059: Concatenate T_Select_Clause, T_Prefix, ".assembly_item_id, "');
+            nodesArr.push('Line No-5062: Concatenate T_From_Clause, " ", T_Table, " BOR, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"');
+            nodesArr.push('Line No-5066: Concatenate T_Where_Clause, " and   BOR.assembly_item_id = BIC.component_item_id", " and   BOR.alternate_routing_designator is null", " and   BOR.organization_id = ?"');
+            nodesArr.push('Line No-5070: If  ""BOM_BILL_OF_MATERIALS"" == T_Table');
+            nodesArr.push('Line No-5071: Assign "BBOM" to T_Prefix');
+            nodesArr.push('Line No-5072: Concatenate T_Select_Clause, " BBOM.assembly_item_id, "');
+            nodesArr.push('Line No-5074: Concatenate T_From_Clause, " ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"');
+            nodesArr.push('Line No-5079: Assign "BLT" to T_Prefix');
+            nodesArr.push('Line No-5080: Concatenate T_Select_Clause, " BIC.component_item_id, "');
+            nodesArr.push('Line No-5082: Concatenate T_From_Clause, " ", T_Table, " BLT, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"');
+            nodesArr.push('Line No-5086: Concatenate T_Where_Clause, " and   BLT.INVENTORY_ITEM_ID = BIC.component_item_id", " and   BLT.organization_id = ?"');
+            nodesArr.push('Line No-5091: Concatenate T_Select_Clause, T_Prefix, ".", T_Table_Field, " "');
+            nodesArr.push('Line No-5093: Concatenate T_Where_Clause, " and ", T_Prefix, ".", T_Table_Field, " is not null"');
+            nodesArr.push('Line No-5095: Concatenate T_Select_Clause, T_From_Clause, T_Where_Clause and assign the result to variable T_Sql_String');
+            nodesArr.push('Line No-5098: Assign "INSERT INTO T_Debug VALUES (100000, SYSDATE, ?)" to Sql');
+            nodesArr.push('Line No-5099: Call prepareStatement on variable static and assign the result to variable preparedStatement');
+            nodesArr.push('Line No-5100: Set Object value T_Sql_String to preparedStatement at index 1');
+            nodesArr.push('Line No-5101: Execute update on Statement preparedStatement');
+            nodesArr.push('Line No-5102: Clear parameters on preparedStatement');
+            nodesArr.push('Line No-5113: Initialize variable counter of type int as 1');
+            nodesArr.push('Line No-5114: Call debug() on variable logger');
+            nodesArr.push('Line No-5115: Call prepareStatement on variable static and assign the result to variable preparedStatement');
+            nodesArr.push('Line No-5118: Set Object value I_Organization_Id to preparedStatement at index counter++');
+            nodesArr.push('Line No-5119: Set Object value I_Inventory_Item_Id to preparedStatement at index counter++');
+            nodesArr.push('Line No-5120: Set Object value I_Organization_Id to preparedStatement at index counter++');
+            nodesArr.push('Line No-5121: Set Object value I_Organization_Id to preparedStatement at index counter++');
+            nodesArr.push('Line No-5123: Execute query on Statement preparedStatement and assign the result to variable resultSet');
+            nodesArr.push('Line No-5124: Call last() on variable resultSet');
+            nodesArr.push('Line No-5125: Get Row value from resultSet at index getRow and assign the result to variable I_Status_Code');
+            nodesArr.push('Line No-5126: Call beforeFirst() on variable resultSet');
+            nodesArr.push('Line No-5127: If  I_Status_Code is lesser than or equal to 0');
+            nodesArr.push('Line No-5128: Change the sign of 1');
+            nodesArr.push('Line No-5130: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"');
+            nodesArr.push('Line No-5132: Return t_Get_Next_Bom_Level_OutputMap');
+            nodesArr.push('Line No-5134: If  I_Status_Code is greater than 1');
+            nodesArr.push('Line No-5135: Assign Failure_Code to I_Status_Code');
+            nodesArr.push('Line No-5136: Assign 1007 to I_Error_Code');
+            nodesArr.push('Line No-5137: Assign "same MES house name attached to multiple child items in oracle" to I_Error_Message');
+            nodesArr.push('Line No-5139: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"');
+            nodesArr.push('Line No-5141: Put value I_Error_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Error_Code"');
+            nodesArr.push('Line No-5143: Put value I_Error_Message in Map t_Get_Next_Bom_Level_OutputMap for key "I_Error_Message"');
+            nodesArr.push('Line No-5145: Return t_Get_Next_Bom_Level_OutputMap');
+            nodesArr.push('Line No-5150: rows are available in Result Set');
+            nodesArr.push('Line No-5151: Get Int value from resultSet at index getInt and assign the result to variable I_Inventory_Item_Id');
+            nodesArr.push('Line No-5152: Get String value from resultSet at index getString and assign the result to variable I_Bom_Level');
+            nodesArr.push('Line No-5155: [IF, [I_Bom_Level is equal to null], [Assign T_Default_Bom_Level to I_Bom_Level], [Assign I_Bom_Level to I_Bom_Level]]');
+            nodesArr.push('Line No-5157: Assign Success_Code to I_Status_Code');
+            nodesArr.push('Line No-5158: Put value I_Inventory_Item_Id in Map t_Get_Next_Bom_Level_OutputMap for key "I_Inventory_Item_Id"');
+            nodesArr.push('Line No-5160: Put value I_Bom_Level in Map t_Get_Next_Bom_Level_OutputMap for key "I_Bom_Level"');
+            nodesArr.push('Line No-5161: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"');
+            nodesArr.push('Line No-5212: If  resultSet is not equal to null');
+            nodesArr.push('Line No-5214: If  preparedStatement is not equal to null');
+            nodesArr.push('Line No-5220: Return t_Get_Next_Bom_Level_OutputMap');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-4972: Create an instance of HashMap and assign it to variable t_Get_Next_Bom_Level_OutputMap    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4973: Declare variable T_Table of type String    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4974: Declare variable T_Table_Field of type String    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4975: Assign "BOM" to variable T_Prefix    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4976: Declare variable T_Item_Table of type String    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.attr('label/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4977: Declare variable T_Where_Condition of type String    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4978: Declare variable T_Item_Mapping of type String    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4979: Assign "No Bom levels used" to variable T_Default_Bom_Level    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4980: Initialize variable I_DEBUG_FLAG of type boolean as false    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4981: Declare variable T_Select_Clause of type String    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4982: Declare variable T_Where_Clause of type String    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4983: Declare variable T_From_Clause of type String    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4985: Concatenate "Select  bom_level_table,", "           bom_level_flexfield,", "           item_table,", "           where_condition,", "           item_mapping", "      from t_factories tf, mtl_parameters mp", "     where mp.organization_id = ?", "       and tf.factory_id = ?", "       and mp.organization_code = tf.organization_code"    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4993: Call prepareStatement on variable static and assign the result to variable preparedStatement    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4994: Set Object value I_Organization_Id to preparedStatement at index 1    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4995: Set Object value I_Factory_Id to preparedStatement at index 2    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4996: Execute query on Statement preparedStatement and assign the result to variable resultSet    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4997: If  rows are available in Result Set is equal to false');
+            var rect18 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect18.resize(maxNodeWidth, resizeWidth);
+            rect18.attr('text/text', flowChartNode);
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5000: Get String value from resultSet at index getString and assign the result to variable T_Table    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.translate(1.1 * maxNodeWidth,312600);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5001: Get String value from resultSet at index getString and assign the result to variable T_Table_Field    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.translate(1.1 * maxNodeWidth,312600);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5002: Get String value from resultSet at index getString and assign the result to variable T_Item_Table    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.translate(1.1 * maxNodeWidth,312600);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5003: Get String value from resultSet at index getString and assign the result to variable T_Where_Condition    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.translate(1.1 * maxNodeWidth,312600);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5004: Get String value from resultSet at index getString and assign the result to variable T_Item_Mapping    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.translate(1.1 * maxNodeWidth,312600);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.attr('label/text', flowChartNode);
+            rect24.addTo(nlStatementsGraph);
+            rect24.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5008: Assign "select " to T_Select_Clause    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5009: Concatenate " where BOM.organization_id = ? ", " and   BOM.assembly_item_id = ? ", " and   BOM.alternate_bom_designator is null ", " and   BIC.bill_sequence_id =BOM.common_bill_sequence_id ", " and   BBOM.assembly_item_id = bic.component_item_id ", " and   BBOM.organization_id = ? ", " and   BBOM.alternate_bom_designator is null", " and   trunc(BIC.effectivity_date) <= sysdate", " and   nvl(BIC.disable_date,sysdate+10) > sysdate"    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5018: If  ""MTL_ITEM_FLEXFIELDS"" == T_Item_Table');
+            var rect27 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect27.resize(maxNodeWidth, resizeWidth);
+            rect27.attr('text/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5019: Assign " from MTL_ITEM_FLEXFIELDS MIF1, MTL_ITEM_FLEXFIELDS MIF2, " to T_From_Clause    ');
+            var rect28 = rect.clone();
+            rect28.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect28.translate(-1.1 * maxNodeWidth,312900);
+            rect28.attr('label/text', flowChartNode);
+            rect28.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5020: Concatenate T_Where_Clause, " and   BOM.organization_id = MIF1.organization_id", " and   MIF1.organization_id = MIF2.organization_id", " and   BOM.assembly_item_id = MIF1.inventory_item_id", " and   MIF2.inventory_item_id = BIC.component_item_id"    ');
+            var rect29 = rect.clone();
+            rect29.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect29.translate(-1.1 * maxNodeWidth,312900);
+            rect29.attr('label/text', flowChartNode);
+            rect29.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5035: Concatenate " from ", T_Item_Table, " MCR1,", T_Item_Table, " MCR2,"    ');
+            var rect30 = rect.clone();
+            rect30.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect30.translate(1.1 * maxNodeWidth,312900);
+            rect30.attr('label/text', flowChartNode);
+            rect30.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5037: Concatenate T_Where_Clause, " and   BOM.organization_id = MCR1.organization_id", " and   MCR1.organization_id = MCR2.organization_id", " and   BOM.assembly_item_id = MCR1.inventory_item_id", " and   MCR2.inventory_item_id = BIC.component_item_id", " and   MCR1.", T_Where_Condition, " and   MCR2.", T_Where_Condition, " and   MCR1.", T_Item_Mapping, " = MCR2.", T_Item_Mapping    ');
+            var rect31 = rect.clone();
+            rect31.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect31.translate(1.1 * maxNodeWidth,312900);
+            rect31.attr('label/text', flowChartNode);
+            rect31.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(nlStatementsGraph);
+            rect32.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5046: If  ""MTL_SYSTEM_ITEMS"" == T_Table');
+            var rect33 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect33.resize(maxNodeWidth, resizeWidth);
+            rect33.attr('text/text', flowChartNode);
+            rect33.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5047: Assign "MSI" to T_Prefix    ');
+            var rect34 = rect.clone();
+            rect34.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect34.translate(-1.1 * maxNodeWidth,313000);
+            rect34.attr('label/text', flowChartNode);
+            rect34.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5048: Concatenate T_Select_Clause, " MSI.inventory_item_id, "    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.translate(-1.1 * maxNodeWidth,313000);
+            rect35.attr('label/text', flowChartNode);
+            rect35.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5049: Concatenate T_From_Clause, " ", T_Table, " MSI, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"    ');
+            var rect36 = rect.clone();
+            rect36.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect36.translate(-1.1 * maxNodeWidth,313000);
+            rect36.attr('label/text', flowChartNode);
+            rect36.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5053: Concatenate T_Where_Clause, " and   MSI.inventory_item_id = BIC.component_item_id", " AND   MSI.organization_id   = ?"    ');
+            var rect37 = rect.clone();
+            rect37.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect37.translate(-1.1 * maxNodeWidth,313000);
+            rect37.attr('label/text', flowChartNode);
+            rect37.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5057: If  ""BOM_OPERATIONAL_ROUTINGS"" == T_Table');
+            var rect38 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect38.resize(maxNodeWidth, resizeWidth);
+            rect38.translate(1.1 * maxNodeWidth,313100);
+            rect38.attr('text/text', flowChartNode);
+            rect38.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5058: Assign "BOR" to T_Prefix    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.translate(0.0 * maxNodeWidth,313100);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5059: Concatenate T_Select_Clause, T_Prefix, ".assembly_item_id, "    ');
+            var rect40 = rect.clone();
+            rect40.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect40.translate(0.0 * maxNodeWidth,313100);
+            rect40.attr('label/text', flowChartNode);
+            rect40.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5062: Concatenate T_From_Clause, " ", T_Table, " BOR, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.translate(0.0 * maxNodeWidth,313100);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5066: Concatenate T_Where_Clause, " and   BOR.assembly_item_id = BIC.component_item_id", " and   BOR.alternate_routing_designator is null", " and   BOR.organization_id = ?"    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.translate(0.0 * maxNodeWidth,313100);
+            rect42.attr('label/text', flowChartNode);
+            rect42.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5070: If  ""BOM_BILL_OF_MATERIALS"" == T_Table');
+            var rect43 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect43.resize(maxNodeWidth, resizeWidth);
+            rect43.translate(2.2 * maxNodeWidth,313200);
+            rect43.attr('text/text', flowChartNode);
+            rect43.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5071: Assign "BBOM" to T_Prefix    ');
+            var rect44 = rect.clone();
+            rect44.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect44.translate(1.1 * maxNodeWidth,313200);
+            rect44.attr('label/text', flowChartNode);
+            rect44.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5072: Concatenate T_Select_Clause, " BBOM.assembly_item_id, "    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.translate(1.1 * maxNodeWidth,313200);
+            rect45.attr('label/text', flowChartNode);
+            rect45.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5074: Concatenate T_From_Clause, " ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.translate(1.1 * maxNodeWidth,313200);
+            rect46.attr('label/text', flowChartNode);
+            rect46.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5079: Assign "BLT" to T_Prefix    ');
+            var rect47 = rect.clone();
+            rect47.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect47.translate(3.3000000000000003 * maxNodeWidth,313200);
+            rect47.attr('label/text', flowChartNode);
+            rect47.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5080: Concatenate T_Select_Clause, " BIC.component_item_id, "    ');
+            var rect48 = rect.clone();
+            rect48.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect48.translate(3.3000000000000003 * maxNodeWidth,313200);
+            rect48.attr('label/text', flowChartNode);
+            rect48.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5082: Concatenate T_From_Clause, " ", T_Table, " BLT, ", " BOM_BILL_OF_MATERIALS BBOM ,", " BOM_INVENTORY_COMPONENTS BIC, ", " BOM_BILL_OF_MATERIALS BOM"    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.translate(3.3000000000000003 * maxNodeWidth,313200);
+            rect49.attr('label/text', flowChartNode);
+            rect49.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5086: Concatenate T_Where_Clause, " and   BLT.INVENTORY_ITEM_ID = BIC.component_item_id", " and   BLT.organization_id = ?"    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.translate(3.3000000000000003 * maxNodeWidth,313200);
+            rect50.attr('label/text', flowChartNode);
+            rect50.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.translate(2.2 * maxNodeWidth,313200);
+            rect51.attr('label/text', flowChartNode);
+            rect51.addTo(nlStatementsGraph);
+            rect51.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect52 = rect.clone();
+            rect52.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect52.translate(1.1 * maxNodeWidth,313200);
+            rect52.attr('label/text', flowChartNode);
+            rect52.addTo(nlStatementsGraph);
+            rect52.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect53 = rect.clone();
+            rect53.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect53.attr('label/text', flowChartNode);
+            rect53.addTo(nlStatementsGraph);
+            rect53.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5091: Concatenate T_Select_Clause, T_Prefix, ".", T_Table_Field, " "    ');
+            var rect54 = rect.clone();
+            rect54.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect54.attr('label/text', flowChartNode);
+            rect54.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5093: Concatenate T_Where_Clause, " and ", T_Prefix, ".", T_Table_Field, " is not null"    ');
+            var rect55 = rect.clone();
+            rect55.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect55.attr('label/text', flowChartNode);
+            rect55.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5095: Concatenate T_Select_Clause, T_From_Clause, T_Where_Clause and assign the result to variable T_Sql_String    ');
+            var rect56 = rect.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.attr('label/text', flowChartNode);
+            rect56.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5098: Assign "INSERT INTO T_Debug VALUES (100000, SYSDATE, ?)" to Sql    ');
+            var rect57 = rect.clone();
+            rect57.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect57.attr('label/text', flowChartNode);
+            rect57.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5099: Call prepareStatement on variable static and assign the result to variable preparedStatement    ');
+            var rect58 = rect.clone();
+            rect58.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect58.attr('label/text', flowChartNode);
+            rect58.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5100: Set Object value T_Sql_String to preparedStatement at index 1    ');
+            var rect59 = rect.clone();
+            rect59.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect59.attr('label/text', flowChartNode);
+            rect59.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5101: Execute update on Statement preparedStatement    ');
+            var rect60 = rect.clone();
+            rect60.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect60.attr('label/text', flowChartNode);
+            rect60.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5102: Clear parameters on preparedStatement    ');
+            var rect61 = rect.clone();
+            rect61.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect61.attr('label/text', flowChartNode);
+            rect61.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5113: Initialize variable counter of type int as 1    ');
+            var rect62 = rect.clone();
+            rect62.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect62.attr('label/text', flowChartNode);
+            rect62.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5114: Call debug() on variable logger    ');
+            var rect63 = rect.clone();
+            rect63.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect63.attr('label/text', flowChartNode);
+            rect63.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5115: Call prepareStatement on variable static and assign the result to variable preparedStatement    ');
+            var rect64 = rect.clone();
+            rect64.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect64.attr('label/text', flowChartNode);
+            rect64.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5118: Set Object value I_Organization_Id to preparedStatement at index counter++    ');
+            var rect65 = rect.clone();
+            rect65.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect65.attr('label/text', flowChartNode);
+            rect65.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5119: Set Object value I_Inventory_Item_Id to preparedStatement at index counter++    ');
+            var rect66 = rect.clone();
+            rect66.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect66.attr('label/text', flowChartNode);
+            rect66.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5120: Set Object value I_Organization_Id to preparedStatement at index counter++    ');
+            var rect67 = rect.clone();
+            rect67.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect67.attr('label/text', flowChartNode);
+            rect67.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5121: Set Object value I_Organization_Id to preparedStatement at index counter++    ');
+            var rect68 = rect.clone();
+            rect68.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect68.attr('label/text', flowChartNode);
+            rect68.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5123: Execute query on Statement preparedStatement and assign the result to variable resultSet    ');
+            var rect69 = rect.clone();
+            rect69.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect69.attr('label/text', flowChartNode);
+            rect69.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5124: Call last() on variable resultSet    ');
+            var rect70 = rect.clone();
+            rect70.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect70.attr('label/text', flowChartNode);
+            rect70.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5125: Get Row value from resultSet at index getRow and assign the result to variable I_Status_Code    ');
+            var rect71 = rect.clone();
+            rect71.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect71.attr('label/text', flowChartNode);
+            rect71.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5126: Call beforeFirst() on variable resultSet    ');
+            var rect72 = rect.clone();
+            rect72.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect72.attr('label/text', flowChartNode);
+            rect72.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5127: If  I_Status_Code is lesser than or equal to 0');
+            var rect73 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect73.resize(maxNodeWidth, resizeWidth);
+            rect73.attr('text/text', flowChartNode);
+            rect73.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5128: Change the sign of 1    ');
+            var rect74 = rect.clone();
+            rect74.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect74.translate(-1.1 * maxNodeWidth,315200);
+            rect74.attr('label/text', flowChartNode);
+            rect74.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5130: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"    ');
+            var rect75 = rect.clone();
+            rect75.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect75.translate(-1.1 * maxNodeWidth,315200);
+            rect75.attr('label/text', flowChartNode);
+            rect75.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5132: Return t_Get_Next_Bom_Level_OutputMap    ');
+            var rect76 = rect.clone();
+            rect76.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect76.translate(-1.1 * maxNodeWidth,315200);
+            rect76.attr('label/text', flowChartNode);
+            rect76.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect77 = rect.clone();
+            rect77.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect77.attr('label/text', flowChartNode);
+            rect77.addTo(nlStatementsGraph);
+            rect77.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5134: If  I_Status_Code is greater than 1');
+            var rect78 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect78.resize(maxNodeWidth, resizeWidth);
+            rect78.attr('text/text', flowChartNode);
+            rect78.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5135: Assign Failure_Code to I_Status_Code    ');
+            var rect79 = rect.clone();
+            rect79.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect79.translate(-1.1 * maxNodeWidth,315300);
+            rect79.attr('label/text', flowChartNode);
+            rect79.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5136: Assign 1007 to I_Error_Code    ');
+            var rect80 = rect.clone();
+            rect80.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect80.translate(-1.1 * maxNodeWidth,315300);
+            rect80.attr('label/text', flowChartNode);
+            rect80.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5137: Assign "same MES house name attached to multiple child items in oracle" to I_Error_Message    ');
+            var rect81 = rect.clone();
+            rect81.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect81.translate(-1.1 * maxNodeWidth,315300);
+            rect81.attr('label/text', flowChartNode);
+            rect81.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5139: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"    ');
+            var rect82 = rect.clone();
+            rect82.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect82.translate(-1.1 * maxNodeWidth,315300);
+            rect82.attr('label/text', flowChartNode);
+            rect82.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5141: Put value I_Error_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Error_Code"    ');
+            var rect83 = rect.clone();
+            rect83.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect83.translate(-1.1 * maxNodeWidth,315300);
+            rect83.attr('label/text', flowChartNode);
+            rect83.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5143: Put value I_Error_Message in Map t_Get_Next_Bom_Level_OutputMap for key "I_Error_Message"    ');
+            var rect84 = rect.clone();
+            rect84.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect84.translate(-1.1 * maxNodeWidth,315300);
+            rect84.attr('label/text', flowChartNode);
+            rect84.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5145: Return t_Get_Next_Bom_Level_OutputMap    ');
+            var rect85 = rect.clone();
+            rect85.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect85.translate(-1.1 * maxNodeWidth,315300);
+            rect85.attr('label/text', flowChartNode);
+            rect85.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect86 = rect.clone();
+            rect86.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect86.attr('label/text', flowChartNode);
+            rect86.addTo(nlStatementsGraph);
+            rect86.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5150: rows are available in Result Set    ');
+            var rect87 = rect.clone();
+            rect87.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect87.attr('label/text', flowChartNode);
+            rect87.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5151: Get Int value from resultSet at index getInt and assign the result to variable I_Inventory_Item_Id    ');
+            var rect88 = rect.clone();
+            rect88.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect88.attr('label/text', flowChartNode);
+            rect88.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5152: Get String value from resultSet at index getString and assign the result to variable I_Bom_Level    ');
+            var rect89 = rect.clone();
+            rect89.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect89.attr('label/text', flowChartNode);
+            rect89.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5155: [IF, [I_Bom_Level is equal to null], [Assign T_Default_Bom_Level to I_Bom_Level], [Assign I_Bom_Level to I_Bom_Level]]    ');
+            var rect90 = rect.clone();
+            rect90.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect90.attr('label/text', flowChartNode);
+            rect90.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5157: Assign Success_Code to I_Status_Code    ');
+            var rect91 = rect.clone();
+            rect91.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect91.attr('label/text', flowChartNode);
+            rect91.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5158: Put value I_Inventory_Item_Id in Map t_Get_Next_Bom_Level_OutputMap for key "I_Inventory_Item_Id"    ');
+            var rect92 = rect.clone();
+            rect92.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect92.attr('label/text', flowChartNode);
+            rect92.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5160: Put value I_Bom_Level in Map t_Get_Next_Bom_Level_OutputMap for key "I_Bom_Level"    ');
+            var rect93 = rect.clone();
+            rect93.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect93.attr('label/text', flowChartNode);
+            rect93.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5161: Put value I_Status_Code in Map t_Get_Next_Bom_Level_OutputMap for key "I_Status_Code"    ');
+            var rect94 = rect.clone();
+            rect94.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect94.attr('label/text', flowChartNode);
+            rect94.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5212: If  resultSet is not equal to null');
+            var rect95 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect95.resize(maxNodeWidth, resizeWidth);
+            rect95.attr('text/text', flowChartNode);
+            rect95.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect96 = rect.clone();
+            rect96.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect96.attr('label/text', flowChartNode);
+            rect96.addTo(nlStatementsGraph);
+            rect96.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5214: If  preparedStatement is not equal to null');
+            var rect97 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect97.resize(maxNodeWidth, resizeWidth);
+            rect97.attr('text/text', flowChartNode);
+            rect97.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect98 = rect.clone();
+            rect98.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect98.attr('label/text', flowChartNode);
+            rect98.addTo(nlStatementsGraph);
+            rect98.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5220: Return t_Get_Next_Bom_Level_OutputMap    ');
+            var rect99 = rect.clone();
+            rect99.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect99.attr('label/text', flowChartNode);
+            rect99.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect100 = ellipse.clone();
+            rect100.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect100.attr('text/text', flowChartNode);
+            rect100.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect10);
+            link11.target(rect11);
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect11);
+            link12.target(rect12);
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect12);
+            link13.target(rect13);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect14);
+            link15.target(rect15);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect15);
+            link16.target(rect16);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect16);
+            link17.target(rect17);
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect17);
+            link18.target(rect18);
+            link18.addTo(nlStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect18);
+            link19.target(rect19);
+            link19.set('elseBlockStartLink', true);
+            link19.label(0, {attrs: {text: {text: 'No'}}});
+            link19.addTo(nlStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect19);
+            link20.target(rect20);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect20);
+            link21.target(rect21);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect21);
+            link22.target(rect22);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect22);
+            link23.target(rect23);
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect18);
+            link24.target(rect24);
+            link24.addTo(nlStatementsGraph);
+            link24.set('ifBlockEndLink', true);
+            link24.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link25 = link.clone();
+            link25.source(rect23);
+            link25.target(rect24);
+            link25.addTo(nlStatementsGraph);
+            link25.set('elseBlockEndLink', true);
+            link25.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect18.set('endIfConditionId', rect24.id);
+            rect24.set('ifConditionId', rect18.id);
+
+            var link26 = link.clone();
+            link26.source(rect24);
+            link26.target(rect25);
+            link26.addTo(nlStatementsGraph);
+
+            var link27 = link.clone();
+            link27.source(rect25);
+            link27.target(rect26);
+            link27.addTo(nlStatementsGraph);
+
+            var link28 = link.clone();
+            link28.source(rect26);
+            link28.target(rect27);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect27);
+            link29.target(rect28);
+            link29.set('ifBlockStartLink', true);
+            link29.label(0, {attrs: {text: {text: 'Yes'}}});
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect28);
+            link30.target(rect29);
+            link30.addTo(nlStatementsGraph);
+
+            var link31 = link.clone();
+            link31.source(rect27);
+            link31.target(rect30);
+            link31.set('elseBlockStartLink', true);
+            link31.label(0, {attrs: {text: {text: 'No'}}});
+            link31.addTo(nlStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect30);
+            link32.target(rect31);
+            link32.addTo(nlStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect29);
+            link33.target(rect32);
+            link33.addTo(nlStatementsGraph);
+            link33.set('ifBlockEndLink', true);
+            link33.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link34 = link.clone();
+            link34.source(rect31);
+            link34.target(rect32);
+            link34.addTo(nlStatementsGraph);
+            link34.set('elseBlockEndLink', true);
+            link34.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect27.set('endIfConditionId', rect32.id);
+            rect32.set('ifConditionId', rect27.id);
+
+            var link35 = link.clone();
+            link35.source(rect32);
+            link35.target(rect33);
+            link35.addTo(nlStatementsGraph);
+
+            var link36 = link.clone();
+            link36.source(rect33);
+            link36.target(rect34);
+            link36.set('ifBlockStartLink', true);
+            link36.label(0, {attrs: {text: {text: 'Yes'}}});
+            link36.addTo(nlStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect34);
+            link37.target(rect35);
+            link37.addTo(nlStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect35);
+            link38.target(rect36);
+            link38.addTo(nlStatementsGraph);
+
+            var link39 = link.clone();
+            link39.source(rect36);
+            link39.target(rect37);
+            link39.addTo(nlStatementsGraph);
+
+            var link40 = link.clone();
+            link40.source(rect33);
+            link40.target(rect38);
+            link40.set('elseBlockStartLink', true);
+            link40.label(0, {attrs: {text: {text: 'No'}}});
+            link40.addTo(nlStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect38);
+            link41.target(rect39);
+            link41.set('ifBlockStartLink', true);
+            link41.label(0, {attrs: {text: {text: 'Yes'}}});
+            link41.addTo(nlStatementsGraph);
+
+            var link42 = link.clone();
+            link42.source(rect39);
+            link42.target(rect40);
+            link42.addTo(nlStatementsGraph);
+
+            var link43 = link.clone();
+            link43.source(rect40);
+            link43.target(rect41);
+            link43.addTo(nlStatementsGraph);
+
+            var link44 = link.clone();
+            link44.source(rect41);
+            link44.target(rect42);
+            link44.addTo(nlStatementsGraph);
+
+            var link45 = link.clone();
+            link45.source(rect38);
+            link45.target(rect43);
+            link45.set('elseBlockStartLink', true);
+            link45.label(0, {attrs: {text: {text: 'No'}}});
+            link45.addTo(nlStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect43);
+            link46.target(rect44);
+            link46.set('ifBlockStartLink', true);
+            link46.label(0, {attrs: {text: {text: 'Yes'}}});
+            link46.addTo(nlStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect44);
+            link47.target(rect45);
+            link47.addTo(nlStatementsGraph);
+
+            var link48 = link.clone();
+            link48.source(rect45);
+            link48.target(rect46);
+            link48.addTo(nlStatementsGraph);
+
+            var link49 = link.clone();
+            link49.source(rect43);
+            link49.target(rect47);
+            link49.set('elseBlockStartLink', true);
+            link49.label(0, {attrs: {text: {text: 'No'}}});
+            link49.addTo(nlStatementsGraph);
+
+            var link50 = link.clone();
+            link50.source(rect47);
+            link50.target(rect48);
+            link50.addTo(nlStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect48);
+            link51.target(rect49);
+            link51.addTo(nlStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect49);
+            link52.target(rect50);
+            link52.addTo(nlStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect46);
+            link53.target(rect51);
+            link53.addTo(nlStatementsGraph);
+            link53.set('ifBlockEndLink', true);
+            link53.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link54 = link.clone();
+            link54.source(rect50);
+            link54.target(rect51);
+            link54.addTo(nlStatementsGraph);
+            link54.set('elseBlockEndLink', true);
+            link54.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect43.set('endIfConditionId', rect51.id);
+            rect51.set('ifConditionId', rect43.id);
+
+            var link55 = link.clone();
+            link55.source(rect42);
+            link55.target(rect52);
+            link55.addTo(nlStatementsGraph);
+            link55.set('ifBlockEndLink', true);
+            link55.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link56 = link.clone();
+            link56.source(rect51);
+            link56.target(rect52);
+            link56.addTo(nlStatementsGraph);
+            link56.set('elseBlockEndLink', true);
+            link56.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect38.set('endIfConditionId', rect52.id);
+            rect52.set('ifConditionId', rect38.id);
+
+            var link57 = link.clone();
+            link57.source(rect37);
+            link57.target(rect53);
+            link57.addTo(nlStatementsGraph);
+            link57.set('ifBlockEndLink', true);
+            link57.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link58 = link.clone();
+            link58.source(rect52);
+            link58.target(rect53);
+            link58.addTo(nlStatementsGraph);
+            link58.set('elseBlockEndLink', true);
+            link58.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect33.set('endIfConditionId', rect53.id);
+            rect53.set('ifConditionId', rect33.id);
+
+            var link59 = link.clone();
+            link59.source(rect53);
+            link59.target(rect54);
+            link59.addTo(nlStatementsGraph);
+
+            var link60 = link.clone();
+            link60.source(rect54);
+            link60.target(rect55);
+            link60.addTo(nlStatementsGraph);
+
+            var link61 = link.clone();
+            link61.source(rect55);
+            link61.target(rect56);
+            link61.addTo(nlStatementsGraph);
+
+            var link62 = link.clone();
+            link62.source(rect56);
+            link62.target(rect57);
+            link62.addTo(nlStatementsGraph);
+
+            var link63 = link.clone();
+            link63.source(rect57);
+            link63.target(rect58);
+            link63.addTo(nlStatementsGraph);
+
+            var link64 = link.clone();
+            link64.source(rect58);
+            link64.target(rect59);
+            link64.addTo(nlStatementsGraph);
+
+            var link65 = link.clone();
+            link65.source(rect59);
+            link65.target(rect60);
+            link65.addTo(nlStatementsGraph);
+
+            var link66 = link.clone();
+            link66.source(rect60);
+            link66.target(rect61);
+            link66.addTo(nlStatementsGraph);
+
+            var link67 = link.clone();
+            link67.source(rect61);
+            link67.target(rect62);
+            link67.addTo(nlStatementsGraph);
+
+            var link68 = link.clone();
+            link68.source(rect62);
+            link68.target(rect63);
+            link68.addTo(nlStatementsGraph);
+
+            var link69 = link.clone();
+            link69.source(rect63);
+            link69.target(rect64);
+            link69.addTo(nlStatementsGraph);
+
+            var link70 = link.clone();
+            link70.source(rect64);
+            link70.target(rect65);
+            link70.addTo(nlStatementsGraph);
+
+            var link71 = link.clone();
+            link71.source(rect65);
+            link71.target(rect66);
+            link71.addTo(nlStatementsGraph);
+
+            var link72 = link.clone();
+            link72.source(rect66);
+            link72.target(rect67);
+            link72.addTo(nlStatementsGraph);
+
+            var link73 = link.clone();
+            link73.source(rect67);
+            link73.target(rect68);
+            link73.addTo(nlStatementsGraph);
+
+            var link74 = link.clone();
+            link74.source(rect68);
+            link74.target(rect69);
+            link74.addTo(nlStatementsGraph);
+
+            var link75 = link.clone();
+            link75.source(rect69);
+            link75.target(rect70);
+            link75.addTo(nlStatementsGraph);
+
+            var link76 = link.clone();
+            link76.source(rect70);
+            link76.target(rect71);
+            link76.addTo(nlStatementsGraph);
+
+            var link77 = link.clone();
+            link77.source(rect71);
+            link77.target(rect72);
+            link77.addTo(nlStatementsGraph);
+
+            var link78 = link.clone();
+            link78.source(rect72);
+            link78.target(rect73);
+            link78.addTo(nlStatementsGraph);
+
+            var link79 = link.clone();
+            link79.source(rect73);
+            link79.target(rect74);
+            link79.set('ifBlockStartLink', true);
+            link79.label(0, {attrs: {text: {text: 'Yes'}}});
+            link79.addTo(nlStatementsGraph);
+
+            var link80 = link.clone();
+            link80.source(rect74);
+            link80.target(rect75);
+            link80.addTo(nlStatementsGraph);
+
+            var link81 = link.clone();
+            link81.source(rect75);
+            link81.target(rect76);
+            link81.addTo(nlStatementsGraph);
+
+            var link82 = link.clone();
+            link82.source(rect76);
+            link82.target(rect77);
+            link82.addTo(nlStatementsGraph);
+            link82.set('ifBlockEndLink', true);
+            link82.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link83 = link.clone();
+            link83.source(rect73);
+            link83.target(rect77);
+            link83.addTo(nlStatementsGraph);
+            link83.label(0, {attrs: {text: {text: 'No'}}});
+            link83.set('elseBlockStartAndEndLink', true);
+
+            rect73.set('endIfConditionId', rect77.id);
+            rect77.set('ifConditionId', rect73.id);
+
+            var link84 = link.clone();
+            link84.source(rect77);
+            link84.target(rect78);
+            link84.addTo(nlStatementsGraph);
+
+            var link85 = link.clone();
+            link85.source(rect78);
+            link85.target(rect79);
+            link85.set('ifBlockStartLink', true);
+            link85.label(0, {attrs: {text: {text: 'Yes'}}});
+            link85.addTo(nlStatementsGraph);
+
+            var link86 = link.clone();
+            link86.source(rect79);
+            link86.target(rect80);
+            link86.addTo(nlStatementsGraph);
+
+            var link87 = link.clone();
+            link87.source(rect80);
+            link87.target(rect81);
+            link87.addTo(nlStatementsGraph);
+
+            var link88 = link.clone();
+            link88.source(rect81);
+            link88.target(rect82);
+            link88.addTo(nlStatementsGraph);
+
+            var link89 = link.clone();
+            link89.source(rect82);
+            link89.target(rect83);
+            link89.addTo(nlStatementsGraph);
+
+            var link90 = link.clone();
+            link90.source(rect83);
+            link90.target(rect84);
+            link90.addTo(nlStatementsGraph);
+
+            var link91 = link.clone();
+            link91.source(rect84);
+            link91.target(rect85);
+            link91.addTo(nlStatementsGraph);
+
+            var link92 = link.clone();
+            link92.source(rect85);
+            link92.target(rect86);
+            link92.addTo(nlStatementsGraph);
+            link92.set('ifBlockEndLink', true);
+            link92.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link93 = link.clone();
+            link93.source(rect78);
+            link93.target(rect86);
+            link93.addTo(nlStatementsGraph);
+            link93.label(0, {attrs: {text: {text: 'No'}}});
+            link93.set('elseBlockStartAndEndLink', true);
+
+            rect78.set('endIfConditionId', rect86.id);
+            rect86.set('ifConditionId', rect78.id);
+
+            var link94 = link.clone();
+            link94.source(rect86);
+            link94.target(rect87);
+            link94.addTo(nlStatementsGraph);
+
+            var link95 = link.clone();
+            link95.source(rect87);
+            link95.target(rect88);
+            link95.addTo(nlStatementsGraph);
+
+            var link96 = link.clone();
+            link96.source(rect88);
+            link96.target(rect89);
+            link96.addTo(nlStatementsGraph);
+
+            var link97 = link.clone();
+            link97.source(rect89);
+            link97.target(rect90);
+            link97.addTo(nlStatementsGraph);
+
+            var link98 = link.clone();
+            link98.source(rect90);
+            link98.target(rect91);
+            link98.addTo(nlStatementsGraph);
+
+            var link99 = link.clone();
+            link99.source(rect91);
+            link99.target(rect92);
+            link99.addTo(nlStatementsGraph);
+
+            var link100 = link.clone();
+            link100.source(rect92);
+            link100.target(rect93);
+            link100.addTo(nlStatementsGraph);
+
+            var link101 = link.clone();
+            link101.source(rect93);
+            link101.target(rect94);
+            link101.addTo(nlStatementsGraph);
+
+            var link102 = link.clone();
+            link102.source(rect94);
+            link102.target(rect95);
+            link102.addTo(nlStatementsGraph);
+
+            var link103 = link.clone();
+            link103.source(rect95);
+            link103.target(rect96);
+            link103.addTo(nlStatementsGraph);
+            link103.set('ifBlockEndLink', true);
+            link103.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            rect95.set('endIfConditionId', rect96.id);
+            rect96.set('ifConditionId', rect95.id);
+
+            var link104 = link.clone();
+            link104.source(rect96);
+            link104.target(rect97);
+            link104.addTo(nlStatementsGraph);
+
+            var link105 = link.clone();
+            link105.source(rect97);
+            link105.target(rect98);
+            link105.addTo(nlStatementsGraph);
+            link105.set('ifBlockEndLink', true);
+            link105.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            rect97.set('endIfConditionId', rect98.id);
+            rect98.set('ifConditionId', rect97.id);
+
+            var link106 = link.clone();
+            link106.source(rect98);
+            link106.target(rect99);
+            link106.addTo(nlStatementsGraph);
+
+            var link107 = link.clone();
+            link107.source(rect99);
+            link107.target(rect100);
+            link107.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect100.set('stopNode', 'true');
+            rect100.attr('circle/fill', 'red');
+            rect100.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect100);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 20300,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-4972: HashMap t_Get_Next_Bom_Level_OutputMap = new HashMap();');
+            nodesArr.push('Line No-4973: String T_Table;');
+            nodesArr.push('Line No-4974: String T_Table_Field;');
+            nodesArr.push('Line No-4975: String T_Prefix = "BOM";');
+            nodesArr.push('Line No-4976: String T_Item_Table;');
+            nodesArr.push('Line No-4977: String T_Where_Condition;');
+            nodesArr.push('Line No-4978: String T_Item_Mapping;');
+            nodesArr.push('Line No-4979: String T_Default_Bom_Level = "No Bom levels used";');
+            nodesArr.push('Line No-4980: boolean I_DEBUG_FLAG = false;');
+            nodesArr.push('Line No-4981: String T_Select_Clause;');
+            nodesArr.push('Line No-4982: String T_Where_Clause;');
+            nodesArr.push('Line No-4983: String T_From_Clause;');
+            nodesArr.push('Line No-4985: Sql = "Select  bom_level_table," + "           bom_level_flexfield," + "           item_table," + "           where_condition," + "           item_mapping" + "      from t_factories tf, mtl_parameters mp" + "     where mp.organization_id = ?" + "       and tf.factory_id = ?" + "       and mp.organization_code = tf.organization_code";');
+            nodesArr.push('Line No-4993: preparedStatement = connection.prepareStatement(Sql);');
+            nodesArr.push('Line No-4994: preparedStatement.setObject(1, I_Organization_Id);');
+            nodesArr.push('Line No-4995: preparedStatement.setObject(2, I_Factory_Id);');
+            nodesArr.push('Line No-4996: resultSet = preparedStatement.executeQuery();');
+            nodesArr.push('Line No-4997: If  resultSet.next() == false');
+            nodesArr.push('Line No-4998: throw new No_Data_Found("No Data Found");');
+            nodesArr.push('Line No-5000: T_Table = resultSet.getString(1);');
+            nodesArr.push('Line No-5001: T_Table_Field = resultSet.getString(2);');
+            nodesArr.push('Line No-5002: T_Item_Table = resultSet.getString(3);');
+            nodesArr.push('Line No-5003: T_Where_Condition = resultSet.getString(4);');
+            nodesArr.push('Line No-5004: T_Item_Mapping = resultSet.getString(5);');
+            nodesArr.push('Line No-5008: T_Select_Clause = "select ";');
+            nodesArr.push('Line No-5009: T_Where_Clause = " where BOM.organization_id = ? " + " and   BOM.assembly_item_id = ? " + " and   BOM.alternate_bom_designator is null " + " and   BIC.bill_sequence_id =BOM.common_bill_sequence_id " + " and   BBOM.assembly_item_id = bic.component_item_id " + " and   BBOM.organization_id = ? " + " and   BBOM.alternate_bom_designator is null" + " and   trunc(BIC.effectivity_date) <= sysdate" + " and   nvl(BIC.disable_date,sysdate+10) > sysdate";');
+            nodesArr.push('Line No-5018: If  "MTL_ITEM_FLEXFIELDS".equals(T_Item_Table)');
+            nodesArr.push('Line No-5019: T_From_Clause = " from MTL_ITEM_FLEXFIELDS MIF1, MTL_ITEM_FLEXFIELDS MIF2, ";');
+            nodesArr.push('Line No-5020: T_Where_Clause = T_Where_Clause + " and   BOM.organization_id = MIF1.organization_id" + " and   MIF1.organization_id = MIF2.organization_id" + " and   BOM.assembly_item_id = MIF1.inventory_item_id" + " and   MIF2.inventory_item_id = BIC.component_item_id";');
+            nodesArr.push('Line No-5035: T_From_Clause = " from " + T_Item_Table + " MCR1," + T_Item_Table + " MCR2,";');
+            nodesArr.push('Line No-5037: T_Where_Clause = T_Where_Clause + " and   BOM.organization_id = MCR1.organization_id" + " and   MCR1.organization_id = MCR2.organization_id" + " and   BOM.assembly_item_id = MCR1.inventory_item_id" + " and   MCR2.inventory_item_id = BIC.component_item_id" + " and   MCR1." + T_Where_Condition + " and   MCR2." + T_Where_Condition + " and   MCR1." + T_Item_Mapping + " = MCR2." + T_Item_Mapping;');
+            nodesArr.push('Line No-5046: If  "MTL_SYSTEM_ITEMS".equals(T_Table)');
+            nodesArr.push('Line No-5047: T_Prefix = "MSI";');
+            nodesArr.push('Line No-5048: T_Select_Clause = T_Select_Clause + " MSI.inventory_item_id, ";');
+            nodesArr.push('Line No-5049: T_From_Clause = T_From_Clause + " " + T_Table + " MSI, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";');
+            nodesArr.push('Line No-5053: T_Where_Clause = T_Where_Clause + " and   MSI.inventory_item_id = BIC.component_item_id" + " AND   MSI.organization_id   = ?";');
+            nodesArr.push('Line No-5057: If  "BOM_OPERATIONAL_ROUTINGS".equals(T_Table)');
+            nodesArr.push('Line No-5058: T_Prefix = "BOR";');
+            nodesArr.push('Line No-5059: T_Select_Clause = T_Select_Clause + T_Prefix + ".assembly_item_id, ";');
+            nodesArr.push('Line No-5062: T_From_Clause = T_From_Clause + " " + T_Table + " BOR, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";');
+            nodesArr.push('Line No-5066: T_Where_Clause = T_Where_Clause + " and   BOR.assembly_item_id = BIC.component_item_id" + " and   BOR.alternate_routing_designator is null" + " and   BOR.organization_id = ?";');
+            nodesArr.push('Line No-5070: If  "BOM_BILL_OF_MATERIALS".equals(T_Table)');
+            nodesArr.push('Line No-5071: T_Prefix = "BBOM";');
+            nodesArr.push('Line No-5072: T_Select_Clause = T_Select_Clause + " BBOM.assembly_item_id, ";');
+            nodesArr.push('Line No-5074: T_From_Clause = T_From_Clause + " " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";');
+            nodesArr.push('Line No-5079: T_Prefix = "BLT";');
+            nodesArr.push('Line No-5080: T_Select_Clause = T_Select_Clause + " BIC.component_item_id, ";');
+            nodesArr.push('Line No-5082: T_From_Clause = T_From_Clause + " " + T_Table + " BLT, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";');
+            nodesArr.push('Line No-5086: T_Where_Clause = T_Where_Clause + " and   BLT.INVENTORY_ITEM_ID = BIC.component_item_id" + " and   BLT.organization_id = ?";');
+            nodesArr.push('Line No-5091: T_Select_Clause = T_Select_Clause + T_Prefix + "." + T_Table_Field + " ";');
+            nodesArr.push('Line No-5093: T_Where_Clause = T_Where_Clause + " and " + T_Prefix + "." + T_Table_Field + " is not null";');
+            nodesArr.push('Line No-5095: String T_Sql_String = T_Select_Clause + T_From_Clause + T_Where_Clause;');
+            nodesArr.push('Line No-5098: Sql = "INSERT INTO T_Debug VALUES (100000, SYSDATE, ?)";');
+            nodesArr.push('Line No-5099: preparedStatement = connection.prepareStatement(Sql);');
+            nodesArr.push('Line No-5100: preparedStatement.setObject(1, T_Sql_String);');
+            nodesArr.push('Line No-5101: preparedStatement.executeUpdate();');
+            nodesArr.push('Line No-5102: preparedStatement.clearParameters();');
+            nodesArr.push('Line No-5113: int counter = 1;');
+            nodesArr.push('Line No-5114: logger.debug("the value of T_Sql_String is : " + T_Sql_String);');
+            nodesArr.push('Line No-5115: preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);');
+            nodesArr.push('Line No-5118: preparedStatement.setObject(counter++, I_Organization_Id);');
+            nodesArr.push('Line No-5119: preparedStatement.setObject(counter++, I_Inventory_Item_Id);');
+            nodesArr.push('Line No-5120: preparedStatement.setObject(counter++, I_Organization_Id);');
+            nodesArr.push('Line No-5121: preparedStatement.setObject(counter++, I_Organization_Id);');
+            nodesArr.push('Line No-5123: resultSet = preparedStatement.executeQuery();');
+            nodesArr.push('Line No-5124: resultSet.last();');
+            nodesArr.push('Line No-5125: I_Status_Code = resultSet.getRow();');
+            nodesArr.push('Line No-5126: resultSet.beforeFirst();');
+            nodesArr.push('Line No-5127: If  I_Status_Code <= 0');
+            nodesArr.push('Line No-5128: I_Status_Code = -1;');
+            nodesArr.push('Line No-5130: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);');
+            nodesArr.push('Line No-5132: return t_Get_Next_Bom_Level_OutputMap;');
+            nodesArr.push('Line No-5134: If  I_Status_Code > 1');
+            nodesArr.push('Line No-5135: I_Status_Code = Failure_Code;');
+            nodesArr.push('Line No-5136: I_Error_Code = 1007;');
+            nodesArr.push('Line No-5137: I_Error_Message = "same MES house name attached to multiple child items in oracle";');
+            nodesArr.push('Line No-5139: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);');
+            nodesArr.push('Line No-5141: t_Get_Next_Bom_Level_OutputMap.put("I_Error_Code", I_Error_Code);');
+            nodesArr.push('Line No-5143: t_Get_Next_Bom_Level_OutputMap.put("I_Error_Message", I_Error_Message);');
+            nodesArr.push('Line No-5145: return t_Get_Next_Bom_Level_OutputMap;');
+            nodesArr.push('Line No-5150: resultSet.next()');
+            nodesArr.push('Line No-5151: I_Inventory_Item_Id = resultSet.getInt(1);');
+            nodesArr.push('Line No-5152: I_Bom_Level = resultSet.getString(2);');
+            nodesArr.push('Line No-5155: I_Bom_Level = (I_Bom_Level == null) ? T_Default_Bom_Level : I_Bom_Level');
+            nodesArr.push('Line No-5157: I_Status_Code = Success_Code;');
+            nodesArr.push('Line No-5158: t_Get_Next_Bom_Level_OutputMap.put("I_Inventory_Item_Id", I_Inventory_Item_Id);');
+            nodesArr.push('Line No-5160: t_Get_Next_Bom_Level_OutputMap.put("I_Bom_Level", I_Bom_Level);');
+            nodesArr.push('Line No-5161: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);');
+            nodesArr.push('Line No-5212: If  resultSet != null');
+            nodesArr.push('Line No-5214: If  preparedStatement != null');
+            nodesArr.push('Line No-5220: return t_Get_Next_Bom_Level_OutputMap;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect101 = ellipse.clone();
+            rect101.addTo(javaStatementsGraph);
+            rect101.attr('text/text', 'Start');
+            rect101.attr('circle/fill', 'green');
+
+            rootNode = rect101;
+
+            flowChartNode = getBrokenText('Line No-4972: HashMap t_Get_Next_Bom_Level_OutputMap = new HashMap();    ');
+            var rect102 = rect.clone();
+            rect102.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect102.attr('label/text', flowChartNode);
+            rect102.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4973: String T_Table;    ');
+            var rect103 = rect.clone();
+            rect103.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect103.attr('label/text', flowChartNode);
+            rect103.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4974: String T_Table_Field;    ');
+            var rect104 = rect.clone();
+            rect104.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect104.attr('label/text', flowChartNode);
+            rect104.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4975: String T_Prefix = "BOM";    ');
+            var rect105 = rect.clone();
+            rect105.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect105.attr('label/text', flowChartNode);
+            rect105.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4976: String T_Item_Table;    ');
+            var rect106 = rect.clone();
+            rect106.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect106.attr('label/text', flowChartNode);
+            rect106.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4977: String T_Where_Condition;    ');
+            var rect107 = rect.clone();
+            rect107.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect107.attr('label/text', flowChartNode);
+            rect107.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4978: String T_Item_Mapping;    ');
+            var rect108 = rect.clone();
+            rect108.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect108.attr('label/text', flowChartNode);
+            rect108.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4979: String T_Default_Bom_Level = "No Bom levels used";    ');
+            var rect109 = rect.clone();
+            rect109.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect109.attr('label/text', flowChartNode);
+            rect109.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4980: boolean I_DEBUG_FLAG = false;    ');
+            var rect110 = rect.clone();
+            rect110.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect110.attr('label/text', flowChartNode);
+            rect110.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4981: String T_Select_Clause;    ');
+            var rect111 = rect.clone();
+            rect111.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect111.attr('label/text', flowChartNode);
+            rect111.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4982: String T_Where_Clause;    ');
+            var rect112 = rect.clone();
+            rect112.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect112.attr('label/text', flowChartNode);
+            rect112.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4983: String T_From_Clause;    ');
+            var rect113 = rect.clone();
+            rect113.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect113.attr('label/text', flowChartNode);
+            rect113.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4985: Sql = "Select  bom_level_table," + "           bom_level_flexfield," + "           item_table," + "           where_condition," + "           item_mapping" + "      from t_factories tf, mtl_parameters mp" + "     where mp.organization_id = ?" + "       and tf.factory_id = ?" + "       and mp.organization_code = tf.organization_code";    ');
+            var rect114 = rect.clone();
+            rect114.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect114.attr('label/text', flowChartNode);
+            rect114.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4993: preparedStatement = connection.prepareStatement(Sql);    ');
+            var rect115 = rect.clone();
+            rect115.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect115.attr('label/text', flowChartNode);
+            rect115.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4994: preparedStatement.setObject(1, I_Organization_Id);    ');
+            var rect116 = rect.clone();
+            rect116.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect116.attr('label/text', flowChartNode);
+            rect116.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4995: preparedStatement.setObject(2, I_Factory_Id);    ');
+            var rect117 = rect.clone();
+            rect117.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect117.attr('label/text', flowChartNode);
+            rect117.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4996: resultSet = preparedStatement.executeQuery();    ');
+            var rect118 = rect.clone();
+            rect118.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect118.attr('label/text', flowChartNode);
+            rect118.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4997: If  resultSet.next() == false');
+            var rect119 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect119.resize(maxNodeWidth, resizeWidth);
+            rect119.attr('text/text', flowChartNode);
+            rect119.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-4998: throw new No_Data_Found("No Data Found");    ');
+            var rect120 = rect.clone();
+            rect120.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect120.translate(-1.1 * maxNodeWidth,318300);
+            rect120.attr('label/text', flowChartNode);
+            rect120.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5000: T_Table = resultSet.getString(1);    ');
+            var rect121 = rect.clone();
+            rect121.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect121.translate(1.1 * maxNodeWidth,318300);
+            rect121.attr('label/text', flowChartNode);
+            rect121.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5001: T_Table_Field = resultSet.getString(2);    ');
+            var rect122 = rect.clone();
+            rect122.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect122.translate(1.1 * maxNodeWidth,318300);
+            rect122.attr('label/text', flowChartNode);
+            rect122.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5002: T_Item_Table = resultSet.getString(3);    ');
+            var rect123 = rect.clone();
+            rect123.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect123.translate(1.1 * maxNodeWidth,318300);
+            rect123.attr('label/text', flowChartNode);
+            rect123.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5003: T_Where_Condition = resultSet.getString(4);    ');
+            var rect124 = rect.clone();
+            rect124.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect124.translate(1.1 * maxNodeWidth,318300);
+            rect124.attr('label/text', flowChartNode);
+            rect124.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5004: T_Item_Mapping = resultSet.getString(5);    ');
+            var rect125 = rect.clone();
+            rect125.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect125.translate(1.1 * maxNodeWidth,318300);
+            rect125.attr('label/text', flowChartNode);
+            rect125.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect126 = rect.clone();
+            rect126.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect126.attr('label/text', flowChartNode);
+            rect126.addTo(javaStatementsGraph);
+            rect126.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5008: T_Select_Clause = "select ";    ');
+            var rect127 = rect.clone();
+            rect127.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect127.attr('label/text', flowChartNode);
+            rect127.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5009: T_Where_Clause = " where BOM.organization_id = ? " + " and   BOM.assembly_item_id = ? " + " and   BOM.alternate_bom_designator is null " + " and   BIC.bill_sequence_id =BOM.common_bill_sequence_id " + " and   BBOM.assembly_item_id = bic.component_item_id " + " and   BBOM.organization_id = ? " + " and   BBOM.alternate_bom_designator is null" + " and   trunc(BIC.effectivity_date) <= sysdate" + " and   nvl(BIC.disable_date,sysdate+10) > sysdate";    ');
+            var rect128 = rect.clone();
+            rect128.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect128.attr('label/text', flowChartNode);
+            rect128.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5018: If  "MTL_ITEM_FLEXFIELDS".equals(T_Item_Table)');
+            var rect129 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect129.resize(maxNodeWidth, resizeWidth);
+            rect129.attr('text/text', flowChartNode);
+            rect129.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5019: T_From_Clause = " from MTL_ITEM_FLEXFIELDS MIF1, MTL_ITEM_FLEXFIELDS MIF2, ";    ');
+            var rect130 = rect.clone();
+            rect130.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect130.translate(-1.1 * maxNodeWidth,318600);
+            rect130.attr('label/text', flowChartNode);
+            rect130.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5020: T_Where_Clause = T_Where_Clause + " and   BOM.organization_id = MIF1.organization_id" + " and   MIF1.organization_id = MIF2.organization_id" + " and   BOM.assembly_item_id = MIF1.inventory_item_id" + " and   MIF2.inventory_item_id = BIC.component_item_id";    ');
+            var rect131 = rect.clone();
+            rect131.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect131.translate(-1.1 * maxNodeWidth,318600);
+            rect131.attr('label/text', flowChartNode);
+            rect131.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5035: T_From_Clause = " from " + T_Item_Table + " MCR1," + T_Item_Table + " MCR2,";    ');
+            var rect132 = rect.clone();
+            rect132.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect132.translate(1.1 * maxNodeWidth,318600);
+            rect132.attr('label/text', flowChartNode);
+            rect132.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5037: T_Where_Clause = T_Where_Clause + " and   BOM.organization_id = MCR1.organization_id" + " and   MCR1.organization_id = MCR2.organization_id" + " and   BOM.assembly_item_id = MCR1.inventory_item_id" + " and   MCR2.inventory_item_id = BIC.component_item_id" + " and   MCR1." + T_Where_Condition + " and   MCR2." + T_Where_Condition + " and   MCR1." + T_Item_Mapping + " = MCR2." + T_Item_Mapping;    ');
+            var rect133 = rect.clone();
+            rect133.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect133.translate(1.1 * maxNodeWidth,318600);
+            rect133.attr('label/text', flowChartNode);
+            rect133.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect134 = rect.clone();
+            rect134.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect134.attr('label/text', flowChartNode);
+            rect134.addTo(javaStatementsGraph);
+            rect134.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5046: If  "MTL_SYSTEM_ITEMS".equals(T_Table)');
+            var rect135 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect135.resize(maxNodeWidth, resizeWidth);
+            rect135.attr('text/text', flowChartNode);
+            rect135.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5047: T_Prefix = "MSI";    ');
+            var rect136 = rect.clone();
+            rect136.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect136.translate(-1.1 * maxNodeWidth,318700);
+            rect136.attr('label/text', flowChartNode);
+            rect136.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5048: T_Select_Clause = T_Select_Clause + " MSI.inventory_item_id, ";    ');
+            var rect137 = rect.clone();
+            rect137.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect137.translate(-1.1 * maxNodeWidth,318700);
+            rect137.attr('label/text', flowChartNode);
+            rect137.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5049: T_From_Clause = T_From_Clause + " " + T_Table + " MSI, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";    ');
+            var rect138 = rect.clone();
+            rect138.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect138.translate(-1.1 * maxNodeWidth,318700);
+            rect138.attr('label/text', flowChartNode);
+            rect138.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5053: T_Where_Clause = T_Where_Clause + " and   MSI.inventory_item_id = BIC.component_item_id" + " AND   MSI.organization_id   = ?";    ');
+            var rect139 = rect.clone();
+            rect139.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect139.translate(-1.1 * maxNodeWidth,318700);
+            rect139.attr('label/text', flowChartNode);
+            rect139.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5057: If  "BOM_OPERATIONAL_ROUTINGS".equals(T_Table)');
+            var rect140 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect140.resize(maxNodeWidth, resizeWidth);
+            rect140.translate(1.1 * maxNodeWidth,318800);
+            rect140.attr('text/text', flowChartNode);
+            rect140.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5058: T_Prefix = "BOR";    ');
+            var rect141 = rect.clone();
+            rect141.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect141.translate(0.0 * maxNodeWidth,318800);
+            rect141.attr('label/text', flowChartNode);
+            rect141.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5059: T_Select_Clause = T_Select_Clause + T_Prefix + ".assembly_item_id, ";    ');
+            var rect142 = rect.clone();
+            rect142.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect142.translate(0.0 * maxNodeWidth,318800);
+            rect142.attr('label/text', flowChartNode);
+            rect142.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5062: T_From_Clause = T_From_Clause + " " + T_Table + " BOR, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";    ');
+            var rect143 = rect.clone();
+            rect143.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect143.translate(0.0 * maxNodeWidth,318800);
+            rect143.attr('label/text', flowChartNode);
+            rect143.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5066: T_Where_Clause = T_Where_Clause + " and   BOR.assembly_item_id = BIC.component_item_id" + " and   BOR.alternate_routing_designator is null" + " and   BOR.organization_id = ?";    ');
+            var rect144 = rect.clone();
+            rect144.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect144.translate(0.0 * maxNodeWidth,318800);
+            rect144.attr('label/text', flowChartNode);
+            rect144.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5070: If  "BOM_BILL_OF_MATERIALS".equals(T_Table)');
+            var rect145 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect145.resize(maxNodeWidth, resizeWidth);
+            rect145.translate(2.2 * maxNodeWidth,318900);
+            rect145.attr('text/text', flowChartNode);
+            rect145.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5071: T_Prefix = "BBOM";    ');
+            var rect146 = rect.clone();
+            rect146.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect146.translate(1.1 * maxNodeWidth,318900);
+            rect146.attr('label/text', flowChartNode);
+            rect146.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5072: T_Select_Clause = T_Select_Clause + " BBOM.assembly_item_id, ";    ');
+            var rect147 = rect.clone();
+            rect147.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect147.translate(1.1 * maxNodeWidth,318900);
+            rect147.attr('label/text', flowChartNode);
+            rect147.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5074: T_From_Clause = T_From_Clause + " " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";    ');
+            var rect148 = rect.clone();
+            rect148.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect148.translate(1.1 * maxNodeWidth,318900);
+            rect148.attr('label/text', flowChartNode);
+            rect148.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5079: T_Prefix = "BLT";    ');
+            var rect149 = rect.clone();
+            rect149.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect149.translate(3.3000000000000003 * maxNodeWidth,318900);
+            rect149.attr('label/text', flowChartNode);
+            rect149.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5080: T_Select_Clause = T_Select_Clause + " BIC.component_item_id, ";    ');
+            var rect150 = rect.clone();
+            rect150.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect150.translate(3.3000000000000003 * maxNodeWidth,318900);
+            rect150.attr('label/text', flowChartNode);
+            rect150.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5082: T_From_Clause = T_From_Clause + " " + T_Table + " BLT, " + " BOM_BILL_OF_MATERIALS BBOM ," + " BOM_INVENTORY_COMPONENTS BIC, " + " BOM_BILL_OF_MATERIALS BOM";    ');
+            var rect151 = rect.clone();
+            rect151.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect151.translate(3.3000000000000003 * maxNodeWidth,318900);
+            rect151.attr('label/text', flowChartNode);
+            rect151.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5086: T_Where_Clause = T_Where_Clause + " and   BLT.INVENTORY_ITEM_ID = BIC.component_item_id" + " and   BLT.organization_id = ?";    ');
+            var rect152 = rect.clone();
+            rect152.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect152.translate(3.3000000000000003 * maxNodeWidth,318900);
+            rect152.attr('label/text', flowChartNode);
+            rect152.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect153 = rect.clone();
+            rect153.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect153.translate(2.2 * maxNodeWidth,318900);
+            rect153.attr('label/text', flowChartNode);
+            rect153.addTo(javaStatementsGraph);
+            rect153.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect154 = rect.clone();
+            rect154.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect154.translate(1.1 * maxNodeWidth,318900);
+            rect154.attr('label/text', flowChartNode);
+            rect154.addTo(javaStatementsGraph);
+            rect154.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect155 = rect.clone();
+            rect155.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect155.attr('label/text', flowChartNode);
+            rect155.addTo(javaStatementsGraph);
+            rect155.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5091: T_Select_Clause = T_Select_Clause + T_Prefix + "." + T_Table_Field + " ";    ');
+            var rect156 = rect.clone();
+            rect156.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect156.attr('label/text', flowChartNode);
+            rect156.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5093: T_Where_Clause = T_Where_Clause + " and " + T_Prefix + "." + T_Table_Field + " is not null";    ');
+            var rect157 = rect.clone();
+            rect157.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect157.attr('label/text', flowChartNode);
+            rect157.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5095: String T_Sql_String = T_Select_Clause + T_From_Clause + T_Where_Clause;    ');
+            var rect158 = rect.clone();
+            rect158.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect158.attr('label/text', flowChartNode);
+            rect158.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5098: Sql = "INSERT INTO T_Debug VALUES (100000, SYSDATE, ?)";    ');
+            var rect159 = rect.clone();
+            rect159.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect159.attr('label/text', flowChartNode);
+            rect159.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5099: preparedStatement = connection.prepareStatement(Sql);    ');
+            var rect160 = rect.clone();
+            rect160.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect160.attr('label/text', flowChartNode);
+            rect160.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5100: preparedStatement.setObject(1, T_Sql_String);    ');
+            var rect161 = rect.clone();
+            rect161.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect161.attr('label/text', flowChartNode);
+            rect161.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5101: preparedStatement.executeUpdate();    ');
+            var rect162 = rect.clone();
+            rect162.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect162.attr('label/text', flowChartNode);
+            rect162.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5102: preparedStatement.clearParameters();    ');
+            var rect163 = rect.clone();
+            rect163.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect163.attr('label/text', flowChartNode);
+            rect163.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5113: int counter = 1;    ');
+            var rect164 = rect.clone();
+            rect164.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect164.attr('label/text', flowChartNode);
+            rect164.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5114: logger.debug("the value of T_Sql_String is : " + T_Sql_String);    ');
+            var rect165 = rect.clone();
+            rect165.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect165.attr('label/text', flowChartNode);
+            rect165.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5115: preparedStatement = connection.prepareStatement(T_Sql_String, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);    ');
+            var rect166 = rect.clone();
+            rect166.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect166.attr('label/text', flowChartNode);
+            rect166.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5118: preparedStatement.setObject(counter++, I_Organization_Id);    ');
+            var rect167 = rect.clone();
+            rect167.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect167.attr('label/text', flowChartNode);
+            rect167.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5119: preparedStatement.setObject(counter++, I_Inventory_Item_Id);    ');
+            var rect168 = rect.clone();
+            rect168.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect168.attr('label/text', flowChartNode);
+            rect168.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5120: preparedStatement.setObject(counter++, I_Organization_Id);    ');
+            var rect169 = rect.clone();
+            rect169.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect169.attr('label/text', flowChartNode);
+            rect169.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5121: preparedStatement.setObject(counter++, I_Organization_Id);    ');
+            var rect170 = rect.clone();
+            rect170.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect170.attr('label/text', flowChartNode);
+            rect170.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5123: resultSet = preparedStatement.executeQuery();    ');
+            var rect171 = rect.clone();
+            rect171.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect171.attr('label/text', flowChartNode);
+            rect171.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5124: resultSet.last();    ');
+            var rect172 = rect.clone();
+            rect172.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect172.attr('label/text', flowChartNode);
+            rect172.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5125: I_Status_Code = resultSet.getRow();    ');
+            var rect173 = rect.clone();
+            rect173.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect173.attr('label/text', flowChartNode);
+            rect173.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5126: resultSet.beforeFirst();    ');
+            var rect174 = rect.clone();
+            rect174.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect174.attr('label/text', flowChartNode);
+            rect174.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5127: If  I_Status_Code <= 0');
+            var rect175 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect175.resize(maxNodeWidth, resizeWidth);
+            rect175.attr('text/text', flowChartNode);
+            rect175.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5128: I_Status_Code = -1;    ');
+            var rect176 = rect.clone();
+            rect176.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect176.translate(-1.1 * maxNodeWidth,320900);
+            rect176.attr('label/text', flowChartNode);
+            rect176.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5130: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);    ');
+            var rect177 = rect.clone();
+            rect177.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect177.translate(-1.1 * maxNodeWidth,320900);
+            rect177.attr('label/text', flowChartNode);
+            rect177.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5132: return t_Get_Next_Bom_Level_OutputMap;    ');
+            var rect178 = rect.clone();
+            rect178.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect178.translate(-1.1 * maxNodeWidth,320900);
+            rect178.attr('label/text', flowChartNode);
+            rect178.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect179 = rect.clone();
+            rect179.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect179.attr('label/text', flowChartNode);
+            rect179.addTo(javaStatementsGraph);
+            rect179.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5134: If  I_Status_Code > 1');
+            var rect180 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect180.resize(maxNodeWidth, resizeWidth);
+            rect180.attr('text/text', flowChartNode);
+            rect180.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5135: I_Status_Code = Failure_Code;    ');
+            var rect181 = rect.clone();
+            rect181.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect181.translate(-1.1 * maxNodeWidth,321000);
+            rect181.attr('label/text', flowChartNode);
+            rect181.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5136: I_Error_Code = 1007;    ');
+            var rect182 = rect.clone();
+            rect182.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect182.translate(-1.1 * maxNodeWidth,321000);
+            rect182.attr('label/text', flowChartNode);
+            rect182.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5137: I_Error_Message = "same MES house name attached to multiple child items in oracle";    ');
+            var rect183 = rect.clone();
+            rect183.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect183.translate(-1.1 * maxNodeWidth,321000);
+            rect183.attr('label/text', flowChartNode);
+            rect183.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5139: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);    ');
+            var rect184 = rect.clone();
+            rect184.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect184.translate(-1.1 * maxNodeWidth,321000);
+            rect184.attr('label/text', flowChartNode);
+            rect184.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5141: t_Get_Next_Bom_Level_OutputMap.put("I_Error_Code", I_Error_Code);    ');
+            var rect185 = rect.clone();
+            rect185.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect185.translate(-1.1 * maxNodeWidth,321000);
+            rect185.attr('label/text', flowChartNode);
+            rect185.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5143: t_Get_Next_Bom_Level_OutputMap.put("I_Error_Message", I_Error_Message);    ');
+            var rect186 = rect.clone();
+            rect186.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect186.translate(-1.1 * maxNodeWidth,321000);
+            rect186.attr('label/text', flowChartNode);
+            rect186.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5145: return t_Get_Next_Bom_Level_OutputMap;    ');
+            var rect187 = rect.clone();
+            rect187.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect187.translate(-1.1 * maxNodeWidth,321000);
+            rect187.attr('label/text', flowChartNode);
+            rect187.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect188 = rect.clone();
+            rect188.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect188.attr('label/text', flowChartNode);
+            rect188.addTo(javaStatementsGraph);
+            rect188.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5150: resultSet.next()    ');
+            var rect189 = rect.clone();
+            rect189.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect189.attr('label/text', flowChartNode);
+            rect189.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5151: I_Inventory_Item_Id = resultSet.getInt(1);    ');
+            var rect190 = rect.clone();
+            rect190.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect190.attr('label/text', flowChartNode);
+            rect190.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5152: I_Bom_Level = resultSet.getString(2);    ');
+            var rect191 = rect.clone();
+            rect191.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect191.attr('label/text', flowChartNode);
+            rect191.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5155: I_Bom_Level = (I_Bom_Level == null) ? T_Default_Bom_Level : I_Bom_Level    ');
+            var rect192 = rect.clone();
+            rect192.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect192.attr('label/text', flowChartNode);
+            rect192.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5157: I_Status_Code = Success_Code;    ');
+            var rect193 = rect.clone();
+            rect193.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect193.attr('label/text', flowChartNode);
+            rect193.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5158: t_Get_Next_Bom_Level_OutputMap.put("I_Inventory_Item_Id", I_Inventory_Item_Id);    ');
+            var rect194 = rect.clone();
+            rect194.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect194.attr('label/text', flowChartNode);
+            rect194.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5160: t_Get_Next_Bom_Level_OutputMap.put("I_Bom_Level", I_Bom_Level);    ');
+            var rect195 = rect.clone();
+            rect195.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect195.attr('label/text', flowChartNode);
+            rect195.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5161: t_Get_Next_Bom_Level_OutputMap.put("I_Status_Code", I_Status_Code);    ');
+            var rect196 = rect.clone();
+            rect196.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect196.attr('label/text', flowChartNode);
+            rect196.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-5212: If  resultSet != null');
+            var rect197 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect197.resize(maxNodeWidth, resizeWidth);
+            rect197.attr('text/text', flowChartNode);
+            rect197.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect198 = rect.clone();
+            rect198.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect198.attr('label/text', flowChartNode);
+            rect198.addTo(javaStatementsGraph);
+            rect198.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5214: If  preparedStatement != null');
+            var rect199 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect199.resize(maxNodeWidth, resizeWidth);
+            rect199.attr('text/text', flowChartNode);
+            rect199.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect200 = rect.clone();
+            rect200.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect200.attr('label/text', flowChartNode);
+            rect200.addTo(javaStatementsGraph);
+            rect200.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-5220: return t_Get_Next_Bom_Level_OutputMap;    ');
+            var rect201 = rect.clone();
+            rect201.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect201.attr('label/text', flowChartNode);
+            rect201.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect202 = ellipse.clone();
+            rect202.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect202.attr('text/text', flowChartNode);
+            rect202.addTo(javaStatementsGraph);
+
+
+            var link108 = link.clone();
+            link108.source(rect101);
+            link108.target(rect102);
+            link108.addTo(javaStatementsGraph);
+
+            var link109 = link.clone();
+            link109.source(rect102);
+            link109.target(rect103);
+            link109.addTo(javaStatementsGraph);
+
+            var link110 = link.clone();
+            link110.source(rect103);
+            link110.target(rect104);
+            link110.addTo(javaStatementsGraph);
+
+            var link111 = link.clone();
+            link111.source(rect104);
+            link111.target(rect105);
+            link111.addTo(javaStatementsGraph);
+
+            var link112 = link.clone();
+            link112.source(rect105);
+            link112.target(rect106);
+            link112.addTo(javaStatementsGraph);
+
+            var link113 = link.clone();
+            link113.source(rect106);
+            link113.target(rect107);
+            link113.addTo(javaStatementsGraph);
+
+            var link114 = link.clone();
+            link114.source(rect107);
+            link114.target(rect108);
+            link114.addTo(javaStatementsGraph);
+
+            var link115 = link.clone();
+            link115.source(rect108);
+            link115.target(rect109);
+            link115.addTo(javaStatementsGraph);
+
+            var link116 = link.clone();
+            link116.source(rect109);
+            link116.target(rect110);
+            link116.addTo(javaStatementsGraph);
+
+            var link117 = link.clone();
+            link117.source(rect110);
+            link117.target(rect111);
+            link117.addTo(javaStatementsGraph);
+
+            var link118 = link.clone();
+            link118.source(rect111);
+            link118.target(rect112);
+            link118.addTo(javaStatementsGraph);
+
+            var link119 = link.clone();
+            link119.source(rect112);
+            link119.target(rect113);
+            link119.addTo(javaStatementsGraph);
+
+            var link120 = link.clone();
+            link120.source(rect113);
+            link120.target(rect114);
+            link120.addTo(javaStatementsGraph);
+
+            var link121 = link.clone();
+            link121.source(rect114);
+            link121.target(rect115);
+            link121.addTo(javaStatementsGraph);
+
+            var link122 = link.clone();
+            link122.source(rect115);
+            link122.target(rect116);
+            link122.addTo(javaStatementsGraph);
+
+            var link123 = link.clone();
+            link123.source(rect116);
+            link123.target(rect117);
+            link123.addTo(javaStatementsGraph);
+
+            var link124 = link.clone();
+            link124.source(rect117);
+            link124.target(rect118);
+            link124.addTo(javaStatementsGraph);
+
+            var link125 = link.clone();
+            link125.source(rect118);
+            link125.target(rect119);
+            link125.addTo(javaStatementsGraph);
+
+            var link126 = link.clone();
+            link126.source(rect119);
+            link126.target(rect120);
+            link126.set('ifBlockStartLink', true);
+            link126.label(0, {attrs: {text: {text: 'Yes'}}});
+            link126.addTo(javaStatementsGraph);
+
+            var link127 = link.clone();
+            link127.source(rect119);
+            link127.target(rect121);
+            link127.set('elseBlockStartLink', true);
+            link127.label(0, {attrs: {text: {text: 'No'}}});
+            link127.addTo(javaStatementsGraph);
+
+            var link128 = link.clone();
+            link128.source(rect121);
+            link128.target(rect122);
+            link128.addTo(javaStatementsGraph);
+
+            var link129 = link.clone();
+            link129.source(rect122);
+            link129.target(rect123);
+            link129.addTo(javaStatementsGraph);
+
+            var link130 = link.clone();
+            link130.source(rect123);
+            link130.target(rect124);
+            link130.addTo(javaStatementsGraph);
+
+            var link131 = link.clone();
+            link131.source(rect124);
+            link131.target(rect125);
+            link131.addTo(javaStatementsGraph);
+
+            var link132 = link.clone();
+            link132.source(rect120);
+            link132.target(rect126);
+            link132.addTo(javaStatementsGraph);
+            link132.set('ifBlockEndLink', true);
+            link132.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link133 = link.clone();
+            link133.source(rect125);
+            link133.target(rect126);
+            link133.addTo(javaStatementsGraph);
+            link133.set('elseBlockEndLink', true);
+            link133.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect119.set('endIfConditionId', rect126.id);
+            rect126.set('ifConditionId', rect119.id);
+
+            var link134 = link.clone();
+            link134.source(rect126);
+            link134.target(rect127);
+            link134.addTo(javaStatementsGraph);
+
+            var link135 = link.clone();
+            link135.source(rect127);
+            link135.target(rect128);
+            link135.addTo(javaStatementsGraph);
+
+            var link136 = link.clone();
+            link136.source(rect128);
+            link136.target(rect129);
+            link136.addTo(javaStatementsGraph);
+
+            var link137 = link.clone();
+            link137.source(rect129);
+            link137.target(rect130);
+            link137.set('ifBlockStartLink', true);
+            link137.label(0, {attrs: {text: {text: 'Yes'}}});
+            link137.addTo(javaStatementsGraph);
+
+            var link138 = link.clone();
+            link138.source(rect130);
+            link138.target(rect131);
+            link138.addTo(javaStatementsGraph);
+
+            var link139 = link.clone();
+            link139.source(rect129);
+            link139.target(rect132);
+            link139.set('elseBlockStartLink', true);
+            link139.label(0, {attrs: {text: {text: 'No'}}});
+            link139.addTo(javaStatementsGraph);
+
+            var link140 = link.clone();
+            link140.source(rect132);
+            link140.target(rect133);
+            link140.addTo(javaStatementsGraph);
+
+            var link141 = link.clone();
+            link141.source(rect131);
+            link141.target(rect134);
+            link141.addTo(javaStatementsGraph);
+            link141.set('ifBlockEndLink', true);
+            link141.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link142 = link.clone();
+            link142.source(rect133);
+            link142.target(rect134);
+            link142.addTo(javaStatementsGraph);
+            link142.set('elseBlockEndLink', true);
+            link142.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect129.set('endIfConditionId', rect134.id);
+            rect134.set('ifConditionId', rect129.id);
+
+            var link143 = link.clone();
+            link143.source(rect134);
+            link143.target(rect135);
+            link143.addTo(javaStatementsGraph);
+
+            var link144 = link.clone();
+            link144.source(rect135);
+            link144.target(rect136);
+            link144.set('ifBlockStartLink', true);
+            link144.label(0, {attrs: {text: {text: 'Yes'}}});
+            link144.addTo(javaStatementsGraph);
+
+            var link145 = link.clone();
+            link145.source(rect136);
+            link145.target(rect137);
+            link145.addTo(javaStatementsGraph);
+
+            var link146 = link.clone();
+            link146.source(rect137);
+            link146.target(rect138);
+            link146.addTo(javaStatementsGraph);
+
+            var link147 = link.clone();
+            link147.source(rect138);
+            link147.target(rect139);
+            link147.addTo(javaStatementsGraph);
+
+            var link148 = link.clone();
+            link148.source(rect135);
+            link148.target(rect140);
+            link148.set('elseBlockStartLink', true);
+            link148.label(0, {attrs: {text: {text: 'No'}}});
+            link148.addTo(javaStatementsGraph);
+
+            var link149 = link.clone();
+            link149.source(rect140);
+            link149.target(rect141);
+            link149.set('ifBlockStartLink', true);
+            link149.label(0, {attrs: {text: {text: 'Yes'}}});
+            link149.addTo(javaStatementsGraph);
+
+            var link150 = link.clone();
+            link150.source(rect141);
+            link150.target(rect142);
+            link150.addTo(javaStatementsGraph);
+
+            var link151 = link.clone();
+            link151.source(rect142);
+            link151.target(rect143);
+            link151.addTo(javaStatementsGraph);
+
+            var link152 = link.clone();
+            link152.source(rect143);
+            link152.target(rect144);
+            link152.addTo(javaStatementsGraph);
+
+            var link153 = link.clone();
+            link153.source(rect140);
+            link153.target(rect145);
+            link153.set('elseBlockStartLink', true);
+            link153.label(0, {attrs: {text: {text: 'No'}}});
+            link153.addTo(javaStatementsGraph);
+
+            var link154 = link.clone();
+            link154.source(rect145);
+            link154.target(rect146);
+            link154.set('ifBlockStartLink', true);
+            link154.label(0, {attrs: {text: {text: 'Yes'}}});
+            link154.addTo(javaStatementsGraph);
+
+            var link155 = link.clone();
+            link155.source(rect146);
+            link155.target(rect147);
+            link155.addTo(javaStatementsGraph);
+
+            var link156 = link.clone();
+            link156.source(rect147);
+            link156.target(rect148);
+            link156.addTo(javaStatementsGraph);
+
+            var link157 = link.clone();
+            link157.source(rect145);
+            link157.target(rect149);
+            link157.set('elseBlockStartLink', true);
+            link157.label(0, {attrs: {text: {text: 'No'}}});
+            link157.addTo(javaStatementsGraph);
+
+            var link158 = link.clone();
+            link158.source(rect149);
+            link158.target(rect150);
+            link158.addTo(javaStatementsGraph);
+
+            var link159 = link.clone();
+            link159.source(rect150);
+            link159.target(rect151);
+            link159.addTo(javaStatementsGraph);
+
+            var link160 = link.clone();
+            link160.source(rect151);
+            link160.target(rect152);
+            link160.addTo(javaStatementsGraph);
+
+            var link161 = link.clone();
+            link161.source(rect148);
+            link161.target(rect153);
+            link161.addTo(javaStatementsGraph);
+            link161.set('ifBlockEndLink', true);
+            link161.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link162 = link.clone();
+            link162.source(rect152);
+            link162.target(rect153);
+            link162.addTo(javaStatementsGraph);
+            link162.set('elseBlockEndLink', true);
+            link162.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect145.set('endIfConditionId', rect153.id);
+            rect153.set('ifConditionId', rect145.id);
+
+            var link163 = link.clone();
+            link163.source(rect144);
+            link163.target(rect154);
+            link163.addTo(javaStatementsGraph);
+            link163.set('ifBlockEndLink', true);
+            link163.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link164 = link.clone();
+            link164.source(rect153);
+            link164.target(rect154);
+            link164.addTo(javaStatementsGraph);
+            link164.set('elseBlockEndLink', true);
+            link164.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect140.set('endIfConditionId', rect154.id);
+            rect154.set('ifConditionId', rect140.id);
+
+            var link165 = link.clone();
+            link165.source(rect139);
+            link165.target(rect155);
+            link165.addTo(javaStatementsGraph);
+            link165.set('ifBlockEndLink', true);
+            link165.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link166 = link.clone();
+            link166.source(rect154);
+            link166.target(rect155);
+            link166.addTo(javaStatementsGraph);
+            link166.set('elseBlockEndLink', true);
+            link166.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect135.set('endIfConditionId', rect155.id);
+            rect155.set('ifConditionId', rect135.id);
+
+            var link167 = link.clone();
+            link167.source(rect155);
+            link167.target(rect156);
+            link167.addTo(javaStatementsGraph);
+
+            var link168 = link.clone();
+            link168.source(rect156);
+            link168.target(rect157);
+            link168.addTo(javaStatementsGraph);
+
+            var link169 = link.clone();
+            link169.source(rect157);
+            link169.target(rect158);
+            link169.addTo(javaStatementsGraph);
+
+            var link170 = link.clone();
+            link170.source(rect158);
+            link170.target(rect159);
+            link170.addTo(javaStatementsGraph);
+
+            var link171 = link.clone();
+            link171.source(rect159);
+            link171.target(rect160);
+            link171.addTo(javaStatementsGraph);
+
+            var link172 = link.clone();
+            link172.source(rect160);
+            link172.target(rect161);
+            link172.addTo(javaStatementsGraph);
+
+            var link173 = link.clone();
+            link173.source(rect161);
+            link173.target(rect162);
+            link173.addTo(javaStatementsGraph);
+
+            var link174 = link.clone();
+            link174.source(rect162);
+            link174.target(rect163);
+            link174.addTo(javaStatementsGraph);
+
+            var link175 = link.clone();
+            link175.source(rect163);
+            link175.target(rect164);
+            link175.addTo(javaStatementsGraph);
+
+            var link176 = link.clone();
+            link176.source(rect164);
+            link176.target(rect165);
+            link176.addTo(javaStatementsGraph);
+
+            var link177 = link.clone();
+            link177.source(rect165);
+            link177.target(rect166);
+            link177.addTo(javaStatementsGraph);
+
+            var link178 = link.clone();
+            link178.source(rect166);
+            link178.target(rect167);
+            link178.addTo(javaStatementsGraph);
+
+            var link179 = link.clone();
+            link179.source(rect167);
+            link179.target(rect168);
+            link179.addTo(javaStatementsGraph);
+
+            var link180 = link.clone();
+            link180.source(rect168);
+            link180.target(rect169);
+            link180.addTo(javaStatementsGraph);
+
+            var link181 = link.clone();
+            link181.source(rect169);
+            link181.target(rect170);
+            link181.addTo(javaStatementsGraph);
+
+            var link182 = link.clone();
+            link182.source(rect170);
+            link182.target(rect171);
+            link182.addTo(javaStatementsGraph);
+
+            var link183 = link.clone();
+            link183.source(rect171);
+            link183.target(rect172);
+            link183.addTo(javaStatementsGraph);
+
+            var link184 = link.clone();
+            link184.source(rect172);
+            link184.target(rect173);
+            link184.addTo(javaStatementsGraph);
+
+            var link185 = link.clone();
+            link185.source(rect173);
+            link185.target(rect174);
+            link185.addTo(javaStatementsGraph);
+
+            var link186 = link.clone();
+            link186.source(rect174);
+            link186.target(rect175);
+            link186.addTo(javaStatementsGraph);
+
+            var link187 = link.clone();
+            link187.source(rect175);
+            link187.target(rect176);
+            link187.set('ifBlockStartLink', true);
+            link187.label(0, {attrs: {text: {text: 'Yes'}}});
+            link187.addTo(javaStatementsGraph);
+
+            var link188 = link.clone();
+            link188.source(rect176);
+            link188.target(rect177);
+            link188.addTo(javaStatementsGraph);
+
+            var link189 = link.clone();
+            link189.source(rect177);
+            link189.target(rect178);
+            link189.addTo(javaStatementsGraph);
+
+            var link190 = link.clone();
+            link190.source(rect178);
+            link190.target(rect179);
+            link190.addTo(javaStatementsGraph);
+            link190.set('ifBlockEndLink', true);
+            link190.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link191 = link.clone();
+            link191.source(rect175);
+            link191.target(rect179);
+            link191.addTo(javaStatementsGraph);
+            link191.label(0, {attrs: {text: {text: 'No'}}});
+            link191.set('elseBlockStartAndEndLink', true);
+
+            rect175.set('endIfConditionId', rect179.id);
+            rect179.set('ifConditionId', rect175.id);
+
+            var link192 = link.clone();
+            link192.source(rect179);
+            link192.target(rect180);
+            link192.addTo(javaStatementsGraph);
+
+            var link193 = link.clone();
+            link193.source(rect180);
+            link193.target(rect181);
+            link193.set('ifBlockStartLink', true);
+            link193.label(0, {attrs: {text: {text: 'Yes'}}});
+            link193.addTo(javaStatementsGraph);
+
+            var link194 = link.clone();
+            link194.source(rect181);
+            link194.target(rect182);
+            link194.addTo(javaStatementsGraph);
+
+            var link195 = link.clone();
+            link195.source(rect182);
+            link195.target(rect183);
+            link195.addTo(javaStatementsGraph);
+
+            var link196 = link.clone();
+            link196.source(rect183);
+            link196.target(rect184);
+            link196.addTo(javaStatementsGraph);
+
+            var link197 = link.clone();
+            link197.source(rect184);
+            link197.target(rect185);
+            link197.addTo(javaStatementsGraph);
+
+            var link198 = link.clone();
+            link198.source(rect185);
+            link198.target(rect186);
+            link198.addTo(javaStatementsGraph);
+
+            var link199 = link.clone();
+            link199.source(rect186);
+            link199.target(rect187);
+            link199.addTo(javaStatementsGraph);
+
+            var link200 = link.clone();
+            link200.source(rect187);
+            link200.target(rect188);
+            link200.addTo(javaStatementsGraph);
+            link200.set('ifBlockEndLink', true);
+            link200.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link201 = link.clone();
+            link201.source(rect180);
+            link201.target(rect188);
+            link201.addTo(javaStatementsGraph);
+            link201.label(0, {attrs: {text: {text: 'No'}}});
+            link201.set('elseBlockStartAndEndLink', true);
+
+            rect180.set('endIfConditionId', rect188.id);
+            rect188.set('ifConditionId', rect180.id);
+
+            var link202 = link.clone();
+            link202.source(rect188);
+            link202.target(rect189);
+            link202.addTo(javaStatementsGraph);
+
+            var link203 = link.clone();
+            link203.source(rect189);
+            link203.target(rect190);
+            link203.addTo(javaStatementsGraph);
+
+            var link204 = link.clone();
+            link204.source(rect190);
+            link204.target(rect191);
+            link204.addTo(javaStatementsGraph);
+
+            var link205 = link.clone();
+            link205.source(rect191);
+            link205.target(rect192);
+            link205.addTo(javaStatementsGraph);
+
+            var link206 = link.clone();
+            link206.source(rect192);
+            link206.target(rect193);
+            link206.addTo(javaStatementsGraph);
+
+            var link207 = link.clone();
+            link207.source(rect193);
+            link207.target(rect194);
+            link207.addTo(javaStatementsGraph);
+
+            var link208 = link.clone();
+            link208.source(rect194);
+            link208.target(rect195);
+            link208.addTo(javaStatementsGraph);
+
+            var link209 = link.clone();
+            link209.source(rect195);
+            link209.target(rect196);
+            link209.addTo(javaStatementsGraph);
+
+            var link210 = link.clone();
+            link210.source(rect196);
+            link210.target(rect197);
+            link210.addTo(javaStatementsGraph);
+
+            var link211 = link.clone();
+            link211.source(rect197);
+            link211.target(rect198);
+            link211.addTo(javaStatementsGraph);
+            link211.set('ifBlockEndLink', true);
+            link211.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            rect197.set('endIfConditionId', rect198.id);
+            rect198.set('ifConditionId', rect197.id);
+
+            var link212 = link.clone();
+            link212.source(rect198);
+            link212.target(rect199);
+            link212.addTo(javaStatementsGraph);
+
+            var link213 = link.clone();
+            link213.source(rect199);
+            link213.target(rect200);
+            link213.addTo(javaStatementsGraph);
+            link213.set('ifBlockEndLink', true);
+            link213.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            rect199.set('endIfConditionId', rect200.id);
+            rect200.set('ifConditionId', rect199.id);
+
+            var link214 = link.clone();
+            link214.source(rect200);
+            link214.target(rect201);
+            link214.addTo(javaStatementsGraph);
+
+            var link215 = link.clone();
+            link215.source(rect201);
+            link215.target(rect202);
+            link215.addTo(javaStatementsGraph);
+
+            rect101.set('startNode', 'true');
+            rect202.set('stopNode', 'true');
+            rect202.attr('circle/fill', 'red');
+            rect202.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect101, rect202);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

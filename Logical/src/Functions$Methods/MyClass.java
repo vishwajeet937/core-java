@@ -1,0 +1,69 @@
+package Functions$Methods;
+
+/*public class PrimeNumber 
+{
+    public static boolean isPrime(int n)
+    {
+    	
+    	for(int i=2;i<=n-1;i++)  //Math.sqrt(n)
+    	{
+    		if(n%i==0)
+    		{
+    			return false;
+    		}
+    	}
+    	return true;
+    	`
+    }
+	public static void main(String[] args)
+	{  
+		//PrimeNumber.isPrime(12);
+		System.out.println(isPrime(3));
+
+	}*/
+	
+	import java.util.*;
+	import java.util. stream.*;
+	import java.util.function.*;
+
+	public class MyClass {
+	  public static void main(String args[]) {
+	     int[] arr = { 1, 2, 1, 3, 2, 3, 1, 2, 3, 2};
+	     Map<Integer,Long> freqMap = IntStream
+	             .of(arr)
+	             .boxed()
+	             .collect(Collectors.groupingBy
+	                      (Function.identity(),
+	                      Collectors.counting()))
+	             .entrySet()
+	             .stream()
+	             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+	             .collect(Collectors.toMap(
+	                 Map.Entry::getKey,
+	                 Map.Entry::getValue,
+	                 (oldVal, newVal) -> oldVal, LinkedHashMap::new));
+	    int index = 0;
+	    for(Integer key : freqMap.keySet()) {
+	        int j = 0;
+	        while(j++ < freqMap.get(key))
+	          arr[index++] = key;
+	    }
+	    System.out.println(Arrays.toString(arr));
+	    int[] arrElements = { 1, 2, 1, 3, 2, 3, 1, 2, 3, 2};
+	    for(int i = 0, j = arrElements.length - 1; i < j;) {
+	        if(arrElements[i] % 2 == 1 && arrElements[j] % 2 == 0)
+	            arrElements[j] = arrElements[i] ^ arrElements[j] ^ (arrElements[i] = arrElements[j]);
+	        else if(arrElements[i] % 2 == 0 && arrElements[j] % 2 == 1) {
+	            ++i;
+	            --j;
+	        }
+	        else if(arrElements[i] % 2 == 0 && arrElements[j] % 2 == 0)
+	            ++i;
+	        else
+	           --j;
+	    }
+	    System.out.println(Arrays.toString(arrElements));
+	  }
+	}
+
+

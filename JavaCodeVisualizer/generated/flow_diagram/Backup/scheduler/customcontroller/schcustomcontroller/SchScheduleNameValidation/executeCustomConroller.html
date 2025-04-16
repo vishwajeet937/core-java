@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html>
+    <head><link rel='icon' href='../../../../dependencies/images/triniti-corporation.png' >  
+    <!-- dependencies -->
+        <title>SchScheduleNameValidation.executeCustomConroller</title>
+        <script src='../../../../dependencies/jquery/jquery.js'></script>
+        <script src='../../../../dependencies/lodash/lodash.js'></script>
+        <script src='../../../../dependencies/backbone/backbone.js'></script>
+        <script src='../../../../dependencies/jointjs/joint.js'></script>
+        <script src='../../../../dependencies/joint_helper.js'></script>
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/jointjs/joint.css' />
+        <link rel='stylesheet' type='text/css' href='../../../../dependencies/slider/slider.css' />
+		<style type="text/css">
+			:root {
+			    font: Courier New;
+			}
+        .natural_language{
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px; 
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .natural_language:hover,.natural_language:focus  {
+          color: white !important;
+         background-color: blue;}
+        .java {
+         text-transform: Uppercase;
+         background: #ffffff;
+         padding: 10px;
+         border: 2px solid black !important;
+         border-radius: 6px;
+         display: inline-block;
+         transition: all 0.3s ease 0s;}
+        .java:hover,.java:focus {
+         color: white !important;
+         background-color: blue;}
+          .flow-head {
+           width: 100%;
+ 		   margin: auto;
+ 		   }
+ 		  .flow-1{
+ 		   width: 80%;
+ 		   float: left;
+		   height: auto;
+ 			}
+ 		  .flow-2{
+ 		   width: 20%;
+ 		   float: left;
+		   height: auto;
+ 			}
+        .one {
+        width: 12%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .two {
+        width: 88%;
+        margin-top: 25px;
+        float: left;
+        height: auto;
+        }
+        .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        }
+        .text {
+        line-height: 15px;
+        margin-bottom: 2px; 
+        }
+		</style>
+
+        <script type='text/javascript'>
+            var textColor = '#EEE';
+            var backGroundColor = 'null';
+            var strokeColor = '#000000';
+            var rhombus = new joint.shapes.basic.Rhombus({
+                size: {
+                    width: 120, height: 60,
+                    height: 60
+                },
+                attrs: {
+                    path: {
+                        d: 'M 50 0 L 0 49 0 51 50 100 100 51 100 49 z',
+                        fill: '#800020',
+                        stroke: strokeColor
+                    },
+                    text: {
+                        text: 'Rhombus',
+                        fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    }
+                }
+            });
+            rhombus.position(400, 30);
+            rhombus.set('nodeType', 'Rhombus');
+
+            var ellipse = new joint.shapes.basic.Circle({
+                size: { 
+                    width: 100, height: 40 
+                },
+                attrs: { 
+                    text: { 
+                        text: 'Ellipse', fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                    },
+                    circle: { 
+                        fill:'blue', 
+                    }
+                }
+            });
+            ellipse.position(400, 30);
+
+            var rect = new joint.shapes.standard.Rectangle();
+            rect.attr({
+                body: {
+                    fill: '#9400D3',
+                    rx: 10,
+                    ry: 10,
+                    strokeWidth: 1
+                },
+                label: {
+                    text: 'Rectangle',
+                    fill: textColor,
+                    fontFamily: 'Courier New',
+                    fontSize: '13px',
+                }
+            });
+            rect.position(400, 30);
+            rect.resize(100, 40);
+            rect.set('nodeType', 'Rectangle');
+
+            var link = new joint.shapes.standard.Link({
+                attrs: {
+                    line: { 
+                        strokeWidth: 1.5
+                    }
+                }
+            });
+            link.connector('rounded', { radius: 15 });
+        </script>
+    </head>
+    <body onUnload='unLoadPage()'>
+  <div class='flow-head'>
+            <div class='flow-1'>
+             <img height='50' width='150;' alt='Triniti' src='../../../../dependencies/images/logo_triniti.png'  /> 
+        <h2 style='text-decoration:none' target='_blank'> Package : customcontroller.schcustomcontroller</h2>
+        <h3><a style='text-decoration:none' target='_blank' href='index.html'>Class : SchScheduleNameValidation</a></h3>
+        <h4 style='text-decoration:none' target='_blank'> Method : executeCustomConroller</h4>
+         <p style='text-decoration:none' target='_blank'> </p>
+  <button class='java' autofocus onClick='Java();'><b>&nbsp;&nbsp&nbsp;&nbsp; Java Language&nbsp;&nbsp&nbsp;&nbsp;</b></button>
+  <button class='natural_language' onClick='NaturalLanguage();'><b>&nbsp;&nbsp&nbsp;Natural Language&nbsp;&nbsp&nbsp;</b></button>
+            </div>
+</div><div class='flow-2'>
+         <div class='one'> 
+         <div class='circle ' style='background-color: #9400D3;'></div>
+         <div class='circle ' style='background-color: #800020;'></div>
+         <div class='circle ' style='background-color: #F400A1;'></div>
+         <div class='circle ' style='background-color: blue;'></div>
+         </div>
+         <div class='two'>
+         <div class='text'>Initialization & Assignment</div>
+         <div class='text'>Conditional</div>
+         <div class='text'>Loops</div>
+         <div class='text'>Method calling</div>
+         </div>
+              </div>
+              </div>
+              <div style="width: 100%; clear: both;"></div>
+        <div id='nlStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var nlStatementsGraph = new joint.dia.Graph;
+
+            var nlStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('nlStatementFlowChart'),
+                interactive: false,
+                model: nlStatementsGraph,
+                width: 1000,
+                height: 7800,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-46: Initialize variable validationStatus of type boolean as true');
+            nodesArr.push('Line No-49: Create an instance of HashMap and assign it to variable tempOldRowNoAndRowDataHashMap');
+            nodesArr.push('Line No-50: Print ("rowIndexAndDataHashMap::" + rowIndexAndDataHashMap)');
+            nodesArr.push('Line No-51: Print ("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap)');
+            nodesArr.push('Line No-52: Print ("columnVector::" + columnVector)');
+            nodesArr.push('Line No-53: Print ("failedRowArrayList::" + failedRowArrayList)');
+            nodesArr.push('Line No-54: Print ("SchScheduleNameValidation.executeCustomConroller()deleteRowIndexAndDataHashMap>" + deleteRowIndexAndDataHashMap)');
+            nodesArr.push('Line No-55: Create an instance of LinkedHashMap and assign it to variable repeatedScheduleNamesMap');
+            nodesArr.push('Line No-56: Assign "" to variable repeatedEntries');
+            nodesArr.push('Line No-57: Assign "" to variable scheduleName');
+            nodesArr.push('Line No-58: Call columnVector.indexOf with params ["SCHEDULE_NAME"] and assign the result to variable scheduleNameIndex');
+            nodesArr.push('Line No-59: Call columnVector.indexOf with params ["SCHEDULE_ID"] and assign the result to variable scheduleIdIndex');
+            nodesArr.push('Line No-60: Call keySet() on variable rowIndexAndDataHashMap and assign the result to variable editedRowsKeySet');
+            nodesArr.push('Line No-61: Call iterator() on variable editedRowsKeySet and assign the result to variable editedRowKeysIterator');
+            nodesArr.push('Line No-62: Initialize variable editedRowKeyObject of type Object as null');
+            nodesArr.push('Line No-63: Initialize variable eachRowVector of type Vector as null');
+            nodesArr.push('Line No-64: Initialize variable updateFlag of type boolean as false');
+            nodesArr.push('Line No-65:  For( totalMapIterator has next value)');
+            nodesArr.push('Line No-67: Call next() on variable totalMapIterator and assign the result to variable eachRowKeyObject');
+            nodesArr.push('Line No-68: Call oldRowNoAndRowDataHashMap.get with params [eachRowKeyObject] and assign the result to variable eachRowArrayList');
+            nodesArr.push('Line No-69: Put value eachRowArrayList in Map tempOldRowNoAndRowDataHashMap for key eachRowKeyObject');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-71: Print ("SchScheduleNameValidation.executeCustomConroller()oldRowNoAndRowDataHashMap.size()>" + tempOldRowNoAndRowDataHashMap.size())');
+            nodesArr.push('Line No-72: While ( editedRowKeysIterator has next value)');
+            nodesArr.push('Line No-74: Call next() on variable editedRowKeysIterator and assign the result to variable editedRowKeyObject');
+            nodesArr.push('Line No-75: Call toString() on variable editedRowKeyObject and assign the result to variable editedRowKeyString');
+            nodesArr.push('Line No-76: Print ("SchScheduleNameValidation.executeCustomConroller()editedRowKeyString>" + editedRowKeyString)');
+            nodesArr.push('Line No-77: Call rowIndexAndDataHashMap.get with params [editedRowKeyObject] and assign the result to variable eachRowVector');
+            nodesArr.push('Line No-78: Get value from List scheduleNameIndex at index eachRowVector and assign the result to variable scheduleName');
+            nodesArr.push('Line No-79: Get value from List scheduleIdIndex at index eachRowVector and assign the result to variable scheduleId');
+            nodesArr.push('Line No-80:  Call indexOf on variable String is equal to Change the sign of 1');
+            nodesArr.push('Line No-82: Assign true to updateFlag');
+            nodesArr.push('Line No-84:  Get value from Map repeatedScheduleNamesMap for key scheduleName is equal to null');
+            nodesArr.push('Line No-86: Put value scheduleName in Map repeatedScheduleNamesMap for key scheduleName');
+            nodesArr.push('Line No-90:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            nodesArr.push('Line No-92: Concatenate repeatedEntries, ",", scheduleName');
+            nodesArr.push('Line No-96: Concatenate repeatedEntries, scheduleName');
+            nodesArr.push('Line No-100:  For( iter has next value)');
+            nodesArr.push('Line No-102: Call next() on variable iter and assign the result to variable eachRowKeyObject');
+            nodesArr.push('Line No-103: Get value from Map tempOldRowNoAndRowDataHashMap for key eachRowKeyObject and assign the result to variable eachRowArrayList');
+            nodesArr.push('Line No-104:  eachRowArrayList is not equal to null AND Call size on variable ArrayList is greater than 0');
+            nodesArr.push('Line No-106: Get value from List scheduleNameIndex at index eachRowArrayList and assign the result to variable scheduleNameInTotalMap');
+            nodesArr.push('Line No-107: Get value from List scheduleIdIndex at index eachRowArrayList and assign the result to variable scheduleIdInTotalMap');
+            nodesArr.push('Line No-108:  updateFlag');
+            nodesArr.push('Line No-110:  "scheduleName" == scheduleNameInTotalMap AND "scheduleId" == scheduleIdInTotalMap');
+            nodesArr.push('Line No-112: Concatenate repeatedEntries, scheduleName');
+            nodesArr.push('Line No-115:  "scheduleName" == scheduleNameInTotalMap');
+            nodesArr.push('Line No-117:  updateFlag');
+            nodesArr.push('Line No-119:  "scheduleId" == scheduleIdInTotalMap');
+            nodesArr.push('Line No-121:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            nodesArr.push('Line No-123: Concatenate repeatedEntries, ",", scheduleName');
+            nodesArr.push('Line No-127: Concatenate repeatedEntries, scheduleName');
+            nodesArr.push('Line No-133:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            nodesArr.push('Line No-135: Concatenate repeatedEntries, ",", scheduleName');
+            nodesArr.push('Line No-139: Concatenate repeatedEntries, scheduleName');
+            nodesArr.push('End - For loop');
+            nodesArr.push('End - While loop');
+            nodesArr.push('Line No-146: Print ("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap)');
+            nodesArr.push('Line No-147: Print ("SchScheduleNameValidation.executeCustomConroller()repeatedScheduleNamesMap>" + repeatedScheduleNamesMap)');
+            nodesArr.push('Line No-148: Print ("SchScheduleNameValidation.executeCustomConroller()repeatedEntries>" + repeatedEntries)');
+            nodesArr.push('Line No-149:  "repeatedEntries" == ""');
+            nodesArr.push('Line No-151: Call setValidationMessage()');
+            nodesArr.push('Line No-152: Assign false to validationStatus');
+            nodesArr.push('Line No-160: Return validationStatus');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect0 = ellipse.clone();
+            rect0.addTo(nlStatementsGraph);
+            rect0.attr('text/text', 'Start');
+            rect0.attr('circle/fill', 'green');
+
+            rootNode = rect0;
+
+            flowChartNode = getBrokenText('Line No-46: Initialize variable validationStatus of type boolean as true    ');
+            var rect1 = rect.clone();
+            rect1.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect1.attr('label/text', flowChartNode);
+            rect1.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-49: Create an instance of HashMap and assign it to variable tempOldRowNoAndRowDataHashMap    ');
+            var rect2 = rect.clone();
+            rect2.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect2.attr('label/text', flowChartNode);
+            rect2.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-50: Print ("rowIndexAndDataHashMap::" + rowIndexAndDataHashMap)    ');
+            var rect3 = rect.clone();
+            rect3.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect3.attr('label/text', flowChartNode);
+            rect3.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-51: Print ("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap)    ');
+            var rect4 = rect.clone();
+            rect4.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect4.attr('label/text', flowChartNode);
+            rect4.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-52: Print ("columnVector::" + columnVector)    ');
+            var rect5 = rect.clone();
+            rect5.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect5.attr('label/text', flowChartNode);
+            rect5.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-53: Print ("failedRowArrayList::" + failedRowArrayList)    ');
+            var rect6 = rect.clone();
+            rect6.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect6.attr('label/text', flowChartNode);
+            rect6.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-54: Print ("SchScheduleNameValidation.executeCustomConroller()deleteRowIndexAndDataHashMap>" + deleteRowIndexAndDataHashMap)    ');
+            var rect7 = rect.clone();
+            rect7.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect7.attr('label/text', flowChartNode);
+            rect7.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-55: Create an instance of LinkedHashMap and assign it to variable repeatedScheduleNamesMap    ');
+            var rect8 = rect.clone();
+            rect8.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect8.attr('label/text', flowChartNode);
+            rect8.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-56: Assign "" to variable repeatedEntries    ');
+            var rect9 = rect.clone();
+            rect9.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect9.attr('label/text', flowChartNode);
+            rect9.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-57: Assign "" to variable scheduleName    ');
+            var rect10 = rect.clone();
+            rect10.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect10.attr('label/text', flowChartNode);
+            rect10.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-58: Call columnVector.indexOf with params ["SCHEDULE_NAME"] and assign the result to variable scheduleNameIndex    ');
+            var rect11 = rect.clone();
+            rect11.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect11.attr('label/text', flowChartNode);
+            rect11.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-59: Call columnVector.indexOf with params ["SCHEDULE_ID"] and assign the result to variable scheduleIdIndex    ');
+            var rect12 = rect.clone();
+            rect12.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect12.attr('label/text', flowChartNode);
+            rect12.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-60: Call keySet() on variable rowIndexAndDataHashMap and assign the result to variable editedRowsKeySet    ');
+            var rect13 = rect.clone();
+            rect13.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect13.attr('label/text', flowChartNode);
+            rect13.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-61: Call iterator() on variable editedRowsKeySet and assign the result to variable editedRowKeysIterator    ');
+            var rect14 = rect.clone();
+            rect14.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect14.attr('label/text', flowChartNode);
+            rect14.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-62: Initialize variable editedRowKeyObject of type Object as null    ');
+            var rect15 = rect.clone();
+            rect15.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect15.attr('label/text', flowChartNode);
+            rect15.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-63: Initialize variable eachRowVector of type Vector as null    ');
+            var rect16 = rect.clone();
+            rect16.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect16.attr('label/text', flowChartNode);
+            rect16.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-64: Initialize variable updateFlag of type boolean as false    ');
+            var rect17 = rect.clone();
+            rect17.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect17.attr('label/text', flowChartNode);
+            rect17.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-65:  For( totalMapIterator has next value)    ');
+            var rect18 = rect.clone();
+            rect18.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect18.attr('label/text', flowChartNode);
+            rect18.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-67: Call next() on variable totalMapIterator and assign the result to variable eachRowKeyObject    ');
+            var rect19 = rect.clone();
+            rect19.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect19.attr('label/text', flowChartNode);
+            rect19.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-68: Call oldRowNoAndRowDataHashMap.get with params [eachRowKeyObject] and assign the result to variable eachRowArrayList    ');
+            var rect20 = rect.clone();
+            rect20.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect20.attr('label/text', flowChartNode);
+            rect20.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-69: Put value eachRowArrayList in Map tempOldRowNoAndRowDataHashMap for key eachRowKeyObject    ');
+            var rect21 = rect.clone();
+            rect21.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect21.attr('label/text', flowChartNode);
+            rect21.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect22 = rect.clone();
+            rect22.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect22.attr('label/text', flowChartNode);
+            rect22.addTo(nlStatementsGraph);
+            rect22.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-71: Print ("SchScheduleNameValidation.executeCustomConroller()oldRowNoAndRowDataHashMap.size()>" + tempOldRowNoAndRowDataHashMap.size())    ');
+            var rect23 = rect.clone();
+            rect23.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect23.attr('label/text', flowChartNode);
+            rect23.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-72: While ( editedRowKeysIterator has next value)    ');
+            var rect24 = rect.clone();
+            rect24.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect24.attr('label/text', flowChartNode);
+            rect24.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-74: Call next() on variable editedRowKeysIterator and assign the result to variable editedRowKeyObject    ');
+            var rect25 = rect.clone();
+            rect25.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect25.attr('label/text', flowChartNode);
+            rect25.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-75: Call toString() on variable editedRowKeyObject and assign the result to variable editedRowKeyString    ');
+            var rect26 = rect.clone();
+            rect26.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect26.attr('label/text', flowChartNode);
+            rect26.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-76: Print ("SchScheduleNameValidation.executeCustomConroller()editedRowKeyString>" + editedRowKeyString)    ');
+            var rect27 = rect.clone();
+            rect27.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect27.attr('label/text', flowChartNode);
+            rect27.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-77: Call rowIndexAndDataHashMap.get with params [editedRowKeyObject] and assign the result to variable eachRowVector    ');
+            var rect28 = rect.clone();
+            rect28.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect28.attr('label/text', flowChartNode);
+            rect28.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-78: Get value from List scheduleNameIndex at index eachRowVector and assign the result to variable scheduleName    ');
+            var rect29 = rect.clone();
+            rect29.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect29.attr('label/text', flowChartNode);
+            rect29.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-79: Get value from List scheduleIdIndex at index eachRowVector and assign the result to variable scheduleId    ');
+            var rect30 = rect.clone();
+            rect30.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect30.attr('label/text', flowChartNode);
+            rect30.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-80:  Call indexOf on variable String is equal to Change the sign of 1');
+            var rect31 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect31.resize(maxNodeWidth, resizeWidth);
+            rect31.attr('text/text', flowChartNode);
+            rect31.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-82: Assign true to updateFlag    ');
+            var rect32 = rect.clone();
+            rect32.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect32.translate(-1.1 * maxNodeWidth,438200);
+            rect32.attr('label/text', flowChartNode);
+            rect32.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect33 = rect.clone();
+            rect33.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect33.attr('label/text', flowChartNode);
+            rect33.addTo(nlStatementsGraph);
+            rect33.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-84:  Get value from Map repeatedScheduleNamesMap for key scheduleName is equal to null');
+            var rect34 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect34.resize(maxNodeWidth, resizeWidth);
+            rect34.attr('text/text', flowChartNode);
+            rect34.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-86: Put value scheduleName in Map repeatedScheduleNamesMap for key scheduleName    ');
+            var rect35 = rect.clone();
+            rect35.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect35.translate(-1.1 * maxNodeWidth,438300);
+            rect35.attr('label/text', flowChartNode);
+            rect35.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-90:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            var rect36 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect36.resize(maxNodeWidth, resizeWidth);
+            rect36.translate(1.1 * maxNodeWidth,438400);
+            rect36.attr('text/text', flowChartNode);
+            rect36.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-92: Concatenate repeatedEntries, ",", scheduleName    ');
+            var rect37 = rect.clone();
+            rect37.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect37.translate(0.0 * maxNodeWidth,438400);
+            rect37.attr('label/text', flowChartNode);
+            rect37.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-96: Concatenate repeatedEntries, scheduleName    ');
+            var rect38 = rect.clone();
+            rect38.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect38.translate(2.2 * maxNodeWidth,438400);
+            rect38.attr('label/text', flowChartNode);
+            rect38.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect39 = rect.clone();
+            rect39.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect39.translate(1.1 * maxNodeWidth,438400);
+            rect39.attr('label/text', flowChartNode);
+            rect39.addTo(nlStatementsGraph);
+            rect39.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect40 = rect.clone();
+            rect40.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect40.attr('label/text', flowChartNode);
+            rect40.addTo(nlStatementsGraph);
+            rect40.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-100:  For( iter has next value)    ');
+            var rect41 = rect.clone();
+            rect41.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect41.attr('label/text', flowChartNode);
+            rect41.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-102: Call next() on variable iter and assign the result to variable eachRowKeyObject    ');
+            var rect42 = rect.clone();
+            rect42.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect42.attr('label/text', flowChartNode);
+            rect42.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-103: Get value from Map tempOldRowNoAndRowDataHashMap for key eachRowKeyObject and assign the result to variable eachRowArrayList    ');
+            var rect43 = rect.clone();
+            rect43.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect43.attr('label/text', flowChartNode);
+            rect43.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-104:  eachRowArrayList is not equal to null AND Call size on variable ArrayList is greater than 0');
+            var rect44 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect44.resize(maxNodeWidth, resizeWidth);
+            rect44.attr('text/text', flowChartNode);
+            rect44.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-106: Get value from List scheduleNameIndex at index eachRowArrayList and assign the result to variable scheduleNameInTotalMap    ');
+            var rect45 = rect.clone();
+            rect45.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect45.translate(-1.1 * maxNodeWidth,438800);
+            rect45.attr('label/text', flowChartNode);
+            rect45.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-107: Get value from List scheduleIdIndex at index eachRowArrayList and assign the result to variable scheduleIdInTotalMap    ');
+            var rect46 = rect.clone();
+            rect46.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect46.translate(-1.1 * maxNodeWidth,438800);
+            rect46.attr('label/text', flowChartNode);
+            rect46.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-108:  updateFlag');
+            var rect47 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect47.resize(maxNodeWidth, resizeWidth);
+            rect47.translate(-1.1 * maxNodeWidth,438900);
+            rect47.attr('text/text', flowChartNode);
+            rect47.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-110:  "scheduleName" == scheduleNameInTotalMap AND "scheduleId" == scheduleIdInTotalMap');
+            var rect48 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect48.resize(maxNodeWidth, resizeWidth);
+            rect48.translate(-2.2 * maxNodeWidth,439000);
+            rect48.attr('text/text', flowChartNode);
+            rect48.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-112: Concatenate repeatedEntries, scheduleName    ');
+            var rect49 = rect.clone();
+            rect49.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect49.translate(-3.3000000000000003 * maxNodeWidth,439000);
+            rect49.attr('label/text', flowChartNode);
+            rect49.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect50 = rect.clone();
+            rect50.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect50.translate(-2.2 * maxNodeWidth,439000);
+            rect50.attr('label/text', flowChartNode);
+            rect50.addTo(nlStatementsGraph);
+            rect50.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect51 = rect.clone();
+            rect51.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect51.translate(-1.1 * maxNodeWidth,439000);
+            rect51.attr('label/text', flowChartNode);
+            rect51.addTo(nlStatementsGraph);
+            rect51.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-115:  "scheduleName" == scheduleNameInTotalMap');
+            var rect52 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect52.resize(maxNodeWidth, resizeWidth);
+            rect52.translate(-1.1 * maxNodeWidth,439100);
+            rect52.attr('text/text', flowChartNode);
+            rect52.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-117:  updateFlag');
+            var rect53 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect53.resize(maxNodeWidth, resizeWidth);
+            rect53.translate(-2.2 * maxNodeWidth,439200);
+            rect53.attr('text/text', flowChartNode);
+            rect53.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-119:  "scheduleId" == scheduleIdInTotalMap');
+            var rect54 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect54.resize(maxNodeWidth, resizeWidth);
+            rect54.translate(-3.3000000000000003 * maxNodeWidth,439300);
+            rect54.attr('text/text', flowChartNode);
+            rect54.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-121:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            var rect55 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect55.resize(maxNodeWidth, resizeWidth);
+            rect55.translate(-4.4 * maxNodeWidth,439400);
+            rect55.attr('text/text', flowChartNode);
+            rect55.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-123: Concatenate repeatedEntries, ",", scheduleName    ');
+            var rect56 = rect.clone();
+            rect56.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect56.translate(-5.5 * maxNodeWidth,439400);
+            rect56.attr('label/text', flowChartNode);
+            rect56.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-127: Concatenate repeatedEntries, scheduleName    ');
+            var rect57 = rect.clone();
+            rect57.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect57.translate(-3.3000000000000003 * maxNodeWidth,439400);
+            rect57.attr('label/text', flowChartNode);
+            rect57.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect58 = rect.clone();
+            rect58.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect58.translate(-4.4 * maxNodeWidth,439400);
+            rect58.attr('label/text', flowChartNode);
+            rect58.addTo(nlStatementsGraph);
+            rect58.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect59 = rect.clone();
+            rect59.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect59.translate(-3.3000000000000003 * maxNodeWidth,439400);
+            rect59.attr('label/text', flowChartNode);
+            rect59.addTo(nlStatementsGraph);
+            rect59.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-133:  "repeatedEntries" == "" AND Call indexOf on variable String is not equal to Change the sign of 1');
+            var rect60 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect60.resize(maxNodeWidth, resizeWidth);
+            rect60.translate(-1.1 * maxNodeWidth,439500);
+            rect60.attr('text/text', flowChartNode);
+            rect60.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-135: Concatenate repeatedEntries, ",", scheduleName    ');
+            var rect61 = rect.clone();
+            rect61.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect61.translate(-2.2 * maxNodeWidth,439500);
+            rect61.attr('label/text', flowChartNode);
+            rect61.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-139: Concatenate repeatedEntries, scheduleName    ');
+            var rect62 = rect.clone();
+            rect62.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect62.translate(0.0 * maxNodeWidth,439500);
+            rect62.attr('label/text', flowChartNode);
+            rect62.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect63 = rect.clone();
+            rect63.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect63.translate(-1.1 * maxNodeWidth,439500);
+            rect63.attr('label/text', flowChartNode);
+            rect63.addTo(nlStatementsGraph);
+            rect63.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect64 = rect.clone();
+            rect64.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect64.translate(-2.2 * maxNodeWidth,439500);
+            rect64.attr('label/text', flowChartNode);
+            rect64.addTo(nlStatementsGraph);
+            rect64.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect65 = rect.clone();
+            rect65.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect65.translate(-1.1 * maxNodeWidth,439500);
+            rect65.attr('label/text', flowChartNode);
+            rect65.addTo(nlStatementsGraph);
+            rect65.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect66 = rect.clone();
+            rect66.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect66.attr('label/text', flowChartNode);
+            rect66.addTo(nlStatementsGraph);
+            rect66.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect67 = rect.clone();
+            rect67.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect67.attr('label/text', flowChartNode);
+            rect67.addTo(nlStatementsGraph);
+            rect67.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('End - While loop    ');
+            var rect68 = rect.clone();
+            rect68.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect68.attr('label/text', flowChartNode);
+            rect68.addTo(nlStatementsGraph);
+            rect68.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-146: Print ("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap)    ');
+            var rect69 = rect.clone();
+            rect69.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect69.attr('label/text', flowChartNode);
+            rect69.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-147: Print ("SchScheduleNameValidation.executeCustomConroller()repeatedScheduleNamesMap>" + repeatedScheduleNamesMap)    ');
+            var rect70 = rect.clone();
+            rect70.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect70.attr('label/text', flowChartNode);
+            rect70.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-148: Print ("SchScheduleNameValidation.executeCustomConroller()repeatedEntries>" + repeatedEntries)    ');
+            var rect71 = rect.clone();
+            rect71.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect71.attr('label/text', flowChartNode);
+            rect71.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-149:  "repeatedEntries" == ""');
+            var rect72 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect72.resize(maxNodeWidth, resizeWidth);
+            rect72.attr('text/text', flowChartNode);
+            rect72.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-151: Call setValidationMessage()    ');
+            var rect73 = rect.clone();
+            rect73.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect73.translate(-1.1 * maxNodeWidth,440100);
+            rect73.attr('label/text', flowChartNode);
+            rect73.set('externalLink', 'scheduler/customcontroller/schcustomcontroller/SchScheduleNameValidation/setValidationMessage.html');
+            rect73.attr('body/stroke', 'blue');
+            rect73.attr('body/fill', 'blue');
+            rect73.attr('label/cursor', 'pointer');
+            rect73.attr('body/cursor', 'pointer');
+            rect73.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-152: Assign false to validationStatus    ');
+            var rect74 = rect.clone();
+            rect74.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect74.translate(-1.1 * maxNodeWidth,440100);
+            rect74.attr('label/text', flowChartNode);
+            rect74.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect75 = rect.clone();
+            rect75.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect75.attr('label/text', flowChartNode);
+            rect75.addTo(nlStatementsGraph);
+            rect75.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-160: Return validationStatus    ');
+            var rect76 = rect.clone();
+            rect76.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect76.attr('label/text', flowChartNode);
+            rect76.addTo(nlStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect77 = ellipse.clone();
+            rect77.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect77.attr('text/text', flowChartNode);
+            rect77.addTo(nlStatementsGraph);
+
+
+            var link1 = link.clone();
+            link1.source(rect0);
+            link1.target(rect1);
+            link1.addTo(nlStatementsGraph);
+
+            var link2 = link.clone();
+            link2.source(rect1);
+            link2.target(rect2);
+            link2.addTo(nlStatementsGraph);
+
+            var link3 = link.clone();
+            link3.source(rect2);
+            link3.target(rect3);
+            link3.addTo(nlStatementsGraph);
+
+            var link4 = link.clone();
+            link4.source(rect3);
+            link4.target(rect4);
+            link4.addTo(nlStatementsGraph);
+
+            var link5 = link.clone();
+            link5.source(rect4);
+            link5.target(rect5);
+            link5.addTo(nlStatementsGraph);
+
+            var link6 = link.clone();
+            link6.source(rect5);
+            link6.target(rect6);
+            link6.addTo(nlStatementsGraph);
+
+            var link7 = link.clone();
+            link7.source(rect6);
+            link7.target(rect7);
+            link7.addTo(nlStatementsGraph);
+
+            var link8 = link.clone();
+            link8.source(rect7);
+            link8.target(rect8);
+            link8.addTo(nlStatementsGraph);
+
+            var link9 = link.clone();
+            link9.source(rect8);
+            link9.target(rect9);
+            link9.addTo(nlStatementsGraph);
+
+            var link10 = link.clone();
+            link10.source(rect9);
+            link10.target(rect10);
+            link10.addTo(nlStatementsGraph);
+
+            var link11 = link.clone();
+            link11.source(rect10);
+            link11.target(rect11);
+            link11.addTo(nlStatementsGraph);
+
+            var link12 = link.clone();
+            link12.source(rect11);
+            link12.target(rect12);
+            link12.addTo(nlStatementsGraph);
+
+            var link13 = link.clone();
+            link13.source(rect12);
+            link13.target(rect13);
+            link13.addTo(nlStatementsGraph);
+
+            var link14 = link.clone();
+            link14.source(rect13);
+            link14.target(rect14);
+            link14.addTo(nlStatementsGraph);
+
+            var link15 = link.clone();
+            link15.source(rect14);
+            link15.target(rect15);
+            link15.addTo(nlStatementsGraph);
+
+            var link16 = link.clone();
+            link16.source(rect15);
+            link16.target(rect16);
+            link16.addTo(nlStatementsGraph);
+
+            var link17 = link.clone();
+            link17.source(rect16);
+            link17.target(rect17);
+            link17.addTo(nlStatementsGraph);
+
+            var link18 = link.clone();
+            link18.source(rect17);
+            link18.target(rect18);
+            link18.addTo(nlStatementsGraph);
+
+            var link19 = link.clone();
+            link19.source(rect18);
+            link19.target(rect19);
+            link19.addTo(nlStatementsGraph);
+
+            var link20 = link.clone();
+            link20.source(rect19);
+            link20.target(rect20);
+            link20.addTo(nlStatementsGraph);
+
+            var link21 = link.clone();
+            link21.source(rect20);
+            link21.target(rect21);
+            link21.addTo(nlStatementsGraph);
+
+            var link22 = link.clone();
+            link22.source(rect21);
+            link22.target(rect22);
+            link22.addTo(nlStatementsGraph);
+
+            var link23 = link.clone();
+            link23.source(rect22);
+            link23.target(rect18);
+            rect18.attr('body/stroke', '#F400A1');
+            rect18.attr('body/fill', '#F400A1');
+            link23.set('loopConnector', true);
+            link23.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link23.addTo(nlStatementsGraph);
+
+            var link24 = link.clone();
+            link24.source(rect22);
+            link24.target(rect23);
+            link24.addTo(nlStatementsGraph);
+
+            var link25 = link.clone();
+            link25.source(rect23);
+            link25.target(rect24);
+            link25.addTo(nlStatementsGraph);
+
+            var link26 = link.clone();
+            link26.source(rect24);
+            link26.target(rect25);
+            link26.addTo(nlStatementsGraph);
+
+            var link27 = link.clone();
+            link27.source(rect25);
+            link27.target(rect26);
+            link27.addTo(nlStatementsGraph);
+
+            var link28 = link.clone();
+            link28.source(rect26);
+            link28.target(rect27);
+            link28.addTo(nlStatementsGraph);
+
+            var link29 = link.clone();
+            link29.source(rect27);
+            link29.target(rect28);
+            link29.addTo(nlStatementsGraph);
+
+            var link30 = link.clone();
+            link30.source(rect28);
+            link30.target(rect29);
+            link30.addTo(nlStatementsGraph);
+
+            var link31 = link.clone();
+            link31.source(rect29);
+            link31.target(rect30);
+            link31.addTo(nlStatementsGraph);
+
+            var link32 = link.clone();
+            link32.source(rect30);
+            link32.target(rect31);
+            link32.addTo(nlStatementsGraph);
+
+            var link33 = link.clone();
+            link33.source(rect31);
+            link33.target(rect32);
+            link33.set('ifBlockStartLink', true);
+            link33.label(0, {attrs: {text: {text: 'Yes'}}});
+            link33.addTo(nlStatementsGraph);
+
+            var link34 = link.clone();
+            link34.source(rect32);
+            link34.target(rect33);
+            link34.addTo(nlStatementsGraph);
+            link34.set('ifBlockEndLink', true);
+            link34.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link35 = link.clone();
+            link35.source(rect31);
+            link35.target(rect33);
+            link35.addTo(nlStatementsGraph);
+            link35.label(0, {attrs: {text: {text: 'No'}}});
+            link35.set('elseBlockStartAndEndLink', true);
+
+            rect31.set('endIfConditionId', rect33.id);
+            rect33.set('ifConditionId', rect31.id);
+
+            var link36 = link.clone();
+            link36.source(rect33);
+            link36.target(rect34);
+            link36.addTo(nlStatementsGraph);
+
+            var link37 = link.clone();
+            link37.source(rect34);
+            link37.target(rect35);
+            link37.set('ifBlockStartLink', true);
+            link37.label(0, {attrs: {text: {text: 'Yes'}}});
+            link37.addTo(nlStatementsGraph);
+
+            var link38 = link.clone();
+            link38.source(rect34);
+            link38.target(rect36);
+            link38.set('elseBlockStartLink', true);
+            link38.label(0, {attrs: {text: {text: 'No'}}});
+            link38.addTo(nlStatementsGraph);
+
+            var link39 = link.clone();
+            link39.source(rect36);
+            link39.target(rect37);
+            link39.set('ifBlockStartLink', true);
+            link39.label(0, {attrs: {text: {text: 'Yes'}}});
+            link39.addTo(nlStatementsGraph);
+
+            var link40 = link.clone();
+            link40.source(rect36);
+            link40.target(rect38);
+            link40.set('elseBlockStartLink', true);
+            link40.label(0, {attrs: {text: {text: 'No'}}});
+            link40.addTo(nlStatementsGraph);
+
+            var link41 = link.clone();
+            link41.source(rect37);
+            link41.target(rect39);
+            link41.addTo(nlStatementsGraph);
+            link41.set('ifBlockEndLink', true);
+            link41.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link42 = link.clone();
+            link42.source(rect38);
+            link42.target(rect39);
+            link42.addTo(nlStatementsGraph);
+            link42.set('elseBlockEndLink', true);
+            link42.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect36.set('endIfConditionId', rect39.id);
+            rect39.set('ifConditionId', rect36.id);
+
+            var link43 = link.clone();
+            link43.source(rect35);
+            link43.target(rect40);
+            link43.addTo(nlStatementsGraph);
+            link43.set('ifBlockEndLink', true);
+            link43.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link44 = link.clone();
+            link44.source(rect39);
+            link44.target(rect40);
+            link44.addTo(nlStatementsGraph);
+            link44.set('elseBlockEndLink', true);
+            link44.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect34.set('endIfConditionId', rect40.id);
+            rect40.set('ifConditionId', rect34.id);
+
+            var link45 = link.clone();
+            link45.source(rect40);
+            link45.target(rect41);
+            link45.addTo(nlStatementsGraph);
+
+            var link46 = link.clone();
+            link46.source(rect41);
+            link46.target(rect42);
+            link46.addTo(nlStatementsGraph);
+
+            var link47 = link.clone();
+            link47.source(rect42);
+            link47.target(rect43);
+            link47.addTo(nlStatementsGraph);
+
+            var link48 = link.clone();
+            link48.source(rect43);
+            link48.target(rect44);
+            link48.addTo(nlStatementsGraph);
+
+            var link49 = link.clone();
+            link49.source(rect44);
+            link49.target(rect45);
+            link49.set('ifBlockStartLink', true);
+            link49.label(0, {attrs: {text: {text: 'Yes'}}});
+            link49.addTo(nlStatementsGraph);
+
+            var link50 = link.clone();
+            link50.source(rect45);
+            link50.target(rect46);
+            link50.addTo(nlStatementsGraph);
+
+            var link51 = link.clone();
+            link51.source(rect46);
+            link51.target(rect47);
+            link51.addTo(nlStatementsGraph);
+
+            var link52 = link.clone();
+            link52.source(rect47);
+            link52.target(rect48);
+            link52.set('ifBlockStartLink', true);
+            link52.label(0, {attrs: {text: {text: 'Yes'}}});
+            link52.addTo(nlStatementsGraph);
+
+            var link53 = link.clone();
+            link53.source(rect48);
+            link53.target(rect49);
+            link53.set('ifBlockStartLink', true);
+            link53.label(0, {attrs: {text: {text: 'Yes'}}});
+            link53.addTo(nlStatementsGraph);
+
+            var link54 = link.clone();
+            link54.source(rect49);
+            link54.target(rect50);
+            link54.addTo(nlStatementsGraph);
+            link54.set('ifBlockEndLink', true);
+            link54.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link55 = link.clone();
+            link55.source(rect48);
+            link55.target(rect50);
+            link55.addTo(nlStatementsGraph);
+            link55.label(0, {attrs: {text: {text: 'No'}}});
+            link55.set('elseBlockStartAndEndLink', true);
+
+            rect48.set('endIfConditionId', rect50.id);
+            rect50.set('ifConditionId', rect48.id);
+
+            var link56 = link.clone();
+            link56.source(rect50);
+            link56.target(rect51);
+            link56.addTo(nlStatementsGraph);
+            link56.set('ifBlockEndLink', true);
+            link56.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link57 = link.clone();
+            link57.source(rect47);
+            link57.target(rect51);
+            link57.addTo(nlStatementsGraph);
+            link57.label(0, {attrs: {text: {text: 'No'}}});
+            link57.set('elseBlockStartAndEndLink', true);
+
+            rect47.set('endIfConditionId', rect51.id);
+            rect51.set('ifConditionId', rect47.id);
+
+            var link58 = link.clone();
+            link58.source(rect51);
+            link58.target(rect52);
+            link58.addTo(nlStatementsGraph);
+
+            var link59 = link.clone();
+            link59.source(rect52);
+            link59.target(rect53);
+            link59.set('ifBlockStartLink', true);
+            link59.label(0, {attrs: {text: {text: 'Yes'}}});
+            link59.addTo(nlStatementsGraph);
+
+            var link60 = link.clone();
+            link60.source(rect53);
+            link60.target(rect54);
+            link60.set('ifBlockStartLink', true);
+            link60.label(0, {attrs: {text: {text: 'Yes'}}});
+            link60.addTo(nlStatementsGraph);
+
+            var link61 = link.clone();
+            link61.source(rect54);
+            link61.target(rect55);
+            link61.set('ifBlockStartLink', true);
+            link61.label(0, {attrs: {text: {text: 'Yes'}}});
+            link61.addTo(nlStatementsGraph);
+
+            var link62 = link.clone();
+            link62.source(rect55);
+            link62.target(rect56);
+            link62.set('ifBlockStartLink', true);
+            link62.label(0, {attrs: {text: {text: 'Yes'}}});
+            link62.addTo(nlStatementsGraph);
+
+            var link63 = link.clone();
+            link63.source(rect55);
+            link63.target(rect57);
+            link63.set('elseBlockStartLink', true);
+            link63.label(0, {attrs: {text: {text: 'No'}}});
+            link63.addTo(nlStatementsGraph);
+
+            var link64 = link.clone();
+            link64.source(rect56);
+            link64.target(rect58);
+            link64.addTo(nlStatementsGraph);
+            link64.set('ifBlockEndLink', true);
+            link64.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link65 = link.clone();
+            link65.source(rect57);
+            link65.target(rect58);
+            link65.addTo(nlStatementsGraph);
+            link65.set('elseBlockEndLink', true);
+            link65.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect55.set('endIfConditionId', rect58.id);
+            rect58.set('ifConditionId', rect55.id);
+
+            var link66 = link.clone();
+            link66.source(rect58);
+            link66.target(rect59);
+            link66.addTo(nlStatementsGraph);
+            link66.set('ifBlockEndLink', true);
+            link66.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link67 = link.clone();
+            link67.source(rect54);
+            link67.target(rect59);
+            link67.addTo(nlStatementsGraph);
+            link67.label(0, {attrs: {text: {text: 'No'}}});
+            link67.set('elseBlockStartAndEndLink', true);
+
+            rect54.set('endIfConditionId', rect59.id);
+            rect59.set('ifConditionId', rect54.id);
+
+            var link68 = link.clone();
+            link68.source(rect53);
+            link68.target(rect60);
+            link68.set('elseBlockStartLink', true);
+            link68.label(0, {attrs: {text: {text: 'No'}}});
+            link68.addTo(nlStatementsGraph);
+
+            var link69 = link.clone();
+            link69.source(rect60);
+            link69.target(rect61);
+            link69.set('ifBlockStartLink', true);
+            link69.label(0, {attrs: {text: {text: 'Yes'}}});
+            link69.addTo(nlStatementsGraph);
+
+            var link70 = link.clone();
+            link70.source(rect60);
+            link70.target(rect62);
+            link70.set('elseBlockStartLink', true);
+            link70.label(0, {attrs: {text: {text: 'No'}}});
+            link70.addTo(nlStatementsGraph);
+
+            var link71 = link.clone();
+            link71.source(rect61);
+            link71.target(rect63);
+            link71.addTo(nlStatementsGraph);
+            link71.set('ifBlockEndLink', true);
+            link71.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link72 = link.clone();
+            link72.source(rect62);
+            link72.target(rect63);
+            link72.addTo(nlStatementsGraph);
+            link72.set('elseBlockEndLink', true);
+            link72.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect60.set('endIfConditionId', rect63.id);
+            rect63.set('ifConditionId', rect60.id);
+
+            var link73 = link.clone();
+            link73.source(rect59);
+            link73.target(rect64);
+            link73.addTo(nlStatementsGraph);
+            link73.set('ifBlockEndLink', true);
+            link73.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link74 = link.clone();
+            link74.source(rect63);
+            link74.target(rect64);
+            link74.addTo(nlStatementsGraph);
+            link74.set('elseBlockEndLink', true);
+            link74.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect53.set('endIfConditionId', rect64.id);
+            rect64.set('ifConditionId', rect53.id);
+
+            var link75 = link.clone();
+            link75.source(rect64);
+            link75.target(rect65);
+            link75.addTo(nlStatementsGraph);
+            link75.set('ifBlockEndLink', true);
+            link75.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link76 = link.clone();
+            link76.source(rect52);
+            link76.target(rect65);
+            link76.addTo(nlStatementsGraph);
+            link76.label(0, {attrs: {text: {text: 'No'}}});
+            link76.set('elseBlockStartAndEndLink', true);
+
+            rect52.set('endIfConditionId', rect65.id);
+            rect65.set('ifConditionId', rect52.id);
+            rect52.set('moveIfBlockBy', 2);
+
+            var link77 = link.clone();
+            link77.source(rect65);
+            link77.target(rect66);
+            link77.addTo(nlStatementsGraph);
+            link77.set('ifBlockEndLink', true);
+            link77.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link78 = link.clone();
+            link78.source(rect44);
+            link78.target(rect66);
+            link78.addTo(nlStatementsGraph);
+            link78.label(0, {attrs: {text: {text: 'No'}}});
+            link78.set('elseBlockStartAndEndLink', true);
+
+            rect44.set('endIfConditionId', rect66.id);
+            rect66.set('ifConditionId', rect44.id);
+
+            var link79 = link.clone();
+            link79.source(rect66);
+            link79.target(rect67);
+            link79.addTo(nlStatementsGraph);
+
+            var link80 = link.clone();
+            link80.source(rect67);
+            link80.target(rect41);
+            rect41.attr('body/stroke', '#F400A1');
+            rect41.attr('body/fill', '#F400A1');
+            link80.set('loopConnector', true);
+            link80.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link80.addTo(nlStatementsGraph);
+
+            var link81 = link.clone();
+            link81.source(rect67);
+            link81.target(rect68);
+            link81.addTo(nlStatementsGraph);
+
+            var link82 = link.clone();
+            link82.source(rect68);
+            link82.target(rect24);
+            rect24.set('whileStart', rect68.get('id'));
+            rect68.set('whileEnd', rect24.get('id'));
+            rect24.attr('body/stroke', '#F400A1');
+            rect24.attr('body/fill', '#F400A1');
+            link82.set('loopConnector', true);
+            link82.label(0, {attrs: {text: {text: breakText(40, 'While Loop')}}});
+            link82.addTo(nlStatementsGraph);
+
+            var link83 = link.clone();
+            link83.source(rect68);
+            link83.target(rect69);
+            link83.addTo(nlStatementsGraph);
+
+            var link84 = link.clone();
+            link84.source(rect69);
+            link84.target(rect70);
+            link84.addTo(nlStatementsGraph);
+
+            var link85 = link.clone();
+            link85.source(rect70);
+            link85.target(rect71);
+            link85.addTo(nlStatementsGraph);
+
+            var link86 = link.clone();
+            link86.source(rect71);
+            link86.target(rect72);
+            link86.addTo(nlStatementsGraph);
+
+            var link87 = link.clone();
+            link87.source(rect72);
+            link87.target(rect73);
+            link87.set('ifBlockStartLink', true);
+            link87.label(0, {attrs: {text: {text: 'Yes'}}});
+            link87.addTo(nlStatementsGraph);
+
+            var link88 = link.clone();
+            link88.source(rect73);
+            link88.target(rect74);
+            link88.addTo(nlStatementsGraph);
+
+            var link89 = link.clone();
+            link89.source(rect74);
+            link89.target(rect75);
+            link89.addTo(nlStatementsGraph);
+            link89.set('ifBlockEndLink', true);
+            link89.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link90 = link.clone();
+            link90.source(rect72);
+            link90.target(rect75);
+            link90.addTo(nlStatementsGraph);
+            link90.label(0, {attrs: {text: {text: 'No'}}});
+            link90.set('elseBlockStartAndEndLink', true);
+
+            rect72.set('endIfConditionId', rect75.id);
+            rect75.set('ifConditionId', rect72.id);
+
+            var link91 = link.clone();
+            link91.source(rect75);
+            link91.target(rect76);
+            link91.addTo(nlStatementsGraph);
+
+            var link92 = link.clone();
+            link92.source(rect76);
+            link92.target(rect77);
+            link92.addTo(nlStatementsGraph);
+
+            rect0.set('startNode', 'true');
+            rect77.set('stopNode', 'true');
+            rect77.attr('circle/fill', 'red');
+            rect77.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(nlStatementsPaper);
+            setGraphId(nlStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect0, rect77);
+            resizePaper();
+            initializePaperBehavior();
+            hideThisFlowChart('nlStatementFlowChart');
+        </script>
+        <div id='javaStatementFlowChart' style='display:block;'></div>
+        <script type='text/javascript'>
+            var javaStatementsGraph = new joint.dia.Graph;
+
+            var javaStatementsPaper = new joint.dia.Paper({
+                el: document.getElementById('javaStatementFlowChart'),
+                interactive: false,
+                model: javaStatementsGraph,
+                width: 1000,
+                height: 15600,
+                gridSize: 1
+            });
+
+            var flowChartNode;
+            var resizeWidth;
+            var nodesArr = [];
+
+            nodesArr.push('Line No-46: boolean validationStatus = true;');
+            nodesArr.push('Line No-49: HashMap tempOldRowNoAndRowDataHashMap = new HashMap();');
+            nodesArr.push('Line No-50: trinitiLogger.debug("rowIndexAndDataHashMap::" + rowIndexAndDataHashMap);');
+            nodesArr.push('Line No-51: trinitiLogger.debug("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap);');
+            nodesArr.push('Line No-52: trinitiLogger.debug("columnVector::" + columnVector);');
+            nodesArr.push('Line No-53: trinitiLogger.debug("failedRowArrayList::" + failedRowArrayList);');
+            nodesArr.push('Line No-54: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()deleteRowIndexAndDataHashMap>" + deleteRowIndexAndDataHashMap);');
+            nodesArr.push('Line No-55: LinkedHashMap repeatedScheduleNamesMap = new LinkedHashMap();');
+            nodesArr.push('Line No-56: String repeatedEntries = "";');
+            nodesArr.push('Line No-57: String scheduleName = "";');
+            nodesArr.push('Line No-58: int scheduleNameIndex = columnVector.indexOf("SCHEDULE_NAME");');
+            nodesArr.push('Line No-59: int scheduleIdIndex = columnVector.indexOf("SCHEDULE_ID");');
+            nodesArr.push('Line No-60: Set editedRowsKeySet = rowIndexAndDataHashMap.keySet();');
+            nodesArr.push('Line No-61: Iterator editedRowKeysIterator = editedRowsKeySet.iterator();');
+            nodesArr.push('Line No-62: Object editedRowKeyObject = null;');
+            nodesArr.push('Line No-63: Vector eachRowVector = null;');
+            nodesArr.push('Line No-64: boolean updateFlag = false;');
+            nodesArr.push('Line No-65:  For( totalMapIterator.hasNext())');
+            nodesArr.push('Line No-67: Object eachRowKeyObject = totalMapIterator.next();');
+            nodesArr.push('Line No-68: ArrayList eachRowArrayList = (ArrayList) oldRowNoAndRowDataHashMap.get(eachRowKeyObject);');
+            nodesArr.push('Line No-69: tempOldRowNoAndRowDataHashMap.put(eachRowKeyObject, eachRowArrayList);');
+            nodesArr.push('End - For loop');
+            nodesArr.push('Line No-71: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()oldRowNoAndRowDataHashMap.size()>" + tempOldRowNoAndRowDataHashMap.size());');
+            nodesArr.push('Line No-72: While ( editedRowKeysIterator.hasNext())');
+            nodesArr.push('Line No-74: editedRowKeyObject = editedRowKeysIterator.next();');
+            nodesArr.push('Line No-75: String editedRowKeyString = editedRowKeyObject.toString();');
+            nodesArr.push('Line No-76: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()editedRowKeyString>" + editedRowKeyString);');
+            nodesArr.push('Line No-77: eachRowVector = (Vector) rowIndexAndDataHashMap.get(editedRowKeyObject);');
+            nodesArr.push('Line No-78: scheduleName = (String) eachRowVector.get(scheduleNameIndex);');
+            nodesArr.push('Line No-79: String scheduleId = (String) eachRowVector.get(scheduleIdIndex);');
+            nodesArr.push('Line No-80:  editedRowKeyString.indexOf("ANR") == -1');
+            nodesArr.push('Line No-82: updateFlag = true;');
+            nodesArr.push('Line No-84:  repeatedScheduleNamesMap.get(scheduleName) == null');
+            nodesArr.push('Line No-86: repeatedScheduleNamesMap.put(scheduleName, scheduleName);');
+            nodesArr.push('Line No-90:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            nodesArr.push('Line No-92: repeatedEntries = repeatedEntries + "," + scheduleName;');
+            nodesArr.push('Line No-96: repeatedEntries = repeatedEntries + scheduleName;');
+            nodesArr.push('Line No-100:  For( iter.hasNext())');
+            nodesArr.push('Line No-102: Object eachRowKeyObject = iter.next();');
+            nodesArr.push('Line No-103: ArrayList eachRowArrayList = (ArrayList) tempOldRowNoAndRowDataHashMap.get(eachRowKeyObject);');
+            nodesArr.push('Line No-104:  eachRowArrayList != null && eachRowArrayList.size() > 0');
+            nodesArr.push('Line No-106: String scheduleNameInTotalMap = (String) eachRowArrayList.get(scheduleNameIndex);');
+            nodesArr.push('Line No-107: String scheduleIdInTotalMap = (String) eachRowArrayList.get(scheduleIdIndex);');
+            nodesArr.push('Line No-108:  updateFlag');
+            nodesArr.push('Line No-110:  scheduleName.equalsIgnoreCase(scheduleNameInTotalMap) && !scheduleId.equalsIgnoreCase(scheduleIdInTotalMap)');
+            nodesArr.push('Line No-112: repeatedEntries = repeatedEntries + scheduleName;');
+            nodesArr.push('Line No-115:  scheduleName.equalsIgnoreCase(scheduleNameInTotalMap)');
+            nodesArr.push('Line No-117:  updateFlag');
+            nodesArr.push('Line No-119:  !scheduleId.equalsIgnoreCase(scheduleIdInTotalMap)');
+            nodesArr.push('Line No-121:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            nodesArr.push('Line No-123: repeatedEntries = repeatedEntries + "," + scheduleName;');
+            nodesArr.push('Line No-127: repeatedEntries = repeatedEntries + scheduleName;');
+            nodesArr.push('Line No-133:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            nodesArr.push('Line No-135: repeatedEntries = repeatedEntries + "," + scheduleName;');
+            nodesArr.push('Line No-139: repeatedEntries = repeatedEntries + scheduleName;');
+            nodesArr.push('End - For loop');
+            nodesArr.push('End - While loop');
+            nodesArr.push('Line No-146: trinitiLogger.debug("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap);');
+            nodesArr.push('Line No-147: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()repeatedScheduleNamesMap>" + repeatedScheduleNamesMap);');
+            nodesArr.push('Line No-148: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()repeatedEntries>" + repeatedEntries);');
+            nodesArr.push('Line No-149:  !repeatedEntries.equalsIgnoreCase("")');
+            nodesArr.push('Line No-151: setValidationMessage("Schedule already exists with the name:" + repeatedEntries + " ");');
+            nodesArr.push('Line No-152: validationStatus = false;');
+            nodesArr.push('Line No-160: return validationStatus;');
+            nodesArr.push('Stop');
+
+            var gapBetweenNodes = 40;
+            maxNodeWidth = getMaxNodeWidthByNames(nodesArr);
+
+
+            var rect78 = ellipse.clone();
+            rect78.addTo(javaStatementsGraph);
+            rect78.attr('text/text', 'Start');
+            rect78.attr('circle/fill', 'green');
+
+            rootNode = rect78;
+
+            flowChartNode = getBrokenText('Line No-46: boolean validationStatus = true;    ');
+            var rect79 = rect.clone();
+            rect79.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect79.attr('label/text', flowChartNode);
+            rect79.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-49: HashMap tempOldRowNoAndRowDataHashMap = new HashMap();    ');
+            var rect80 = rect.clone();
+            rect80.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect80.attr('label/text', flowChartNode);
+            rect80.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-50: trinitiLogger.debug("rowIndexAndDataHashMap::" + rowIndexAndDataHashMap);    ');
+            var rect81 = rect.clone();
+            rect81.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect81.attr('label/text', flowChartNode);
+            rect81.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-51: trinitiLogger.debug("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap);    ');
+            var rect82 = rect.clone();
+            rect82.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect82.attr('label/text', flowChartNode);
+            rect82.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-52: trinitiLogger.debug("columnVector::" + columnVector);    ');
+            var rect83 = rect.clone();
+            rect83.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect83.attr('label/text', flowChartNode);
+            rect83.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-53: trinitiLogger.debug("failedRowArrayList::" + failedRowArrayList);    ');
+            var rect84 = rect.clone();
+            rect84.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect84.attr('label/text', flowChartNode);
+            rect84.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-54: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()deleteRowIndexAndDataHashMap>" + deleteRowIndexAndDataHashMap);    ');
+            var rect85 = rect.clone();
+            rect85.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect85.attr('label/text', flowChartNode);
+            rect85.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-55: LinkedHashMap repeatedScheduleNamesMap = new LinkedHashMap();    ');
+            var rect86 = rect.clone();
+            rect86.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect86.attr('label/text', flowChartNode);
+            rect86.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-56: String repeatedEntries = "";    ');
+            var rect87 = rect.clone();
+            rect87.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect87.attr('label/text', flowChartNode);
+            rect87.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-57: String scheduleName = "";    ');
+            var rect88 = rect.clone();
+            rect88.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect88.attr('label/text', flowChartNode);
+            rect88.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-58: int scheduleNameIndex = columnVector.indexOf("SCHEDULE_NAME");    ');
+            var rect89 = rect.clone();
+            rect89.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect89.attr('label/text', flowChartNode);
+            rect89.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-59: int scheduleIdIndex = columnVector.indexOf("SCHEDULE_ID");    ');
+            var rect90 = rect.clone();
+            rect90.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect90.attr('label/text', flowChartNode);
+            rect90.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-60: Set editedRowsKeySet = rowIndexAndDataHashMap.keySet();    ');
+            var rect91 = rect.clone();
+            rect91.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect91.attr('label/text', flowChartNode);
+            rect91.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-61: Iterator editedRowKeysIterator = editedRowsKeySet.iterator();    ');
+            var rect92 = rect.clone();
+            rect92.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect92.attr('label/text', flowChartNode);
+            rect92.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-62: Object editedRowKeyObject = null;    ');
+            var rect93 = rect.clone();
+            rect93.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect93.attr('label/text', flowChartNode);
+            rect93.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-63: Vector eachRowVector = null;    ');
+            var rect94 = rect.clone();
+            rect94.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect94.attr('label/text', flowChartNode);
+            rect94.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-64: boolean updateFlag = false;    ');
+            var rect95 = rect.clone();
+            rect95.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect95.attr('label/text', flowChartNode);
+            rect95.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-65:  For( totalMapIterator.hasNext())    ');
+            var rect96 = rect.clone();
+            rect96.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect96.attr('label/text', flowChartNode);
+            rect96.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-67: Object eachRowKeyObject = totalMapIterator.next();    ');
+            var rect97 = rect.clone();
+            rect97.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect97.attr('label/text', flowChartNode);
+            rect97.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-68: ArrayList eachRowArrayList = (ArrayList) oldRowNoAndRowDataHashMap.get(eachRowKeyObject);    ');
+            var rect98 = rect.clone();
+            rect98.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect98.attr('label/text', flowChartNode);
+            rect98.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-69: tempOldRowNoAndRowDataHashMap.put(eachRowKeyObject, eachRowArrayList);    ');
+            var rect99 = rect.clone();
+            rect99.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect99.attr('label/text', flowChartNode);
+            rect99.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect100 = rect.clone();
+            rect100.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect100.attr('label/text', flowChartNode);
+            rect100.addTo(javaStatementsGraph);
+            rect100.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-71: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()oldRowNoAndRowDataHashMap.size()>" + tempOldRowNoAndRowDataHashMap.size());    ');
+            var rect101 = rect.clone();
+            rect101.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect101.attr('label/text', flowChartNode);
+            rect101.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-72: While ( editedRowKeysIterator.hasNext())    ');
+            var rect102 = rect.clone();
+            rect102.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect102.attr('label/text', flowChartNode);
+            rect102.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-74: editedRowKeyObject = editedRowKeysIterator.next();    ');
+            var rect103 = rect.clone();
+            rect103.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect103.attr('label/text', flowChartNode);
+            rect103.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-75: String editedRowKeyString = editedRowKeyObject.toString();    ');
+            var rect104 = rect.clone();
+            rect104.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect104.attr('label/text', flowChartNode);
+            rect104.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-76: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()editedRowKeyString>" + editedRowKeyString);    ');
+            var rect105 = rect.clone();
+            rect105.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect105.attr('label/text', flowChartNode);
+            rect105.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-77: eachRowVector = (Vector) rowIndexAndDataHashMap.get(editedRowKeyObject);    ');
+            var rect106 = rect.clone();
+            rect106.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect106.attr('label/text', flowChartNode);
+            rect106.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-78: scheduleName = (String) eachRowVector.get(scheduleNameIndex);    ');
+            var rect107 = rect.clone();
+            rect107.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect107.attr('label/text', flowChartNode);
+            rect107.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-79: String scheduleId = (String) eachRowVector.get(scheduleIdIndex);    ');
+            var rect108 = rect.clone();
+            rect108.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect108.attr('label/text', flowChartNode);
+            rect108.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-80:  editedRowKeyString.indexOf("ANR") == -1');
+            var rect109 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect109.resize(maxNodeWidth, resizeWidth);
+            rect109.attr('text/text', flowChartNode);
+            rect109.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-82: updateFlag = true;    ');
+            var rect110 = rect.clone();
+            rect110.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect110.translate(-1.1 * maxNodeWidth,443400);
+            rect110.attr('label/text', flowChartNode);
+            rect110.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect111 = rect.clone();
+            rect111.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect111.attr('label/text', flowChartNode);
+            rect111.addTo(javaStatementsGraph);
+            rect111.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-84:  repeatedScheduleNamesMap.get(scheduleName) == null');
+            var rect112 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect112.resize(maxNodeWidth, resizeWidth);
+            rect112.attr('text/text', flowChartNode);
+            rect112.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-86: repeatedScheduleNamesMap.put(scheduleName, scheduleName);    ');
+            var rect113 = rect.clone();
+            rect113.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect113.translate(-1.1 * maxNodeWidth,443500);
+            rect113.attr('label/text', flowChartNode);
+            rect113.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-90:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            var rect114 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect114.resize(maxNodeWidth, resizeWidth);
+            rect114.translate(1.1 * maxNodeWidth,443600);
+            rect114.attr('text/text', flowChartNode);
+            rect114.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-92: repeatedEntries = repeatedEntries + "," + scheduleName;    ');
+            var rect115 = rect.clone();
+            rect115.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect115.translate(0.0 * maxNodeWidth,443600);
+            rect115.attr('label/text', flowChartNode);
+            rect115.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-96: repeatedEntries = repeatedEntries + scheduleName;    ');
+            var rect116 = rect.clone();
+            rect116.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect116.translate(2.2 * maxNodeWidth,443600);
+            rect116.attr('label/text', flowChartNode);
+            rect116.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect117 = rect.clone();
+            rect117.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect117.translate(1.1 * maxNodeWidth,443600);
+            rect117.attr('label/text', flowChartNode);
+            rect117.addTo(javaStatementsGraph);
+            rect117.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect118 = rect.clone();
+            rect118.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect118.attr('label/text', flowChartNode);
+            rect118.addTo(javaStatementsGraph);
+            rect118.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-100:  For( iter.hasNext())    ');
+            var rect119 = rect.clone();
+            rect119.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect119.attr('label/text', flowChartNode);
+            rect119.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-102: Object eachRowKeyObject = iter.next();    ');
+            var rect120 = rect.clone();
+            rect120.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect120.attr('label/text', flowChartNode);
+            rect120.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-103: ArrayList eachRowArrayList = (ArrayList) tempOldRowNoAndRowDataHashMap.get(eachRowKeyObject);    ');
+            var rect121 = rect.clone();
+            rect121.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect121.attr('label/text', flowChartNode);
+            rect121.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-104:  eachRowArrayList != null && eachRowArrayList.size() > 0');
+            var rect122 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect122.resize(maxNodeWidth, resizeWidth);
+            rect122.attr('text/text', flowChartNode);
+            rect122.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-106: String scheduleNameInTotalMap = (String) eachRowArrayList.get(scheduleNameIndex);    ');
+            var rect123 = rect.clone();
+            rect123.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect123.translate(-1.1 * maxNodeWidth,444000);
+            rect123.attr('label/text', flowChartNode);
+            rect123.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-107: String scheduleIdInTotalMap = (String) eachRowArrayList.get(scheduleIdIndex);    ');
+            var rect124 = rect.clone();
+            rect124.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect124.translate(-1.1 * maxNodeWidth,444000);
+            rect124.attr('label/text', flowChartNode);
+            rect124.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-108:  updateFlag');
+            var rect125 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect125.resize(maxNodeWidth, resizeWidth);
+            rect125.translate(-1.1 * maxNodeWidth,444100);
+            rect125.attr('text/text', flowChartNode);
+            rect125.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-110:  scheduleName.equalsIgnoreCase(scheduleNameInTotalMap) && !scheduleId.equalsIgnoreCase(scheduleIdInTotalMap)');
+            var rect126 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect126.resize(maxNodeWidth, resizeWidth);
+            rect126.translate(-2.2 * maxNodeWidth,444200);
+            rect126.attr('text/text', flowChartNode);
+            rect126.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-112: repeatedEntries = repeatedEntries + scheduleName;    ');
+            var rect127 = rect.clone();
+            rect127.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect127.translate(-3.3000000000000003 * maxNodeWidth,444200);
+            rect127.attr('label/text', flowChartNode);
+            rect127.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect128 = rect.clone();
+            rect128.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect128.translate(-2.2 * maxNodeWidth,444200);
+            rect128.attr('label/text', flowChartNode);
+            rect128.addTo(javaStatementsGraph);
+            rect128.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect129 = rect.clone();
+            rect129.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect129.translate(-1.1 * maxNodeWidth,444200);
+            rect129.attr('label/text', flowChartNode);
+            rect129.addTo(javaStatementsGraph);
+            rect129.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-115:  scheduleName.equalsIgnoreCase(scheduleNameInTotalMap)');
+            var rect130 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect130.resize(maxNodeWidth, resizeWidth);
+            rect130.translate(-1.1 * maxNodeWidth,444300);
+            rect130.attr('text/text', flowChartNode);
+            rect130.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-117:  updateFlag');
+            var rect131 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect131.resize(maxNodeWidth, resizeWidth);
+            rect131.translate(-2.2 * maxNodeWidth,444400);
+            rect131.attr('text/text', flowChartNode);
+            rect131.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-119:  !scheduleId.equalsIgnoreCase(scheduleIdInTotalMap)');
+            var rect132 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect132.resize(maxNodeWidth, resizeWidth);
+            rect132.translate(-3.3000000000000003 * maxNodeWidth,444500);
+            rect132.attr('text/text', flowChartNode);
+            rect132.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-121:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            var rect133 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect133.resize(maxNodeWidth, resizeWidth);
+            rect133.translate(-4.4 * maxNodeWidth,444600);
+            rect133.attr('text/text', flowChartNode);
+            rect133.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-123: repeatedEntries = repeatedEntries + "," + scheduleName;    ');
+            var rect134 = rect.clone();
+            rect134.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect134.translate(-5.5 * maxNodeWidth,444600);
+            rect134.attr('label/text', flowChartNode);
+            rect134.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-127: repeatedEntries = repeatedEntries + scheduleName;    ');
+            var rect135 = rect.clone();
+            rect135.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect135.translate(-3.3000000000000003 * maxNodeWidth,444600);
+            rect135.attr('label/text', flowChartNode);
+            rect135.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect136 = rect.clone();
+            rect136.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect136.translate(-4.4 * maxNodeWidth,444600);
+            rect136.attr('label/text', flowChartNode);
+            rect136.addTo(javaStatementsGraph);
+            rect136.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect137 = rect.clone();
+            rect137.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect137.translate(-3.3000000000000003 * maxNodeWidth,444600);
+            rect137.attr('label/text', flowChartNode);
+            rect137.addTo(javaStatementsGraph);
+            rect137.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-133:  !repeatedEntries.equalsIgnoreCase("") && repeatedEntries.indexOf(scheduleName) != -1');
+            var rect138 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect138.resize(maxNodeWidth, resizeWidth);
+            rect138.translate(-1.1 * maxNodeWidth,444700);
+            rect138.attr('text/text', flowChartNode);
+            rect138.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-135: repeatedEntries = repeatedEntries + "," + scheduleName;    ');
+            var rect139 = rect.clone();
+            rect139.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect139.translate(-2.2 * maxNodeWidth,444700);
+            rect139.attr('label/text', flowChartNode);
+            rect139.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-139: repeatedEntries = repeatedEntries + scheduleName;    ');
+            var rect140 = rect.clone();
+            rect140.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect140.translate(0.0 * maxNodeWidth,444700);
+            rect140.attr('label/text', flowChartNode);
+            rect140.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect141 = rect.clone();
+            rect141.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect141.translate(-1.1 * maxNodeWidth,444700);
+            rect141.attr('label/text', flowChartNode);
+            rect141.addTo(javaStatementsGraph);
+            rect141.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect142 = rect.clone();
+            rect142.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect142.translate(-2.2 * maxNodeWidth,444700);
+            rect142.attr('label/text', flowChartNode);
+            rect142.addTo(javaStatementsGraph);
+            rect142.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect143 = rect.clone();
+            rect143.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect143.translate(-1.1 * maxNodeWidth,444700);
+            rect143.attr('label/text', flowChartNode);
+            rect143.addTo(javaStatementsGraph);
+            rect143.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect144 = rect.clone();
+            rect144.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect144.attr('label/text', flowChartNode);
+            rect144.addTo(javaStatementsGraph);
+            rect144.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('End - For loop    ');
+            var rect145 = rect.clone();
+            rect145.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect145.attr('label/text', flowChartNode);
+            rect145.addTo(javaStatementsGraph);
+            rect145.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('End - While loop    ');
+            var rect146 = rect.clone();
+            rect146.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect146.attr('label/text', flowChartNode);
+            rect146.addTo(javaStatementsGraph);
+            rect146.attr('body/fill', '#F400A1');
+
+            flowChartNode = getBrokenText('Line No-146: trinitiLogger.debug("oldRowNoAndRowDataHashMap::" + oldRowNoAndRowDataHashMap);    ');
+            var rect147 = rect.clone();
+            rect147.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect147.attr('label/text', flowChartNode);
+            rect147.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-147: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()repeatedScheduleNamesMap>" + repeatedScheduleNamesMap);    ');
+            var rect148 = rect.clone();
+            rect148.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect148.attr('label/text', flowChartNode);
+            rect148.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-148: trinitiLogger.debug("SchScheduleNameValidation.executeCustomConroller()repeatedEntries>" + repeatedEntries);    ');
+            var rect149 = rect.clone();
+            rect149.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect149.attr('label/text', flowChartNode);
+            rect149.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-149:  !repeatedEntries.equalsIgnoreCase("")');
+            var rect150 = rhombus.clone();
+            resizeWidth = 45 + ((flowChartNode.match(/\n/g) || []).length) * 15;
+            rect150.resize(maxNodeWidth, resizeWidth);
+            rect150.attr('text/text', flowChartNode);
+            rect150.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-151: setValidationMessage("Schedule already exists with the name:" + repeatedEntries + " ");    ');
+            var rect151 = rect.clone();
+            rect151.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect151.translate(-1.1 * maxNodeWidth,445300);
+            rect151.attr('label/text', flowChartNode);
+            rect151.set('externalLink', 'scheduler/customcontroller/schcustomcontroller/SchScheduleNameValidation/setValidationMessage.html');
+            rect151.attr('body/stroke', 'blue');
+            rect151.attr('body/fill', 'blue');
+            rect151.attr('label/cursor', 'pointer');
+            rect151.attr('body/cursor', 'pointer');
+            rect151.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Line No-152: validationStatus = false;    ');
+            var rect152 = rect.clone();
+            rect152.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect152.translate(-1.1 * maxNodeWidth,445300);
+            rect152.attr('label/text', flowChartNode);
+            rect152.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('End - If condition    ');
+            var rect153 = rect.clone();
+            rect153.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect153.attr('label/text', flowChartNode);
+            rect153.addTo(javaStatementsGraph);
+            rect153.attr('body/fill', '#800020');
+
+            flowChartNode = getBrokenText('Line No-160: return validationStatus;    ');
+            var rect154 = rect.clone();
+            rect154.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect154.attr('label/text', flowChartNode);
+            rect154.addTo(javaStatementsGraph);
+
+            flowChartNode = getBrokenText('Stop    ');
+            var rect155 = ellipse.clone();
+            rect155.resize(maxNodeWidth, ((flowChartNode.match(/\n/g) || []).length + 2) * 15);
+            rect155.attr('text/text', flowChartNode);
+            rect155.addTo(javaStatementsGraph);
+
+
+            var link93 = link.clone();
+            link93.source(rect78);
+            link93.target(rect79);
+            link93.addTo(javaStatementsGraph);
+
+            var link94 = link.clone();
+            link94.source(rect79);
+            link94.target(rect80);
+            link94.addTo(javaStatementsGraph);
+
+            var link95 = link.clone();
+            link95.source(rect80);
+            link95.target(rect81);
+            link95.addTo(javaStatementsGraph);
+
+            var link96 = link.clone();
+            link96.source(rect81);
+            link96.target(rect82);
+            link96.addTo(javaStatementsGraph);
+
+            var link97 = link.clone();
+            link97.source(rect82);
+            link97.target(rect83);
+            link97.addTo(javaStatementsGraph);
+
+            var link98 = link.clone();
+            link98.source(rect83);
+            link98.target(rect84);
+            link98.addTo(javaStatementsGraph);
+
+            var link99 = link.clone();
+            link99.source(rect84);
+            link99.target(rect85);
+            link99.addTo(javaStatementsGraph);
+
+            var link100 = link.clone();
+            link100.source(rect85);
+            link100.target(rect86);
+            link100.addTo(javaStatementsGraph);
+
+            var link101 = link.clone();
+            link101.source(rect86);
+            link101.target(rect87);
+            link101.addTo(javaStatementsGraph);
+
+            var link102 = link.clone();
+            link102.source(rect87);
+            link102.target(rect88);
+            link102.addTo(javaStatementsGraph);
+
+            var link103 = link.clone();
+            link103.source(rect88);
+            link103.target(rect89);
+            link103.addTo(javaStatementsGraph);
+
+            var link104 = link.clone();
+            link104.source(rect89);
+            link104.target(rect90);
+            link104.addTo(javaStatementsGraph);
+
+            var link105 = link.clone();
+            link105.source(rect90);
+            link105.target(rect91);
+            link105.addTo(javaStatementsGraph);
+
+            var link106 = link.clone();
+            link106.source(rect91);
+            link106.target(rect92);
+            link106.addTo(javaStatementsGraph);
+
+            var link107 = link.clone();
+            link107.source(rect92);
+            link107.target(rect93);
+            link107.addTo(javaStatementsGraph);
+
+            var link108 = link.clone();
+            link108.source(rect93);
+            link108.target(rect94);
+            link108.addTo(javaStatementsGraph);
+
+            var link109 = link.clone();
+            link109.source(rect94);
+            link109.target(rect95);
+            link109.addTo(javaStatementsGraph);
+
+            var link110 = link.clone();
+            link110.source(rect95);
+            link110.target(rect96);
+            link110.addTo(javaStatementsGraph);
+
+            var link111 = link.clone();
+            link111.source(rect96);
+            link111.target(rect97);
+            link111.addTo(javaStatementsGraph);
+
+            var link112 = link.clone();
+            link112.source(rect97);
+            link112.target(rect98);
+            link112.addTo(javaStatementsGraph);
+
+            var link113 = link.clone();
+            link113.source(rect98);
+            link113.target(rect99);
+            link113.addTo(javaStatementsGraph);
+
+            var link114 = link.clone();
+            link114.source(rect99);
+            link114.target(rect100);
+            link114.addTo(javaStatementsGraph);
+
+            var link115 = link.clone();
+            link115.source(rect100);
+            link115.target(rect96);
+            rect96.attr('body/stroke', '#F400A1');
+            rect96.attr('body/fill', '#F400A1');
+            link115.set('loopConnector', true);
+            link115.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link115.addTo(javaStatementsGraph);
+
+            var link116 = link.clone();
+            link116.source(rect100);
+            link116.target(rect101);
+            link116.addTo(javaStatementsGraph);
+
+            var link117 = link.clone();
+            link117.source(rect101);
+            link117.target(rect102);
+            link117.addTo(javaStatementsGraph);
+
+            var link118 = link.clone();
+            link118.source(rect102);
+            link118.target(rect103);
+            link118.addTo(javaStatementsGraph);
+
+            var link119 = link.clone();
+            link119.source(rect103);
+            link119.target(rect104);
+            link119.addTo(javaStatementsGraph);
+
+            var link120 = link.clone();
+            link120.source(rect104);
+            link120.target(rect105);
+            link120.addTo(javaStatementsGraph);
+
+            var link121 = link.clone();
+            link121.source(rect105);
+            link121.target(rect106);
+            link121.addTo(javaStatementsGraph);
+
+            var link122 = link.clone();
+            link122.source(rect106);
+            link122.target(rect107);
+            link122.addTo(javaStatementsGraph);
+
+            var link123 = link.clone();
+            link123.source(rect107);
+            link123.target(rect108);
+            link123.addTo(javaStatementsGraph);
+
+            var link124 = link.clone();
+            link124.source(rect108);
+            link124.target(rect109);
+            link124.addTo(javaStatementsGraph);
+
+            var link125 = link.clone();
+            link125.source(rect109);
+            link125.target(rect110);
+            link125.set('ifBlockStartLink', true);
+            link125.label(0, {attrs: {text: {text: 'Yes'}}});
+            link125.addTo(javaStatementsGraph);
+
+            var link126 = link.clone();
+            link126.source(rect110);
+            link126.target(rect111);
+            link126.addTo(javaStatementsGraph);
+            link126.set('ifBlockEndLink', true);
+            link126.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link127 = link.clone();
+            link127.source(rect109);
+            link127.target(rect111);
+            link127.addTo(javaStatementsGraph);
+            link127.label(0, {attrs: {text: {text: 'No'}}});
+            link127.set('elseBlockStartAndEndLink', true);
+
+            rect109.set('endIfConditionId', rect111.id);
+            rect111.set('ifConditionId', rect109.id);
+
+            var link128 = link.clone();
+            link128.source(rect111);
+            link128.target(rect112);
+            link128.addTo(javaStatementsGraph);
+
+            var link129 = link.clone();
+            link129.source(rect112);
+            link129.target(rect113);
+            link129.set('ifBlockStartLink', true);
+            link129.label(0, {attrs: {text: {text: 'Yes'}}});
+            link129.addTo(javaStatementsGraph);
+
+            var link130 = link.clone();
+            link130.source(rect112);
+            link130.target(rect114);
+            link130.set('elseBlockStartLink', true);
+            link130.label(0, {attrs: {text: {text: 'No'}}});
+            link130.addTo(javaStatementsGraph);
+
+            var link131 = link.clone();
+            link131.source(rect114);
+            link131.target(rect115);
+            link131.set('ifBlockStartLink', true);
+            link131.label(0, {attrs: {text: {text: 'Yes'}}});
+            link131.addTo(javaStatementsGraph);
+
+            var link132 = link.clone();
+            link132.source(rect114);
+            link132.target(rect116);
+            link132.set('elseBlockStartLink', true);
+            link132.label(0, {attrs: {text: {text: 'No'}}});
+            link132.addTo(javaStatementsGraph);
+
+            var link133 = link.clone();
+            link133.source(rect115);
+            link133.target(rect117);
+            link133.addTo(javaStatementsGraph);
+            link133.set('ifBlockEndLink', true);
+            link133.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link134 = link.clone();
+            link134.source(rect116);
+            link134.target(rect117);
+            link134.addTo(javaStatementsGraph);
+            link134.set('elseBlockEndLink', true);
+            link134.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect114.set('endIfConditionId', rect117.id);
+            rect117.set('ifConditionId', rect114.id);
+
+            var link135 = link.clone();
+            link135.source(rect113);
+            link135.target(rect118);
+            link135.addTo(javaStatementsGraph);
+            link135.set('ifBlockEndLink', true);
+            link135.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link136 = link.clone();
+            link136.source(rect117);
+            link136.target(rect118);
+            link136.addTo(javaStatementsGraph);
+            link136.set('elseBlockEndLink', true);
+            link136.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect112.set('endIfConditionId', rect118.id);
+            rect118.set('ifConditionId', rect112.id);
+
+            var link137 = link.clone();
+            link137.source(rect118);
+            link137.target(rect119);
+            link137.addTo(javaStatementsGraph);
+
+            var link138 = link.clone();
+            link138.source(rect119);
+            link138.target(rect120);
+            link138.addTo(javaStatementsGraph);
+
+            var link139 = link.clone();
+            link139.source(rect120);
+            link139.target(rect121);
+            link139.addTo(javaStatementsGraph);
+
+            var link140 = link.clone();
+            link140.source(rect121);
+            link140.target(rect122);
+            link140.addTo(javaStatementsGraph);
+
+            var link141 = link.clone();
+            link141.source(rect122);
+            link141.target(rect123);
+            link141.set('ifBlockStartLink', true);
+            link141.label(0, {attrs: {text: {text: 'Yes'}}});
+            link141.addTo(javaStatementsGraph);
+
+            var link142 = link.clone();
+            link142.source(rect123);
+            link142.target(rect124);
+            link142.addTo(javaStatementsGraph);
+
+            var link143 = link.clone();
+            link143.source(rect124);
+            link143.target(rect125);
+            link143.addTo(javaStatementsGraph);
+
+            var link144 = link.clone();
+            link144.source(rect125);
+            link144.target(rect126);
+            link144.set('ifBlockStartLink', true);
+            link144.label(0, {attrs: {text: {text: 'Yes'}}});
+            link144.addTo(javaStatementsGraph);
+
+            var link145 = link.clone();
+            link145.source(rect126);
+            link145.target(rect127);
+            link145.set('ifBlockStartLink', true);
+            link145.label(0, {attrs: {text: {text: 'Yes'}}});
+            link145.addTo(javaStatementsGraph);
+
+            var link146 = link.clone();
+            link146.source(rect127);
+            link146.target(rect128);
+            link146.addTo(javaStatementsGraph);
+            link146.set('ifBlockEndLink', true);
+            link146.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link147 = link.clone();
+            link147.source(rect126);
+            link147.target(rect128);
+            link147.addTo(javaStatementsGraph);
+            link147.label(0, {attrs: {text: {text: 'No'}}});
+            link147.set('elseBlockStartAndEndLink', true);
+
+            rect126.set('endIfConditionId', rect128.id);
+            rect128.set('ifConditionId', rect126.id);
+
+            var link148 = link.clone();
+            link148.source(rect128);
+            link148.target(rect129);
+            link148.addTo(javaStatementsGraph);
+            link148.set('ifBlockEndLink', true);
+            link148.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link149 = link.clone();
+            link149.source(rect125);
+            link149.target(rect129);
+            link149.addTo(javaStatementsGraph);
+            link149.label(0, {attrs: {text: {text: 'No'}}});
+            link149.set('elseBlockStartAndEndLink', true);
+
+            rect125.set('endIfConditionId', rect129.id);
+            rect129.set('ifConditionId', rect125.id);
+
+            var link150 = link.clone();
+            link150.source(rect129);
+            link150.target(rect130);
+            link150.addTo(javaStatementsGraph);
+
+            var link151 = link.clone();
+            link151.source(rect130);
+            link151.target(rect131);
+            link151.set('ifBlockStartLink', true);
+            link151.label(0, {attrs: {text: {text: 'Yes'}}});
+            link151.addTo(javaStatementsGraph);
+
+            var link152 = link.clone();
+            link152.source(rect131);
+            link152.target(rect132);
+            link152.set('ifBlockStartLink', true);
+            link152.label(0, {attrs: {text: {text: 'Yes'}}});
+            link152.addTo(javaStatementsGraph);
+
+            var link153 = link.clone();
+            link153.source(rect132);
+            link153.target(rect133);
+            link153.set('ifBlockStartLink', true);
+            link153.label(0, {attrs: {text: {text: 'Yes'}}});
+            link153.addTo(javaStatementsGraph);
+
+            var link154 = link.clone();
+            link154.source(rect133);
+            link154.target(rect134);
+            link154.set('ifBlockStartLink', true);
+            link154.label(0, {attrs: {text: {text: 'Yes'}}});
+            link154.addTo(javaStatementsGraph);
+
+            var link155 = link.clone();
+            link155.source(rect133);
+            link155.target(rect135);
+            link155.set('elseBlockStartLink', true);
+            link155.label(0, {attrs: {text: {text: 'No'}}});
+            link155.addTo(javaStatementsGraph);
+
+            var link156 = link.clone();
+            link156.source(rect134);
+            link156.target(rect136);
+            link156.addTo(javaStatementsGraph);
+            link156.set('ifBlockEndLink', true);
+            link156.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link157 = link.clone();
+            link157.source(rect135);
+            link157.target(rect136);
+            link157.addTo(javaStatementsGraph);
+            link157.set('elseBlockEndLink', true);
+            link157.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect133.set('endIfConditionId', rect136.id);
+            rect136.set('ifConditionId', rect133.id);
+
+            var link158 = link.clone();
+            link158.source(rect136);
+            link158.target(rect137);
+            link158.addTo(javaStatementsGraph);
+            link158.set('ifBlockEndLink', true);
+            link158.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link159 = link.clone();
+            link159.source(rect132);
+            link159.target(rect137);
+            link159.addTo(javaStatementsGraph);
+            link159.label(0, {attrs: {text: {text: 'No'}}});
+            link159.set('elseBlockStartAndEndLink', true);
+
+            rect132.set('endIfConditionId', rect137.id);
+            rect137.set('ifConditionId', rect132.id);
+
+            var link160 = link.clone();
+            link160.source(rect131);
+            link160.target(rect138);
+            link160.set('elseBlockStartLink', true);
+            link160.label(0, {attrs: {text: {text: 'No'}}});
+            link160.addTo(javaStatementsGraph);
+
+            var link161 = link.clone();
+            link161.source(rect138);
+            link161.target(rect139);
+            link161.set('ifBlockStartLink', true);
+            link161.label(0, {attrs: {text: {text: 'Yes'}}});
+            link161.addTo(javaStatementsGraph);
+
+            var link162 = link.clone();
+            link162.source(rect138);
+            link162.target(rect140);
+            link162.set('elseBlockStartLink', true);
+            link162.label(0, {attrs: {text: {text: 'No'}}});
+            link162.addTo(javaStatementsGraph);
+
+            var link163 = link.clone();
+            link163.source(rect139);
+            link163.target(rect141);
+            link163.addTo(javaStatementsGraph);
+            link163.set('ifBlockEndLink', true);
+            link163.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link164 = link.clone();
+            link164.source(rect140);
+            link164.target(rect141);
+            link164.addTo(javaStatementsGraph);
+            link164.set('elseBlockEndLink', true);
+            link164.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect138.set('endIfConditionId', rect141.id);
+            rect141.set('ifConditionId', rect138.id);
+
+            var link165 = link.clone();
+            link165.source(rect137);
+            link165.target(rect142);
+            link165.addTo(javaStatementsGraph);
+            link165.set('ifBlockEndLink', true);
+            link165.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link166 = link.clone();
+            link166.source(rect141);
+            link166.target(rect142);
+            link166.addTo(javaStatementsGraph);
+            link166.set('elseBlockEndLink', true);
+            link166.label(0, {attrs: {text: {text: 'No'}}});
+
+            rect131.set('endIfConditionId', rect142.id);
+            rect142.set('ifConditionId', rect131.id);
+
+            var link167 = link.clone();
+            link167.source(rect142);
+            link167.target(rect143);
+            link167.addTo(javaStatementsGraph);
+            link167.set('ifBlockEndLink', true);
+            link167.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link168 = link.clone();
+            link168.source(rect130);
+            link168.target(rect143);
+            link168.addTo(javaStatementsGraph);
+            link168.label(0, {attrs: {text: {text: 'No'}}});
+            link168.set('elseBlockStartAndEndLink', true);
+
+            rect130.set('endIfConditionId', rect143.id);
+            rect143.set('ifConditionId', rect130.id);
+            rect130.set('moveIfBlockBy', 2);
+
+            var link169 = link.clone();
+            link169.source(rect143);
+            link169.target(rect144);
+            link169.addTo(javaStatementsGraph);
+            link169.set('ifBlockEndLink', true);
+            link169.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link170 = link.clone();
+            link170.source(rect122);
+            link170.target(rect144);
+            link170.addTo(javaStatementsGraph);
+            link170.label(0, {attrs: {text: {text: 'No'}}});
+            link170.set('elseBlockStartAndEndLink', true);
+
+            rect122.set('endIfConditionId', rect144.id);
+            rect144.set('ifConditionId', rect122.id);
+
+            var link171 = link.clone();
+            link171.source(rect144);
+            link171.target(rect145);
+            link171.addTo(javaStatementsGraph);
+
+            var link172 = link.clone();
+            link172.source(rect145);
+            link172.target(rect119);
+            rect119.attr('body/stroke', '#F400A1');
+            rect119.attr('body/fill', '#F400A1');
+            link172.set('loopConnector', true);
+            link172.label(0, {attrs: {text: {text: breakText(40, 'For Loop')}}});
+            link172.addTo(javaStatementsGraph);
+
+            var link173 = link.clone();
+            link173.source(rect145);
+            link173.target(rect146);
+            link173.addTo(javaStatementsGraph);
+
+            var link174 = link.clone();
+            link174.source(rect146);
+            link174.target(rect102);
+            rect102.set('whileStart', rect146.get('id'));
+            rect146.set('whileEnd', rect102.get('id'));
+            rect102.attr('body/stroke', '#F400A1');
+            rect102.attr('body/fill', '#F400A1');
+            link174.set('loopConnector', true);
+            link174.label(0, {attrs: {text: {text: breakText(40, 'While Loop')}}});
+            link174.addTo(javaStatementsGraph);
+
+            var link175 = link.clone();
+            link175.source(rect146);
+            link175.target(rect147);
+            link175.addTo(javaStatementsGraph);
+
+            var link176 = link.clone();
+            link176.source(rect147);
+            link176.target(rect148);
+            link176.addTo(javaStatementsGraph);
+
+            var link177 = link.clone();
+            link177.source(rect148);
+            link177.target(rect149);
+            link177.addTo(javaStatementsGraph);
+
+            var link178 = link.clone();
+            link178.source(rect149);
+            link178.target(rect150);
+            link178.addTo(javaStatementsGraph);
+
+            var link179 = link.clone();
+            link179.source(rect150);
+            link179.target(rect151);
+            link179.set('ifBlockStartLink', true);
+            link179.label(0, {attrs: {text: {text: 'Yes'}}});
+            link179.addTo(javaStatementsGraph);
+
+            var link180 = link.clone();
+            link180.source(rect151);
+            link180.target(rect152);
+            link180.addTo(javaStatementsGraph);
+
+            var link181 = link.clone();
+            link181.source(rect152);
+            link181.target(rect153);
+            link181.addTo(javaStatementsGraph);
+            link181.set('ifBlockEndLink', true);
+            link181.label(0, {attrs: {text: {text: 'Yes'}}});
+
+            var link182 = link.clone();
+            link182.source(rect150);
+            link182.target(rect153);
+            link182.addTo(javaStatementsGraph);
+            link182.label(0, {attrs: {text: {text: 'No'}}});
+            link182.set('elseBlockStartAndEndLink', true);
+
+            rect150.set('endIfConditionId', rect153.id);
+            rect153.set('ifConditionId', rect150.id);
+
+            var link183 = link.clone();
+            link183.source(rect153);
+            link183.target(rect154);
+            link183.addTo(javaStatementsGraph);
+
+            var link184 = link.clone();
+            link184.source(rect154);
+            link184.target(rect155);
+            link184.addTo(javaStatementsGraph);
+
+            rect78.set('startNode', 'true');
+            rect155.set('stopNode', 'true');
+            rect155.attr('circle/fill', 'red');
+            rect155.translate((maxNodeWidth - 100)/ 2, 0);
+
+            setFlowDiagramFolder('../../../../');
+            setIfElseMultiplier(1.1);
+
+            setPaperId(javaStatementsPaper);
+            setGraphId(javaStatementsGraph);
+            moveNodesOnYAxis(gapBetweenNodes);
+            moveIfElseBlocks();
+            moveImproperIfElseBlocks();
+            moveImproperWhileBlocks();
+            moveInvisibleNodes();
+            beautifyLoopConnectors();
+            alignStopNode(rect78, rect155);
+            resizePaper();
+            initializePaperBehavior();
+        </script>
+    </body>
+</html>

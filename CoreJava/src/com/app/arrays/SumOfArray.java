@@ -1,0 +1,21 @@
+package com.app.arrays;
+import java.util.Scanner;
+public class SumOfArray
+{
+    public static void main(String[] args)
+      {
+    	Scanner scan=new Scanner(System.in);
+    	System.out.println("Enter the number");
+    	int i=scan.nextInt();
+    	int[] i1=new int[i];
+    	int sum=0;
+    	for (int j=0;j<=i;j++)
+    	   {
+    		sum=sum+j;
+    		//if(1%2==0)
+    		//{
+    		System.out.println(sum); 
+    		//}
+    	   }
+      }
+}

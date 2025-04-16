@@ -1,0 +1,20 @@
+package com.app.dataType;
+
+public class Check1 
+{
+	int i=(byte)2.5;
+	Integer in=new Integer(5);
+	byte b=(byte)129;
+	Byte b1=new Byte((byte)6);
+	double d=(float)54.2d;
+	float f=(float)78.3f;
+	{
+		System.out.println(i);
+		System.out.println(b);
+		System.out.println(d);
+	}
+public static void main(String[] args)
+  {
+	Check1 c=new Check1();
+  }
+}

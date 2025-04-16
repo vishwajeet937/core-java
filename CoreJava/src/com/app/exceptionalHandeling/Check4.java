@@ -1,0 +1,28 @@
+package com.app.exceptionalHandeling;
+
+public class Check4 
+{
+   public void check4()throws Exception
+     {
+	   String name="sonu";
+	   long mobNo=9570381226l;
+	   try
+	   {
+	    System.out.println(name+"\n"+mobNo);
+	   }
+	   catch(NullPointerException n)
+	   {
+		 //n.toString();
+		   System.out.println(mobNo);
+	   }
+	   finally
+	   {
+		   System.out.println("finally");
+	   }
+     }
+   public static void main(String[] args)throws Exception
+   {
+	   Check4 c=new Check4();
+	   c.check4();
+   }
+}
