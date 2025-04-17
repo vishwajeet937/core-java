@@ -1,0 +1,26 @@
+import java.util.Scanner;
+class Demo6 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the first value");
+		int num=scan.nextInt(); 
+		int count_factor=0;
+		   for(int i=0;i<=num;i++)
+		      {
+			   if (num%1==0)
+			   {
+				count_factor++;
+		       }
+			 }
+			 if (count_factor==2)
+			 {
+				 System.out.println("prime");
+			 }
+			 else
+		     {
+				System.out.println("not prime");
+		     }
+	}
+}

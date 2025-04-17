@@ -1,0 +1,32 @@
+import java.util.Arrays;
+import java.util.Scanner;
+class Check24 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the value");
+		int numberOfInput=scan.nextInt();
+		int[] arr=new int[numberOfInput];
+		for (int i=0 ;i<=arr.length-1 ;i++ )
+		{
+             arr[i]=scan.nextInt();
+		}
+		int smallestNmuber=arr[0];
+		int temp=0;
+		for (int j=0 ;j<=arr.length-2 ;j++ )
+		{
+			for (int k=j+1 ;k<=arr.length-1 ;k++ ) 
+			{
+				if (arr[k]<arr[j])
+			{
+				temp=arr[j];
+                arr[j]=arr[k];
+			     arr[k]=temp;
+			}
+			}
+			
+		}
+		System.out.println(Arrays.toString(arr));
+	}
+}

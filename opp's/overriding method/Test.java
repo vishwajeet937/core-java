@@ -1,0 +1,34 @@
+class Test extends Object
+{
+	String stateName="Bihar";
+	public Integer test1()
+	{
+		System.out.println(stateName);
+		return 56;
+	}
+}
+class Test1 extends Test
+{
+	String districtName="Patna";
+	@Override
+	public Integer test1()
+	{
+	 System.out.println(districtName);	
+	 return 23;
+	}
+}
+class Test2 extends Test1
+{
+	String studentName="Sonu kumar";
+	//@Override
+	public Integer test()
+	{
+		System.out.println(studentName);
+		return 32;
+	}
+	public static void main(String[] args) 
+	{
+		Test2 t=new Test2();
+			t.test1();
+	}
+}

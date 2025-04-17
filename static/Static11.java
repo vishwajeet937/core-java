@@ -1,0 +1,10 @@
+class Static11
+{
+		static int x=20;
+		static int y=30;
+	public static void main(String[] args) 
+	{
+		System.out.println(x+y);
+		System.out.println(y);
+	}
+}

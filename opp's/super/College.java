@@ -1,0 +1,35 @@
+class  College extends Object
+{
+	String name="vishwajeet kumar";
+	long mobNo=9570381226l;
+	public String college()
+	{
+		System.out.println("college:"+name);
+		return "sdds";
+	}
+}
+class HighSchool extends College
+{
+	String name="vishwajeet kumar";
+	public HighSchool highSchool()
+	{
+		System.out.println("high school:"+name);
+		return new PrimarySchool();
+	}
+}
+class PrimarySchool extends HighSchool
+{
+	String name="vishwajeet kumar";
+	public Object primarySchool()
+	{
+		System.out.println("primary school:"+name);
+		return new PrimarySchool();
+	}
+	public static void main(String[] args) 
+	{
+		PrimarySchool p=new PrimarySchool();
+		p.primarySchool();
+		p.highSchool();
+		p.college();
+	}
+}

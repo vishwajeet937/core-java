@@ -1,0 +1,25 @@
+import java.util.Scanner;
+class Static6
+{
+	static int x;
+	static double d;
+	static{
+		System.out.println("class test is loaded");
+		Scanner scan=new Scanner(System.in);
+		System.out.println("enter the 1St number");
+		x=scan.nextInt();
+		System.out.println("enter the 2nd number");
+		d=scan.nextInt();
+	}
+	public static void main(String[] args) 
+	{
+		//Static6.add(1,2,3);
+		System.out.println("x:"+x);
+		System.out.println("d:"+d);
+	}
+	public static void add(int i,float f,double y)
+	{
+        Static6.add(1,2,3);
+		//add.Static6();
+	}
+}

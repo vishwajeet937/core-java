@@ -1,0 +1,37 @@
+class Project 
+{
+	String fName;
+	String lName;
+	int rollNo;
+	long mobNo;
+	public String m1()
+	{
+		System.out.println("vishwajeet"+" "+"kumar");
+		return fName;
+	}
+	public String m2()
+	{
+		System.out.println("kumar");
+		return lName;
+	}
+	public int m3()
+	{
+		System.out.println(164122);
+		return rollNo;
+	}
+	public long m4()
+	{
+		System.out.println(9570381226l);
+		return mobNo;
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("Start");
+		Project p=new Project();
+		p.m1();
+		p.m2();
+		p.m3();
+		p.m4();
+		System.out.println("End");
+	}
+}

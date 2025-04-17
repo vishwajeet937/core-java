@@ -1,0 +1,32 @@
+class Example 
+{
+	int x=20;
+	int y=30;
+	{
+		System.out.println("IIB1");
+	}
+	{
+		System.out.println("IIB2");
+	}
+	Example()
+	{
+		System.out.println("NPC");
+	}
+	Example(int p)
+	{
+		System.out.println("IPC");
+	}
+	void m1()
+	{
+		System.out.println("NSM1");
+	}
+	void m2()
+	{
+		System.out.println("NSM2");
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("main start");
+		System.out.println("main end");
+	}
+}

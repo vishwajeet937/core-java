@@ -1,0 +1,47 @@
+class Check5 
+{
+	public void m1()
+	{
+		try
+		{
+			throw new RuntimeException();
+			//System.out.println("try");
+		}
+		/*catch (ArithmeticException t)
+		{
+			//throw new ArithmeticException();
+			System.out.println("catch");
+		}
+		catch(ClassCastException e)
+		{
+			//throw new ClassCastException();
+			System.out.println("Catch2");
+		}
+		catch(NegativeArraySizeException r)
+		{
+			//throw new ClassCastException();
+			System.out.println("catch3");
+		}*/
+		catch(Exception c)//..................................................handile
+		{
+			System.out.println("checked exception");
+		}
+		/*finally
+		{
+			System.out.println("finally");
+		}*/
+	}
+	public static void main(String[] args) 
+	{
+		Check5 c=new Check5();
+		//c.m1();
+		try
+		{
+			c.m1();
+		}
+		catch (Exception e)
+		{
+			System.out.println("main method");
+		}
+	}
+}

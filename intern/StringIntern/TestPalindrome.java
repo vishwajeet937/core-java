@@ -1,0 +1,8 @@
+public class TestPalindrome
+{  
+     public static void main(String[] args)
+	{  
+      System.out.println(Palindrome.isPalindrome("nitin"));  
+       //System.out.println(Palindrome.isPalindrome("jatin"));  
+    }  
+}  

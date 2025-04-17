@@ -1,0 +1,35 @@
+class Check2
+{
+	String name;
+	public void m1()throws Exception
+	{
+		name.concat("jkvj");
+		/*try
+		{
+			name.concat("jkvj");
+			System.out.println("try");
+		}
+		catch (Exception e)
+		{
+			System.out.println("e.catch block");
+		}*/
+		System.out.println("m1");
+	}
+	public void m2()
+	{
+		try
+		{
+		 c.m1();	
+		}
+		catch (Exception e)
+		{
+			System.out.println("catch block");
+		}
+		System.out.println("m2");
+	}
+	public static void main(String[] args) 
+	{
+		Check2 c=new Check2();
+		c.m2();
+	}
+}

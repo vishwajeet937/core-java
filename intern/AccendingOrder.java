@@ -1,0 +1,24 @@
+import java.util.Arrays;
+class AccendingOrder 
+{
+	public static void main(String[] args) 
+	{
+		 int val=0;
+		int[] arr=new int[]{2,5,1,9,3,6,45,44};
+		for (int i=0 ;i<arr.length ;i++ )
+		{
+			for (int j=i+1 ;j<arr.length ;j++ )
+			{
+				if (arr[j]<arr[i])
+				{
+					val=arr[i];
+					arr[i]=arr[j];
+					arr[j]=val;
+				}
+			}
+			
+		}
+		//System.out.println(arr[arr.length-2]);
+		System.out.println(Arrays.toString(arr));
+	}
+}

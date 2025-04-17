@@ -1,0 +1,9 @@
+class Test111 
+{
+	public static void main(String[] args) 
+	{
+		int[] arr={(int)4.0,5,6,7};
+		String val=null;
+		System.out.println(arr[1]+","+arr[0]);
+	}
+}

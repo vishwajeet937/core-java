@@ -1,0 +1,26 @@
+import java.util.Scanner;
+class Test44 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number of i");
+		int i=scan.nextInt();
+		System.out.println("Enter the number of j");
+		int j=scan.nextInt();
+		System.out.println("Result");
+		if(i==j)
+		{
+			System.out.println("equal");
+		}
+		if(i<j)
+		{
+			System.out.println("gratter than");
+		}
+		if(i>j)
+		{
+			System.out.println("less than");
+		}
+			else{}
+	}
+}

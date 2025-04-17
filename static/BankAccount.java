@@ -1,0 +1,31 @@
+class BankAccount 
+{
+	private double balance;
+	public void setBalance(double balance) throws Exception 
+	{
+		if(balance==0)
+		{
+			throw new Exception ("Donot pass Zero");
+			//System.out.println("Donot pass Zero");
+		}
+		if(balance<0)
+		{
+			throw new Exception ("Donot pass -ve amount");
+			//System.out.println("Donot pass -ve amount");
+		}
+		this.balance=balance;
+	}
+		public double getBalance()
+	{
+		return balance;
+	}
+	public static void main (String[] args) throws Exception
+	{
+	BankAccount b=new BankAccount();
+	b.setBalance(23);
+	System.out.println(b.getBalance());
+	}
+		//System.out.println("Hello World!");
+	//}
+}
+ 

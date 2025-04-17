@@ -1,0 +1,18 @@
+class Demo15 
+{
+	static int i=2;
+	Demo15()
+	{
+		System.out.println(i);
+	}
+	public void m1()
+	{
+		System.out.println("m1");
+	}
+	public static void main(String[] args) 
+	{
+		Demo15 d=new Demo15();
+		d.m1();
+		System.out.println("Hello World!");
+	}
+}

@@ -1,0 +1,34 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Check 
+{
+	 static String query="select * from REPCAT$_TEMPLATE_TARGETS where TEMPLATE_TARGET_ID=?";
+	public static void main(String[] args)
+	{
+try 
+{
+	Connection c=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+	PreparedStatement p=c.prepareStatement(query);
+	p.setInt(1,100);
+	ResultSet rs=p.executeQuery();
+	//System.out.println(rs.next());
+	while(rs.next())
+	{
+		System.out.println(rs.getInt(1));
+		System.out.println(rs.getString(2));
+		System.out.println(rs.getString(3));
+		System.out.println(rs.getString(4));
+	}
+}
+  catch (SQLException e)
+ {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+ }
+}
+}
+

@@ -1,0 +1,41 @@
+class Test1 
+{
+	String compnyName="Triniti";
+	String location="Resulpura";
+	int totalEmp=300;
+	public void compny()
+	{
+		System.out.println("CompnyName:"+compnyName+"\n"+"Location:"+location+"\n"+"TotalEmp:"+totalEmp);
+	}
+	public void emp1()
+	{
+		String empName1="vishwajeet kumar";
+		int rollNo=20;
+		long mobNo=9570381226l;
+		System.out.println("EmpName1:"+empName1+"\n"+"RollNo:"+rollNo+"\n"+"MobNo:"+mobNo);
+	}
+	public int emp2()
+	{
+		String empName2="xyz";
+		int rollNo=1;
+		long mobNo=12345678l;
+		System.out.println("EmpName2:"+empName2+"\n"+"RollNo:"+rollNo+"MobNo:"+mobNo);
+		return 3;
+	}
+	Test1(String empName2,int rollNo,long mobNo)
+	{
+		/*String empName3="Abc";
+		int rollNo=2;
+		long mobNo=3456789l;*/
+		System.out.println("EmpName3:"+empName2+"\n"+"RollNo:"+rollNo+"MobNo:"+mobNo);
+		
+	}
+	public static void main(String[] args)
+	{
+		Test1 t=new Test1("jds",1,873242l);
+		t.compny();
+		t.emp1();
+		t.emp2();
+		System.out.println("Hello World!");
+	}
+}

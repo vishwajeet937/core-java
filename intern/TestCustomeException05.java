@@ -1,0 +1,18 @@
+import java.util.Scanner;
+class TestCustomeException05 
+{
+	public static void main(String[] args)throws TestCustomeException5
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		int num=scan.nextInt();
+        if (num<=100)
+        {
+			System.out.print("Available");
+        }
+		else
+		{
+			throw new TestCustomeException5("out of stock");
+		}
+	}
+}

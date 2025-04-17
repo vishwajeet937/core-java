@@ -1,0 +1,41 @@
+ class Test extends Object 
+{
+	String name="Sonu";
+	int age=24;
+	long mobNo=9570381226l;
+	public void test()
+	{
+		System.out.println("test:"+name);
+	}
+}
+class Test1 extends Test
+{
+	int age=25;
+	public void test1()
+	{
+		int age=26;
+	System.out.println("Test1:"+super.age+"\n"+this.age+"\n"+age);
+	}
+}
+class Test2 extends Test1
+{
+	Test2()
+	{
+		//this(34,54.3f);
+		System.out.println("Test3:"+"constructor");
+	}
+}
+class Test3 extends Test2
+{
+	public void test3()
+	{
+		System.out.println("Test2:"+mobNo);
+	}
+	public static void main(String[] args) 
+	{
+		Test3 t=new Test3();
+		t.test();
+		t.test1();
+		t.test3();
+	}
+}

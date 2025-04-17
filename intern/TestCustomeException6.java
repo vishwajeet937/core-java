@@ -1,0 +1,11 @@
+class TestCustomeException6 extends RuntimeException 
+{
+	TestCustomeException6(String s)
+	{
+		super(s);
+	}
+		TestCustomeException6()
+	{
+		super();
+	}
+}

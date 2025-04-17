@@ -1,0 +1,29 @@
+class ReturnCheck1 
+{
+	int rollNo;
+	String name;
+	long mobNo;
+	public int rollNo()
+	{
+		System.out.println("rollNo");
+		return rollNo;
+	}
+	public String name()
+	{
+		System.out.println("name");
+			return name;
+	}
+	public long mobNo()
+	{
+		System.out.println("mobNo");
+		return mobNo;
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("main method");
+		ReturnCheck1 r=new ReturnCheck1();
+		r.rollNo();
+		r.name();
+		r.mobNo();
+	}
+}

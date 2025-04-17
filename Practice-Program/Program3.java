@@ -1,0 +1,25 @@
+class Program3 
+{
+	public static int m1(int i,char ch)
+	{
+		int num=20;
+		int num1=0;
+		try
+		{
+			int div=(num/num1);
+			System.out.println(div);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("catch-Block");
+		}
+		return 11;
+	}
+	public static void main(String[] args)
+	{
+		System.out.println("main-method");
+		Program3 p=new Program3();
+		p.m1(21,'s');
+	}
+}

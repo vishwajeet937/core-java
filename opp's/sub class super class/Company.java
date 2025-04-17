@@ -1,0 +1,22 @@
+class Company extends Object
+{
+	String companyName;
+	String companyOverview;
+	String comanyPeopleContect;
+	String Charges;
+	String ControllOwnerShip;
+	String Competition;
+	String ComplanceCheck;
+	String Finencial;
+	String LeagleCase;
+	String Douckments;
+	static
+	{
+		System.out.println("Comapny Details");
+		System.out.println("companyName:"+"............");
+	}
+	public static void main(String[] args) 
+	{
+
+	}
+}

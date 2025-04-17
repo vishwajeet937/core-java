@@ -1,0 +1,36 @@
+public class Temp{
+	
+	static 
+	{
+		System.out.println("static block01");
+		main(new String[] {""});
+	}
+	private static long mobNo=getValue();
+	private String name;
+	{
+		System.out.println("non-static block01");
+	}
+	
+	public static void main(String[] args) 
+	{
+		Temp te=new Temp();
+		//Test42 t1=new Test42();
+		//Test42 t2=new Test42();
+		Test42.main(new String[] {""});
+		System.out.println("main-method");
+	}
+	
+	public static long getValue()
+	{
+		System.out.println("getValue()");
+		return 10;
+	}
+	 {
+		System.out.println("non-static block02");
+	 }
+	
+	static 
+	{
+		System.out.println("static block02");
+	}
+}

@@ -1,0 +1,74 @@
+class Check3 
+{
+	String name="vishwajeet kumar";
+	int i=34;
+	int j=45;
+	public void check3()
+	{
+		System.out.println(name);
+	}
+}
+class Check4 extends Check3
+{
+	int k=67;
+	public void check4()
+	{
+	  System.out.println((super.i)*(super.j));
+	  System.out.println(k);
+	}
+}
+class Check5 extends Check4
+{
+	String fName="vishwajeet";
+	String lName="kumar";
+	public void check5()
+	{
+		String fName="sonu";
+		System.out.println(fName+" "+lName);
+		System.out.println(this.fName+" "+lName);
+	}
+}
+class Check6 extends Check5
+{
+	/*int i=100;
+	Check6(int i)
+	{
+		i=99;
+		System.out.println(this.i);
+		System.out.println(i);
+	}*/
+}
+class Check7 extends Check6
+{
+	public void check7()
+  {
+	try
+	{
+		System.out.println("try");
+	}
+	catch (Exception e)
+	{
+		System.out.println("catch");
+	}
+  }
+}
+ class Check8 extends Check7
+	{ 
+		int i=101;
+		Check8(int i)
+		{
+			//super(1);
+			System.out.println(i);
+		}
+	
+	public static void main(String[] args) 
+	{
+		Check8 c=new Check8(2);
+		c.check3();
+		c.check4();
+		c.check5();
+		c.check7();
+		System.out.println("Hello World!");
+	}
+}
+

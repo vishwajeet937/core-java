@@ -1,0 +1,24 @@
+/*class Test27
+{
+ static int a=12;
+ static
+	{
+		System.out.println("SB");
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("MM");
+	}
+	static int b=20;
+}*/
+class Test27
+{
+	static int a;
+	static int b;
+	//Test27();
+	public static void main (String[] args);
+	static
+	{
+		System.out.println("a");
+	}
+}

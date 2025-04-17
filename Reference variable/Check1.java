@@ -1,0 +1,46 @@
+class Check1 
+{
+	String name="vishwajeet kumar";
+	int age=23;
+	long mobNo=9570381226L;
+	String gender="mail";
+	String vill="mahadeopur";
+	public void name(Check1 c)
+	{
+		String name="sonu";
+		System.out.println(this.name);
+	}
+	public int age()
+	{
+		int age=22;
+		System.out.println(this.age);
+		return 23;
+	}
+	public long mobNo()
+	{
+		long mobNo=9117348133l;
+		System.out.println(mobNo);
+		return 9570381226l;
+	}
+	public Check1 gender()
+	{
+		String gender="Mail";
+		System.out.println(gender);
+		return new Check1();
+	}
+	public Check1 vill(Check1 c)
+	{
+		String vill="Mahadeopur";
+		System.out.println(vill);
+		return new Check1();
+	}
+	public static void main(String[] args) 
+	{
+		Check1 c=new Check1();
+		c.name(c);
+		c.age();
+		c.mobNo();
+		c.gender();
+		c.vill(c);
+	}
+}

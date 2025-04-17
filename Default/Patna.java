@@ -1,0 +1,38 @@
+class Patna extends Object
+{
+	String distic="patna";
+	public String distic()
+	{
+		System.out.println("Distic:"+distic);
+		return distic;
+	}
+	interface I
+	{
+	}
+}
+	abstract class Masaurhi extends Patna
+	{
+		String post="Masaurhi";
+		public String post()
+		{
+			System.out.println("Post:"+post);
+			return post;
+		}
+	}
+	class Mahadeopur extends Masaurhi
+	{
+		String vill="Mahadeopur";
+		public String vill()
+		{
+			System.out.println("vill:"+vill);
+			return vill;
+		}
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		Mahadeopur m=new Mahadeopur();
+		m.distic();
+		m.vill();
+		m.post();
+	}
+}

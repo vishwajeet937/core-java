@@ -1,0 +1,19 @@
+import java.util.Scanner;
+class Program1112 
+{
+	//static ReverseString rv=new ReverseString();
+	
+	
+	public static void main(String[] args) 
+	{
+		int i;
+
+
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		//if(i==2)
+	i=scan.nextInt();
+		//int num=10;
+		
+	}
+}

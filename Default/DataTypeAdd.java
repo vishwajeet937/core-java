@@ -1,0 +1,12 @@
+class DataTypeAdd 
+{
+	public static void main(String[] args) 
+	{
+		int x=10;
+		String s="sonu";
+		int y=20;
+		String s1="monu";
+		System.out.println(x+y);
+		System.out.println(s+s1);
+	}
+}

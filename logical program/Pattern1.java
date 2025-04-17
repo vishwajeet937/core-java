@@ -1,0 +1,23 @@
+import java.util.Scanner;
+class Pattern1 
+{
+	public static void main(String[] args) 
+	{
+		//Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the Number");
+		//int i=scan.nextInt();
+		//int[] j=new int[5];
+        for(int k=1;k<=3;k++)
+		{
+			for(int j=5;j>=k;j--)
+			{
+				if(j!=4 && j!=2)
+				System.out.print(j+" ");
+			}
+			System.out.println();
+		}
+	}
+}
+/*5  3  1 
+  5  3  
+  5 */

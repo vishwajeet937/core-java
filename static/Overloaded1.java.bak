@@ -1,0 +1,20 @@
+class Overloaded1
+{
+	Overloaded1()
+	{
+		System.out.println("Zero parrem");
+	}
+	Overloaded1(int i)
+	{
+		System.out.println("one prrem");
+	}
+	Overloaded1(int i,String j)
+	{
+		System.out.println("two parrem");
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		Overloaded1 a1=new Overloaded1();
+	}
+}

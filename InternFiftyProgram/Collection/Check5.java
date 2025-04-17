@@ -1,0 +1,24 @@
+class Check5 
+{
+	public void m1(int[] arr)
+	{
+		
+	}
+	public void m2(int[] arr1)
+	{
+		
+	}
+	public void m2(int[] arr3)
+	{
+		
+	}
+	public static void main(String[] args) 
+	{
+		Check5 c5=new Check5();
+		int[] arr=new int[]{2,3,4,5};
+		c5.m1(arr);
+
+		Check4 c4=new Check4();
+
+	}
+}

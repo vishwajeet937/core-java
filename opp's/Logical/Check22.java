@@ -1,0 +1,18 @@
+import java.util.Arrays;
+import java.util.Scanner;
+class Check22 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		int storeInVal=scan.nextInt();
+		int[] arr=new int[storeInVal];
+		int product=1;
+		for (int i=1 ;i<=arr.length ;i++ )
+		{
+			product=product*i;
+		}
+		System.out.println(product);
+	}
+}

@@ -1,0 +1,35 @@
+abstract class College extends Object 
+{
+	public abstract void college();
+    public void school()
+{
+	System.out.println("school");
+ }
+ /* College()
+ {
+	 System.out.println("college constructor");
+ }*/
+ College(int i)
+	{
+		System.out.println("parametrize constructor");
+	}
+ }
+ class Coaching extends College
+ {
+	 public void college()
+	 {
+		System.out.println("college");
+	 }
+	 Coaching()
+	 {
+		 //super(5);
+		System.out.println();
+	 }
+	 public static void main(String[] args)
+	 {
+		Coaching c=new Coaching();
+		c.college();
+	 }
+ }
+/*Coaching(){
+super();*/

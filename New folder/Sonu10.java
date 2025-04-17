@@ -1,0 +1,21 @@
+class Sonu10 
+{
+	public static void main(String[] args)
+	{
+	xcv(10);
+	//sonu("sonu","monu");
+	}
+	public static void xcv(int number) 
+	{
+		System.out.println(number);
+		xcv(10);
+        int number1=10;
+		int number2=20;
+	}//method end
+	public static void sonu(String name,String name1)
+	{
+		System.out.println(name);
+		System.out.println(name1);
+	}
+
+}

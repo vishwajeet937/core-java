@@ -1,0 +1,23 @@
+class Program1113 
+{
+	public static void main(String[] args) 
+	{
+		int[] arr={31,3453,567,34,45,547732,34224,56765,-4566,-1};
+
+		int smallest=arr[0];
+		int largest=arr[0];
+		for (int i=1 ;i<arr.length ;i++ )
+		{
+			if (arr[i]<smallest)
+			{
+				smallest=arr[i];
+			}
+			else if (arr[i]>largest)
+			{
+				largest=arr[i];
+			}
+		}
+		System.out.println("Smallest value is:"+smallest);
+		System.out.println("largest vale is:"+largest);
+	}
+}

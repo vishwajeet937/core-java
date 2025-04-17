@@ -1,0 +1,7 @@
+class Test5 
+{
+	public static void main(String[] args) 
+	{
+		System.out.println("S\n\to\n\t\tn\n\t\t\tu\n\t\t\t\tk\n\t\t\tu\n\t\tm\n\ta\nr");
+	}
+}

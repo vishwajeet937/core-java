@@ -1,0 +1,30 @@
+class Check3 
+{
+	String name="sonu";
+	int rollNo=164122;
+	public void m1()
+	{
+		System.out.println("m1");
+	}
+	public float m2()
+	{
+		int i=34;
+		System.out.println(i);
+		return 3.2f;
+	}
+	public Check3 m3()
+	{
+		String name="vishwajeet";
+		System.out.println(name);
+		System.out.println(this.name);
+		//System.out.println(i);//wrong statement
+		return new Check3();
+	}
+	public static void main(String[] args) 
+	{
+		Check3 c=new Check3();
+		c.m1();
+		c.m2();
+		c.m3();
+	}
+}

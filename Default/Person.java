@@ -1,0 +1,34 @@
+class Person
+{
+	Person()
+	{
+		System.out.println("person constuctor");
+	}
+	static
+	{
+		System.out.println("person static");
+	}
+	{
+		System.out.println("person non static");
+	}
+}
+class Sonu extends Person
+{
+	Sonu()
+		{
+		super();
+		System.out.println(" sonu constructor");
+		}
+		static
+	{
+		System.out.println("sonu static");
+	}
+	{
+		System.out.println("sonu non static");
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		Sonu s=new Sonu();
+	}
+}

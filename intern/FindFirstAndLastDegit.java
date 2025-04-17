@@ -1,0 +1,20 @@
+class FindFirstAndLastDegit 
+{
+	public static void main(String[] args) 
+	{
+		int val=125;
+		int firstDegit=0;
+		int lastDegit=0;
+
+
+		lastDegit=val%10;
+		System.out.println("lastDegit is:"+lastDegit);
+		//firstDegit=val;
+		while(val>10)
+		{
+			val=val/10;
+		}
+		  firstDegit=val;
+		System.out.println("firstDegit is:"+firstDegit);
+	}
+}

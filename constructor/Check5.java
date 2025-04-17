@@ -1,0 +1,31 @@
+class Check5 
+{
+	//static int i;
+       String s;
+	public static void m1(int i)
+	{
+		Check5.i=i;//static variable call
+		System.out.println("m1");
+	}
+	public void m1(String s)
+	{
+		this.s=s;
+		System.out.println(this.s);
+	}
+	public String m1()
+	{
+		System.out.println(this.s);
+		return this.s;
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println();
+		Check5 c=new Check5();
+		c.m1("dff");
+		System.out.println(c.m1());
+		System.out.println("hlo");
+		Check5.m1(32);//static method call
+		System.out.println(i);
+	}
+     static int i;
+}

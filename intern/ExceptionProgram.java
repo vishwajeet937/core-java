@@ -1,0 +1,34 @@
+class ExceptionProgram 
+{ 
+	/*int i=298;
+	int j=0;*/
+	public static void main(String[] args)throws Exception 
+	{
+		int i=345;
+		int j=0;
+		try
+		{
+		   System.out.println(i/j);	
+		}
+		catch (Exception e)
+		{
+			System.out.println("Catch");
+		}
+		try
+		{
+			int i1=8576;
+			int j1=84758;
+			System.out.println(i1+j1);
+			throw new ArithmeticException("msg");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Catch1");
+		}
+		finally 
+		{
+			System.out.println("finally");
+		}
+		System.out.println("Hello World!");
+	}
+}

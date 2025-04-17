@@ -1,0 +1,16 @@
+ class LenearSearch 
+{
+	public static void main(String[] args) 
+	{
+		int[] arr={34,23,3,54,655,6,4,61};
+         
+		 int item=655;
+		for (int i=0 ;i<arr.length ;i++ )
+		{
+			if (arr[i]==item)
+			{
+				System.out.println(i);
+			}
+		}
+	}
+}

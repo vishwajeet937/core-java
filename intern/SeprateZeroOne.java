@@ -1,0 +1,37 @@
+import java.util.Arrays;
+class SeprateZeroOne 
+{
+	public static void main(String[] args) 
+	{
+		int[] arr=new int[]{1,1,1,0,0,0,0,1,1,0,1,0,1,0,1,0};
+
+           int zeroCount=0; 
+		   int oneCount=0;
+		for (int i=0 ;i<arr.length ;i++ )
+		{
+			if (arr[i]==0)
+			{
+                zeroCount++; 
+			}
+			else if (arr[i]==1)
+			{
+				oneCount++;
+			}
+		}
+		for (int j=0 ;j<arr.length ;j++ )
+		{
+             if (zeroCount>0)
+             {
+				 arr[j]=0;
+				 zeroCount--;
+             }
+			 else if (oneCount>0)
+			 {
+				 arr[j]=1;
+				 oneCount--;
+			 }
+		}
+		System.out.println(Arrays.toString(arr));
+
+	}
+}

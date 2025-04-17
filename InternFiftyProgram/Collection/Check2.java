@@ -1,0 +1,38 @@
+class Check2 
+{
+	public void m1(int num)
+	{
+		System.out.println(num);
+	}
+	public void m2(String name)
+	{
+		System.out.println(name);
+	}
+	public void m3(double d)
+	{
+		System.out.println(d);
+	}
+	public void m4(Check3 c)
+	{
+		System.out.println(c.c4.num);
+	}
+	public void m5(int[] arr)
+	{
+		System.out.println(arr);
+	}
+	public static void main(String[] args) 
+	{
+		Check2 c2=new Check2();
+		c2.m1(1);   //int x=2;
+		c2.m2("sonu..");    //String name="sonu";
+		c2.m3(23.0);    //double d=23.0;
+
+		Check3 c3=new Check3();
+		 c3.c4=new Check3();
+		c3.c4.num=2;
+        c2.m4(c3);
+
+		int[] arr1=new int[]{1,2,3};
+		c2.m5(arr1);
+	}
+}

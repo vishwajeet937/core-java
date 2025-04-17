@@ -1,0 +1,14 @@
+class Static104 
+{
+	int x=10;
+	public static void main(String[] args) 
+	{
+		Static104 t=new Static104();
+		System.out.println(t.x);
+	}
+	static 
+	{
+		int x=20;
+		System.out.print(x+" ");
+	}
+}

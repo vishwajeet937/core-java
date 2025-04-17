@@ -1,0 +1,28 @@
+class SwapNumber 
+{
+	public static void swap(int arr[],int n)
+	{
+		
+		int i=0;
+
+		while(i<n)
+		{
+			if (i+1<n)
+			{
+				swap(arr[i],arr[i++]);
+			}
+				i=i+2;
+		}
+	}
+	public static void main(String[] args) 
+	{
+	   int arr[]=new int[]{23,4,5,6,5,7,8,9,0};	
+		System.out.println("Hello World!");
+		SwapNumber.swap(arr,7);
+		for (int i=0 ;i>=9 ;i++ )
+		{
+			count=arr[i]<" ";
+		}
+		
+	}
+}

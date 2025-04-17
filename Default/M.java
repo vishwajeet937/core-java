@@ -1,0 +1,22 @@
+class M
+{
+	public static void main(String[] args) 
+	{
+		String s="spnu";
+	var n=("length of String" +s.length());
+	for (var i=2;i<n;i++)
+	{
+		for (var j=i;j<n;j++)
+		{
+			var bag="";
+			for (var k=i;k<=n;k++)
+			{
+				bag=bag+var[k];
+			}
+			System.out.println("bag");
+		}
+	}
+  }
+		//System.out.println("Hello World!");
+	}
+

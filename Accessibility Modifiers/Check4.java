@@ -1,0 +1,18 @@
+import java.util.Scanner;
+import java.util.Arrays;
+class Check4
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the value");
+		int a=scan.nextInt();
+		int[] b=new int[a];
+		for (int i=0;i<=b.length-1;i++)
+		{
+			b[i]=scan.nextInt();
+		}
+              System.out.println(Arrays.toString(b));
+       
+	}
+}

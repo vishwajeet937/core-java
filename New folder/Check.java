@@ -1,0 +1,21 @@
+class Check01 implements Runnable
+{
+	@Override
+		public void run(){
+			System.out.println(Thread.currentThread());
+		}
+}
+
+class Check 
+{
+	public static void main(String[] args) 
+	{
+		Runnable run=()->
+		System.out.println(Thread.currentThread());	
+		Runnable run01=()->
+		System.out.println(Thread.currentThread());	
+
+		System.out.println(run instanceof Check01);
+		
+	}
+}

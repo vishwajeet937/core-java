@@ -1,0 +1,35 @@
+import java.util.Scanner;
+class OddNumber 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter The Number");
+		int i=scan.nextInt();
+		int[] j=new int[i];
+		for (int k=0;k<=i;k++)
+		{
+			/*if(k%2==1)
+			{
+			System.out.println(k);
+
+			}*/
+			int b=scan.nextInt();
+			j[k]=b;
+		}
+		System.out.println(java.util.Arrays.toString(j));
+		OddNumber o=new OddNumber();
+		int val=o.multi(j);
+		System.out.println(val);
+	}
+	public int multi(int[] j)
+	{
+		int multi=1;
+		for (int i=0;i<j.length;i++)
+		{
+			multi=multi+j[i];
+		}
+		System.out.println();
+		return multi;
+	}
+}

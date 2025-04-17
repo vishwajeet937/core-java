@@ -1,0 +1,17 @@
+import java.util.Arrays;
+class Check5 
+{
+	public static void main(String[] args) 
+	{
+		//System.out.println("Hello World!");
+		int[] i=new int[]{12,13,14,15};
+		int i1=0;
+		int[] j=new int[i.length];
+		for(int k=i.length-1;k>=0;k--)
+		{
+			j[i1]=i[k];
+			i1++;
+		}
+		System.out.println(Arrays.toString(j));
+	}
+}

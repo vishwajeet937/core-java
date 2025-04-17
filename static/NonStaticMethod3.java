@@ -1,0 +1,26 @@
+class NonStaticMethod3 
+{
+	//int i;
+	void m1(int i)
+	{
+		System.out.println("m1:"+i);
+		m2(10,12,13);
+	}
+	void m2(int j,int k, int l)
+	{
+		System.out.println("m2:"+j);
+		System.out.println("m2:"+k);
+		System.out.println("m2:"+l);
+		m3(11);
+	}
+	void m3(int m)
+	{
+	System.out.println("m3:"+m);	
+	}
+	public static void main(String[] args) 
+	{
+		System.out.println("out put value");
+		NonStaticMethod3 m3=new NonStaticMethod3();
+		m3.m1(9);
+	}
+}

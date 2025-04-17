@@ -1,0 +1,31 @@
+class Check3 
+{
+	int a=10;
+	int b=0;
+	public void m1()throws Exception//Propagation
+	{
+			try//handling
+			{
+			    throw new Exception();
+				//System.out.println("m1"); 
+			}
+			catch (Exception e)
+			{
+				System.out.println("catch block");
+			}
+		System.out.println(a/b);
+	}
+	public static void main(String[] args)throws Exception 
+	{
+		Check3 c=new Check3();
+		try
+		{
+		c.m1();	
+		}
+		catch (Exception e)
+		{
+			System.out.println("ghdfb");
+		}
+		
+	}
+}

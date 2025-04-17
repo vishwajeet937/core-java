@@ -1,0 +1,25 @@
+import java.util.Scanner;
+class InveliedAgeException1 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		int age=scan.nextInt();
+		try
+		{
+			if (age<18)
+			{
+				System.out.println("Applicable");
+			}
+			else 
+			{
+				throw new InveliedAgeException("not-Applicable");
+			}
+		}
+		catch (InveliedAgeException i)
+		{
+			System.out.println("catch");
+		}
+	}
+}

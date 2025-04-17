@@ -1,0 +1,12 @@
+class StaticVariableAdderesh  
+{
+	static String firstName="vishwajeet";
+	static String lastName="Kumar";
+	static long mobNo=9570381226L;
+	public static void main(String[] args) 
+	{
+		System.out.print(firstName+"\n"+lastName+"\n"+mobNo);
+		//System.out.println(lastname);
+		//System.out.println(mobNo);
+	}
+}

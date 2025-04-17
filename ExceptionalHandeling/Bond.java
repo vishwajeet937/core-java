@@ -1,0 +1,29 @@
+import java.util.Scanner;
+class Bond 
+{
+	public static void main(String[] args) 
+	{
+		Scanner scan=new Scanner(System.in);
+		System.out.println("Enter the number");
+		int val=scan.nextInt();
+		try
+		{
+			if (val<=100)
+			{
+				System.out.println("Available");
+			}
+			else 
+			{
+				throw new OutOfBond("Not-Available");
+			}
+		}
+		catch (RuntimeException r)
+		{
+			System.out.println("catch");
+		}
+		finally
+		{
+			System.out.println("finally");
+		}
+	}
+}

@@ -1,0 +1,12 @@
+import java.util.LinkedHashMap;
+class LinkedHashMapProgram 
+{
+	public static void main(String[] args) 
+	{
+		LinkedHashMap<Integer,String> lh=new LinkedHashMap<Integer,String>();
+		lh.put(201,"nnkn");
+		lh.put(202,"sads");
+		System.out.println(lh);
+	}
+}
+ 

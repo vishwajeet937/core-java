@@ -1,0 +1,20 @@
+class EmployeeDetails 
+{
+	static String name="piush";
+	static long mobNo=98478788l;
+	public void m1(String name,int no,String add,int basicSal,int pf,int da)
+	{
+		System.out.println("m1:"+name);
+	}
+	/*public static void m2()
+	{
+		System.out.println("m2:"+mobNo);
+	}*/
+	public static void main(String[] args) 
+	{
+		System.out.println("Hello World!");
+		EmployeeDetails e=new EmployeeDetails();
+		e.m1("fsg",2,"qe",3,4,5);
+		//e.m2();
+	}
+}

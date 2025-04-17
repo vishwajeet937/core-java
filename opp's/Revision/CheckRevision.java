@@ -1,0 +1,33 @@
+class CheckRevision 
+{
+	CheckRevision(int j)
+	{
+		System.out.println("Zero parrem");
+	}
+	public void m1()
+	{
+		System.out.println("m1");
+	}
+}
+class Check1 extends CheckRevision
+{
+	Check1(int i)
+		//super() add by the compiler
+	{
+		super(5);
+		System.out.println("one parrem");
+	}
+	@Override
+	public void m1()
+	{
+		System.out.println("m1 in check");
+	}
+	public static void main(String[] args) 
+	{
+         Check1 c=new Check1(4);//tight coupling
+		 c.m1();
+		 CheckRevision c1=new Check1(3);//luse coupling
+		 c1.m1();
+		System.out.println("Hello World!");
+	}
+}

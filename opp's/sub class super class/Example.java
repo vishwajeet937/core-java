@@ -1,0 +1,70 @@
+class Example 
+{
+	static int a=m1();
+	static 
+	{
+		System.out.println("Example static block");
+	}
+	int x=m2();
+	{
+		System.out.println("Example non static Block");
+	}
+	Example()
+	{
+		System.out.println("Example Constructor");
+	}
+	static int m1()
+	{
+		System.out.println("Example static Block is created m1");
+		return 10;
+	}
+	int m2()
+	{
+		System.out.println("Example non static block is created m2");
+		return 20;
+	}
+	void abc()
+	{
+		System.out.println("Example abc");
+	}
+	void bbc()
+	{
+		System.out.println("Example BBC");
+	}
+}
+	class Sample extends Example
+	{
+		static int b=m3();
+		static
+		{
+			System.out.println("sample SB");
+		}
+		int y=m4();
+		{
+			System.out.println("Sample NSB");
+		}
+		Sample()
+		{
+			System.out.println("Sample Constructor");
+		}
+		static int m3()
+		{
+			System.out.println("Sample sv is created");
+			return 30;
+		}
+		int m4()
+		{
+			System.out.println("Samplr NSV is Created");
+			return 40;
+		}
+		void abc()
+		{
+			System.out.println("sample abc");
+		}
+	public static void main(String[] args) 
+	{
+		Sample s=new Sample();
+		s.abc();
+		s.bbc();
+	}
+}

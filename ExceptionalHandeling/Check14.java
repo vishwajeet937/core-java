@@ -1,0 +1,67 @@
+class Check14 
+{
+	static
+	{
+		System.out.println("static");
+	}
+	public static void m1()
+	{
+		System.out.println("m1");
+	}
+	Check14()
+	{
+		System.out.println("zero-parrem constructor");
+	}
+	{
+		System.out.println("non-static");
+	}
+
+	public void m2()
+	{
+		try
+		{
+			int dev=12/3;
+			System.out.println("m2-try:"+dev);
+		}
+		catch (Exception e)
+		{
+			System.out.println("catch");
+		}
+	}
+	public void m3()
+	{
+		try
+		{
+			System.out.println("m3-try.");
+			throw new ArithmeticException();
+		}
+		catch (RuntimeException r)
+		{
+			System.out.println("m3-catch.");
+		}
+	}
+	public static void main(String[] args) 
+	{
+		Check14 c=new Check14();
+		c.m2();
+		c.m3();
+		
+		try
+		{
+			int i=12;
+			int j=2;
+			System.out.println(i/j);
+		}
+		catch (ArithmeticException a)
+		{
+			System.out.println("catch");
+		}
+		
+		finally 
+		{
+			System.out.println("finally");
+		}
+		System.out.println("Hello World!");
+		c.m1();
+	}
+}
